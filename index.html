@@ -1925,7 +1925,25 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
           localStorage.setItem('mv_user', JSON.stringify(user));
         }
         authOverlay.style.display = 'none';
-        updateAuthUI();
+        // Validate stored token on page load
+  (async function validateToken() {
+    const token = localStorage.getItem('mv_token');
+    if (token) {
+      try {
+        const res = await fetch(API_BASE + '/api/v1/auth/me', {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        if (!res.ok) {
+          // Token is invalid (expired, server reset, etc.)
+          localStorage.removeItem('mv_token');
+          localStorage.removeItem('mv_user');
+        }
+      } catch (e) {
+        // Network error, keep token for offline
+      }
+    }
+    updateAuthUI();
+  })();
       }
     } catch (err) {
       console.error('Auth error:', err);
@@ -2131,7 +2149,25 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   }
   
   
-  updateAuthUI();
+  // Validate stored token on page load
+  (async function validateToken() {
+    const token = localStorage.getItem('mv_token');
+    if (token) {
+      try {
+        const res = await fetch(API_BASE + '/api/v1/auth/me', {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        if (!res.ok) {
+          // Token is invalid (expired, server reset, etc.)
+          localStorage.removeItem('mv_token');
+          localStorage.removeItem('mv_user');
+        }
+      } catch (e) {
+        // Network error, keep token for offline
+      }
+    }
+    updateAuthUI();
+  })();
   
   // ── Video Generation (Real API) ──
   const genBtn = document.getElementById('generateBtn');
@@ -2159,7 +2195,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       const duration = parseInt(document.querySelector('.control-chip[data-duration].active')?.dataset?.duration || '5');
       
       genBtn.classList.add('loading');
-      genBtn.querySelector('.btn-text').textContent = 'Generating...';
+      genBtn.querySelector('.btn-text').innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 3L7 9M7 9L3 13M7 9L11 5M7 9L3 5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg> Generating...';
       
       try {
         const res = await fetch(API_BASE + '/api/v1/video/generate', {
@@ -2180,7 +2216,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
           }
           alert(data.detail || 'Generation failed');
           genBtn.classList.remove('loading');
-          genBtn.querySelector('.btn-text').textContent = 'Generate';
+          genBtn.querySelector('.btn-text').innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 3L7 9M7 9L3 13M7 9L11 5M7 9L3 5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg> Generate';
           return;
         }
         
@@ -2190,7 +2226,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         console.error('Generate error:', err);
         alert('Connection error');
         genBtn.classList.remove('loading');
-        genBtn.querySelector('.btn-text').textContent = 'Generate';
+        genBtn.querySelector('.btn-text').innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 3L7 9M7 9L3 13M7 9L11 5M7 9L3 5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg> Generate';
       }
     });
   }
@@ -2208,7 +2244,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         if (data.status === 'completed') {
           clearInterval(pollInterval);
           genBtn.classList.remove('loading');
-          genBtn.querySelector('.btn-text').textContent = 'Generate';
+          genBtn.querySelector('.btn-text').innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 3L7 9M7 9L3 13M7 9L11 5M7 9L3 5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg> Generate';
 
           // Show result
           showVideoResult(data.video_url, promptInput?.value || '');
@@ -2216,7 +2252,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         } else if (data.status === 'failed') {
           clearInterval(pollInterval);
           genBtn.classList.remove('loading');
-          genBtn.querySelector('.btn-text').textContent = 'Generate';
+          genBtn.querySelector('.btn-text').innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 3L7 9M7 9L3 13M7 9L11 5M7 9L3 5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg> Generate';
           alert('Video generation failed: ' + (data.error_message || 'Unknown error'));
           loadMyVideos();  // Update My Videos with failed status
         }
