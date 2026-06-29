@@ -919,15 +919,25 @@ body {
 
 /* ── Scroll Animations ── */
 .fade-up {
-  opacity: 0;
-  transform: translateY(30px);
+  /* Default visible: no JS dependency */
+  opacity: 1;
+  transform: translateY(0);
   transition: all 0.8s var(--transition);
 }
 
-.fade-up.visible,
-.hero .fade-up {
+/* Progressive enhancement: if JS runs, animate in */
+.fade-up.animate {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.fade-up.animate.visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+.hero .fade-up {
+  opacity: 1;
 }
 
 /* ── Mobile Menu ── */
@@ -1417,7 +1427,10 @@ const observer = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
 
-document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+document.querySelectorAll('.fade-up').forEach(el => {
+  el.classList.add('animate');
+  observer.observe(el);
+});
 
 // ── Aspect ratio chips ──
 document.querySelectorAll('.control-chip[data-ratio]').forEach(chip => {
