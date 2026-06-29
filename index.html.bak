@@ -1740,38 +1740,6 @@ body {
 
 </div>
 
-
-
-  <!-- Login Modal -->
-  <div class="auth-overlay" id="authOverlay" style="display:none;">
-    <div class="auth-modal glass">
-      <button class="auth-close" id="authClose">&times;</button>
-      <div class="auth-logo">
-        <img src="logo.png" alt="MineVideos" style="width:48px;height:48px;border-radius:12px;">
-      </div>
-      <h2 style="text-align:center;font-size:1.4rem;margin-bottom:0.3rem;">Welcome to MineVideos</h2>
-      <p style="text-align:center;color:var(--text-secondary);font-size:0.9rem;margin-bottom:1.5rem;">Sign in to start creating AI videos</p>
-      
-      <a href="#" class="github-signin-btn" id="githubSignIn">
-        <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
-          <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
-        </svg>
-        Continue with GitHub
-      </a>
-      
-      <div class="auth-divider"><span>or</span></div>
-      
-      <form id="emailSignInForm" onsubmit="return false;">
-        <input type="email" placeholder="Email" class="auth-input" id="authEmail" required>
-        <input type="password" placeholder="Password" class="auth-input" id="authPassword" required>
-        <button type="submit" class="auth-submit-btn">Sign In</button>
-      </form>
-      
-      <p class="auth-footer">Don't have an account? <a href="#">Sign up free</a></p>
-      <p class="auth-footer" style="margin-top:0.3rem;font-size:0.75rem;color:var(--text-tertiary);">By signing in you agree to our Terms & Privacy Policy</p>
-    </div>
-  </div>
-
 <script>
 // ── Nav scroll effect ──
 const nav = document.getElementById('navbar');
@@ -2130,6 +2098,42 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     }
   }
   
+  // Auto-refresh My Videos when task completes
+  const originalStartPolling = window.startPolling;
+  window.startPolling = function(taskId) {
+    if (pollInterval) clearInterval(pollInterval);
+    pollInterval = setInterval(async () => {
+      try {
+        const token = localStorage.getItem('mv_token');
+        const res = await fetch(API_BASE + '/api/v1/video/task/' + taskId, {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        const data = await res.json();
+        
+        if (data.status === 'completed') {
+          clearInterval(pollInterval);
+          genBtn.classList.remove('loading');
+          genBtn.querySelector('.btn-text').innerHTML = `
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 3L7 9M7 9L3 13M7 9L11 5M7 9L3 5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+            Generate
+          `;
+          showVideoResult(data.video_url, promptInput?.value || '');
+          loadMyVideos(); // Auto-refresh My Videos
+        } else if (data.status === 'failed') {
+          clearInterval(pollInterval);
+          genBtn.classList.remove('loading');
+          genBtn.querySelector('.btn-text').innerHTML = `
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 3L7 9M7 9L3 13M7 9L11 5M7 9L3 5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+            Generate
+          `;
+          alert('Video generation failed: ' + (data.error_message || 'Unknown error'));
+          loadMyVideos(); // Still refresh to show failed status
+        }
+      } catch (err) {
+        console.error('Poll error:', err);
+      }
+    }, 5000);
+  };
   
   updateAuthUI();
   
@@ -2209,16 +2213,14 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
           clearInterval(pollInterval);
           genBtn.classList.remove('loading');
           genBtn.querySelector('.btn-text').textContent = 'Generate';
-
+          
           // Show result
           showVideoResult(data.video_url, promptInput?.value || '');
-          loadMyVideos();  // Auto-refresh My Videos
         } else if (data.status === 'failed') {
           clearInterval(pollInterval);
           genBtn.classList.remove('loading');
           genBtn.querySelector('.btn-text').textContent = 'Generate';
           alert('Video generation failed: ' + (data.error_message || 'Unknown error'));
-          loadMyVideos();  // Update My Videos with failed status
         }
         // else still processing, continue polling
       } catch (err) {
@@ -2243,6 +2245,36 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     document.body.insertAdjacentHTML('beforeend', resultHtml);
   }
 </script>
+
+  <!-- Login Modal -->
+  <div class="auth-overlay" id="authOverlay" style="display:none;">
+    <div class="auth-modal glass">
+      <button class="auth-close" id="authClose">&times;</button>
+      <div class="auth-logo">
+        <img src="logo.png" alt="MineVideos" style="width:48px;height:48px;border-radius:12px;">
+      </div>
+      <h2 style="text-align:center;font-size:1.4rem;margin-bottom:0.3rem;">Welcome to MineVideos</h2>
+      <p style="text-align:center;color:var(--text-secondary);font-size:0.9rem;margin-bottom:1.5rem;">Sign in to start creating AI videos</p>
+      
+      <a href="#" class="github-signin-btn" id="githubSignIn">
+        <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+        </svg>
+        Continue with GitHub
+      </a>
+      
+      <div class="auth-divider"><span>or</span></div>
+      
+      <form id="emailSignInForm" onsubmit="return false;">
+        <input type="email" placeholder="Email" class="auth-input" id="authEmail" required>
+        <input type="password" placeholder="Password" class="auth-input" id="authPassword" required>
+        <button type="submit" class="auth-submit-btn">Sign In</button>
+      </form>
+      
+      <p class="auth-footer">Don't have an account? <a href="#">Sign up free</a></p>
+      <p class="auth-footer" style="margin-top:0.3rem;font-size:0.75rem;color:var(--text-tertiary);">By signing in you agree to our Terms & Privacy Policy</p>
+    </div>
+  </div>
 
 </body>
 </html>
