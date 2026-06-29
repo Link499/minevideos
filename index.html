@@ -439,6 +439,49 @@ body {
   margin: 0 auto;
 }
 
+
+/* ── Features Section ── */
+.features-section {
+  padding: 80px 24px;
+}
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.feature-card {
+  padding: 32px 24px;
+  border-radius: var(--radius-lg);
+  transition: all 0.4s var(--transition);
+}
+.feature-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255,255,255,0.15);
+}
+.feature-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(108,92,231,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  color: var(--accent);
+}
+.feature-card h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.feature-card p {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
 /* ── Prompt Card ── */
 .prompt-card {
   max-width: 800px;
@@ -1678,35 +1721,76 @@ body {
   <!-- Hero -->
   <section class="hero">
     <div class="hero-content fade-up">
-      <div class="hero-badge">Powered by Seedance 2.0</div>
+      <div class="hero-badge">Next-Gen AI Video Creation</div>
       <h1>
-        <span class="gradient-text">Create stunning videos</span><br>
-        from your imagination
+        <span class="gradient-text">One prompt,</span><br>
+        infinite creations
       </h1>
-      <p>Transform text prompts into cinematic videos in minutes. No editing skills required — just describe what you see.</p>
+      <p>Transform your ideas into cinematic videos. Shape each creation with interactive choices — every video leads to the next.</p>
       <div class="hero-actions">
         <a href="#create" class="btn btn-primary btn-large">Start Creating — Free</a>
         <a href="#gallery" class="btn btn-ghost btn-large">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M6.5 5.5L11 8L6.5 10.5V5.5Z" fill="currentColor"/></svg>
-          Watch Demo
+          See Examples
         </a>
       </div>
       <div class="hero-stats">
         <div class="stat">
-          <div class="stat-value">720p</div>
-          <div class="stat-label">Resolution</div>
+          <div class="stat-value">100+</div>
+          <div class="stat-label">Styles</div>
         </div>
         <div class="stat">
           <div class="stat-value">~4min</div>
           <div class="stat-label">Generation</div>
         </div>
         <div class="stat">
-          <div class="stat-value">5-11s</div>
-          <div class="stat-label">Video Length</div>
+          <div class="stat-value">∞</div>
+          <div class="stat-label">Chain</div>
         </div>
         <div class="stat">
           <div class="stat-value">24fps</div>
           <div class="stat-label">Frame Rate</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features-section" id="features">
+    <div class="container">
+      <div class="section-header fade-up">
+        <div class="section-label">Features</div>
+        <h2 class="section-title">Not just generation. Creation loop.</h2>
+        <p class="section-desc">MineVideos turns a single prompt into a chain of inspired creations — no other platform does this.</p>
+      </div>
+      <div class="features-grid fade-up">
+        <div class="feature-card glass">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>Creative Chain</h3>
+          <p>Every video sparks the next. Interactive choices during generation automatically compose your next prompt — an infinite creation flywheel.</p>
+        </div>
+        <div class="feature-card glass">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M8 12l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>Interactive Wait</h3>
+          <p>No more staring at a progress bar. Answer style questions while your video generates — your choices shape the next creation.</p>
+        </div>
+        <div class="feature-card glass">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" stroke-width="2"/><path d="M8 21h8M12 17v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <h3>Cinema Quality</h3>
+          <p>720p resolution, 24fps cinematic output. Choose 16:9, 9:16, or 1:1 aspect ratios. 5s or 11s duration options.</p>
+        </div>
+        <div class="feature-card glass">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <h3>Fast Model</h3>
+          <p>Switch between Standard quality and Fast mode. Get results quicker when speed matters, or max out quality for final renders.</p>
         </div>
       </div>
     </div>
@@ -1762,6 +1846,15 @@ body {
             </div>
             <div class="control-chip" data-duration="5">5s</div>
             <div class="control-chip" data-duration="11">11s</div>
+
+            <div class="control-chip active" data-model="standard" title="Standard quality">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1l1.5 3.5L11 5.5l-2.8 2.2.8 3.8L6 9.5 3 11.5l.8-3.8L1 5.5l3.5-1z" stroke="currentColor" stroke-width="1" fill="none"/></svg>
+              HD
+            </div>
+            <div class="control-chip" data-model="fast" title="Fast generation">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M10 3L4 9M4 9L2 7M4 9l2 2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+              Fast
+            </div>
           </div>
           <button class="generate-btn" id="generateBtn">
             <span class="spinner"></span>
@@ -1932,7 +2025,7 @@ body {
           </div>
           <div class="pricing-desc">Try MineVideos at no cost</div>
           <ul class="pricing-features">
-            <li>3 videos per day</li>
+            <li>2 videos per day</li>
             <li>720p resolution</li>
             <li>5s duration</li>
             <li>Text-to-video only</li>
@@ -1945,16 +2038,16 @@ body {
         <div class="pricing-card glass featured">
           <div class="pricing-label">Pro</div>
           <div class="pricing-value">
-            <span class="currency">$</span>29
+            <span class="currency">$</span>19
             <span class="period">/mo</span>
           </div>
           <div class="pricing-desc">For creators & professionals</div>
           <ul class="pricing-features">
-            <li>50 videos per day</li>
-            <li>1080p resolution</li>
+            <li>30 videos per day</li>
+            <li>720p resolution</li>
             <li>Up to 11s duration</li>
-            <li>Image & video reference</li>
-            <li>Audio generation</li>
+            <li>Creative chain (interactive quiz)</li>
+            <li>Fast model access</li>
             <li>Priority queue</li>
           </ul>
           <button class="pricing-btn pricing-btn-fill">Start Pro Trial</button>
@@ -1964,7 +2057,7 @@ body {
         <div class="pricing-card glass">
           <div class="pricing-label">Studio</div>
           <div class="pricing-value">
-            <span class="currency">$</span>99
+            <span class="currency">$</span>79
             <span class="period">/mo</span>
           </div>
           <div class="pricing-desc">For teams & agencies</div>
@@ -1972,7 +2065,7 @@ body {
             <li>Unlimited videos</li>
             <li>1080p resolution</li>
             <li>Up to 11s duration</li>
-            <li>All reference types</li>
+            <li>All creation features</li>
             <li>API access</li>
             <li>Dedicated support</li>
           </ul>
@@ -2050,6 +2143,16 @@ document.querySelectorAll('.control-chip[data-duration]').forEach(chip => {
   chip.addEventListener('click', () => {
     document.querySelectorAll('.control-chip[data-duration]').forEach(c => c.classList.remove('active'));
     chip.classList.add('active');
+  });
+});
+
+// ── Model chips
+let selectedModel = 'standard';
+document.querySelectorAll('.control-chip[data-model]').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.control-chip[data-model]').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    selectedModel = chip.dataset.model;
   });
 });
 
@@ -2596,7 +2699,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + token
           },
-          body: JSON.stringify({ prompt, ratio, duration, model: 'fast' })
+          body: JSON.stringify({ prompt, ratio, duration, model: selectedModel === 'fast' ? 'fast' : undefined })
         });
         
         const data = await res.json();
