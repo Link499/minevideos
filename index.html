@@ -1,0 +1,1382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MineVideos AI — Create Stunning Videos with AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════
+   MineVideos AI — Glassmorphism UI
+   Apple-inspired, minimal & elegant
+   ═══════════════════════════════════════════════ */
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --glass-bg: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.15);
+  --glass-shadow: rgba(0, 0, 0, 0.3);
+  --text-primary: rgba(255, 255, 255, 0.95);
+  --text-secondary: rgba(255, 255, 255, 0.6);
+  --text-tertiary: rgba(255, 255, 255, 0.35);
+  --accent: #6C5CE7;
+  --accent-glow: rgba(108, 92, 231, 0.4);
+  --accent-secondary: #00D2FF;
+  --success: #00E676;
+  --warning: #FFB74D;
+  --radius-sm: 12px;
+  --radius-md: 20px;
+  --radius-lg: 28px;
+  --radius-xl: 36px;
+  --blur: 40px;
+  --blur-heavy: 80px;
+  --transition: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+  background: #0a0a1a;
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Animated Background ── */
+.bg-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.bg-canvas::before {
+  content: '';
+  position: absolute;
+  width: 140vmax;
+  height: 140vmax;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: conic-gradient(
+    from 180deg,
+    #0a0a1a 0deg,
+    #1a0a3e 60deg,
+    #0a1a3e 120deg,
+    #0a0a2e 180deg,
+    #1a0a2e 240deg,
+    #0a0a1a 360deg
+  );
+  animation: bgRotate 120s linear infinite;
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.5;
+  animation: orbFloat 20s ease-in-out infinite;
+}
+
+.orb-1 {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+  top: -10%;
+  right: -5%;
+  animation-delay: 0s;
+}
+
+.orb-2 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, var(--accent-secondary) 0%, transparent 70%);
+  bottom: -15%;
+  left: -10%;
+  animation-delay: -7s;
+  opacity: 0.3;
+}
+
+.orb-3 {
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, #FF6B9D 0%, transparent 70%);
+  top: 40%;
+  left: 30%;
+  animation-delay: -14s;
+  opacity: 0.2;
+}
+
+@keyframes bgRotate {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes orbFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -40px) scale(1.05); }
+  66% { transform: translate(-20px, 20px) scale(0.95); }
+}
+
+/* ── Glass Utility ── */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    0 8px 32px var(--glass-shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.glass-heavy {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(var(--blur-heavy));
+  -webkit-backdrop-filter: blur(var(--blur-heavy));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 16px 64px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+/* ── Layout ── */
+.content-layer {
+  position: relative;
+  z-index: 1;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ── Navigation ── */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 16px 24px;
+  transition: all 0.5s var(--transition);
+}
+
+.nav.scrolled {
+  padding: 10px 24px;
+}
+
+.nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 28px;
+  border-radius: var(--radius-xl);
+  transition: all 0.5s var(--transition);
+}
+
+.nav.scrolled .nav-inner {
+  border-radius: var(--radius-lg);
+  background: rgba(10, 10, 26, 0.7);
+  backdrop-filter: blur(60px);
+  -webkit-backdrop-filter: blur(60px);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.logo-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 4px 16px var(--accent-glow);
+}
+
+.logo-text {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.logo-text span {
+  background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  list-style: none;
+}
+
+.nav-links a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  transition: all 0.3s var(--transition);
+  letter-spacing: -0.01em;
+}
+
+.nav-links a:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.nav-cta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 24px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s var(--transition);
+  letter-spacing: -0.01em;
+}
+
+.btn-ghost {
+  color: var(--text-secondary);
+  background: transparent;
+}
+
+.btn-ghost:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.btn-primary {
+  color: white;
+  background: linear-gradient(135deg, var(--accent), #8B5CF6);
+  box-shadow: 0 4px 20px var(--accent-glow);
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 30px var(--accent-glow);
+}
+
+.btn-large {
+  padding: 16px 36px;
+  font-size: 16px;
+  border-radius: var(--radius-md);
+}
+
+/* ── Hero Section ── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 120px 24px 80px;
+  text-align: center;
+}
+
+.hero-content {
+  max-width: 800px;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--accent-secondary);
+  margin-bottom: 32px;
+  border: 1px solid rgba(0, 210, 255, 0.2);
+  background: rgba(0, 210, 255, 0.06);
+}
+
+.hero-badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-secondary);
+  box-shadow: 0 0 8px var(--accent-secondary);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.hero h1 {
+  font-size: clamp(40px, 7vw, 72px);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  margin-bottom: 24px;
+}
+
+.hero h1 .gradient-text {
+  background: linear-gradient(135deg, #fff 0%, var(--accent) 50%, var(--accent-secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero p {
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  max-width: 560px;
+  margin: 0 auto 40px;
+  letter-spacing: -0.01em;
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: 48px;
+  margin-top: 64px;
+  padding-top: 48px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, var(--text-primary), var(--accent-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.stat-label {
+  font-size: 13px;
+  color: var(--text-tertiary);
+  margin-top: 4px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ── Create Section (Main App Interface) ── */
+.create-section {
+  padding: 80px 24px;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.section-label {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+
+.section-title {
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin-bottom: 12px;
+}
+
+.section-desc {
+  font-size: 16px;
+  color: var(--text-secondary);
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+/* ── Prompt Card ── */
+.prompt-card {
+  max-width: 800px;
+  margin: 0 auto;
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+.prompt-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+}
+
+.prompt-input-wrapper {
+  position: relative;
+}
+
+.prompt-textarea {
+  width: 100%;
+  min-height: 120px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  color: var(--text-primary);
+  font-size: 16px;
+  font-family: inherit;
+  line-height: 1.6;
+  resize: vertical;
+  transition: all 0.3s var(--transition);
+  letter-spacing: -0.01em;
+}
+
+.prompt-textarea::placeholder {
+  color: var(--text-tertiary);
+}
+
+.prompt-textarea:focus {
+  outline: none;
+  border-color: rgba(108, 92, 231, 0.5);
+  box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.1);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.prompt-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.control-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.control-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  transition: all 0.3s var(--transition);
+  user-select: none;
+}
+
+.control-chip:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+}
+
+.control-chip.active {
+  background: rgba(108, 92, 231, 0.15);
+  border-color: rgba(108, 92, 231, 0.3);
+  color: var(--accent);
+}
+
+.control-chip svg {
+  width: 14px;
+  height: 14px;
+}
+
+.generate-btn {
+  padding: 12px 32px;
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(135deg, var(--accent), #8B5CF6);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s var(--transition);
+  box-shadow: 0 4px 20px var(--accent-glow);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.generate-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px var(--accent-glow);
+}
+
+.generate-btn:active {
+  transform: translateY(0);
+}
+
+.generate-btn.loading {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.generate-btn .spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  display: none;
+}
+
+.generate-btn.loading .spinner {
+  display: block;
+}
+
+.generate-btn.loading .btn-text {
+  display: none;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Attachment Upload ── */
+.attachments-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.attach-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  color: var(--text-tertiary);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: all 0.3s var(--transition);
+}
+
+.attach-btn:hover {
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.attach-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* ── Gallery Section ── */
+.gallery-section {
+  padding: 80px 24px;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.video-card {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: all 0.4s var(--transition);
+  cursor: pointer;
+  position: relative;
+}
+
+.video-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.video-thumb {
+  aspect-ratio: 16/9;
+  background: linear-gradient(135deg, rgba(108, 92, 231, 0.2), rgba(0, 210, 255, 0.1));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.video-thumb::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 50%);
+}
+
+.play-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  transition: all 0.3s var(--transition);
+}
+
+.video-card:hover .play-icon {
+  background: rgba(255, 255, 255, 0.25);
+  transform: scale(1.1);
+}
+
+.play-icon svg {
+  width: 20px;
+  height: 20px;
+  fill: white;
+  margin-left: 2px;
+}
+
+.video-info {
+  padding: 16px;
+}
+
+.video-prompt {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.video-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
+.video-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ── Pricing Section ── */
+.pricing-section {
+  padding: 80px 24px 120px;
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.pricing-card {
+  border-radius: var(--radius-lg);
+  padding: 36px 28px;
+  text-align: center;
+  transition: all 0.4s var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.pricing-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+}
+
+.pricing-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.pricing-card.featured {
+  border-color: rgba(108, 92, 231, 0.4);
+  background: rgba(108, 92, 231, 0.08);
+}
+
+.pricing-card.featured::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: var(--radius-lg);
+  padding: 1px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.pricing-label {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-tertiary);
+  margin-bottom: 16px;
+}
+
+.pricing-card.featured .pricing-label {
+  color: var(--accent);
+}
+
+.pricing-value {
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  margin-bottom: 4px;
+}
+
+.pricing-value .currency {
+  font-size: 24px;
+  font-weight: 500;
+  vertical-align: top;
+  margin-right: 2px;
+}
+
+.pricing-value .period {
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--text-tertiary);
+}
+
+.pricing-desc {
+  font-size: 14px;
+  color: var(--text-tertiary);
+  margin-bottom: 28px;
+}
+
+.pricing-features {
+  list-style: none;
+  text-align: left;
+  margin-bottom: 32px;
+}
+
+.pricing-features li {
+  font-size: 14px;
+  color: var(--text-secondary);
+  padding: 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pricing-features li::before {
+  content: '';
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(0, 230, 118, 0.1);
+  border: 1px solid rgba(0, 230, 118, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='8' viewBox='0 0 10 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 4L3.5 6.5L9 1' stroke='%2300E676' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.pricing-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s var(--transition);
+  border: none;
+}
+
+.pricing-btn-outline {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.pricing-btn-outline:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.pricing-btn-fill {
+  color: white;
+  background: linear-gradient(135deg, var(--accent), #8B5CF6);
+  box-shadow: 0 4px 20px var(--accent-glow);
+}
+
+.pricing-btn-fill:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 30px var(--accent-glow);
+}
+
+/* ── Footer ── */
+.footer {
+  padding: 48px 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.footer-copy {
+  font-size: 13px;
+  color: var(--text-tertiary);
+}
+
+.footer-links {
+  display: flex;
+  gap: 24px;
+  list-style: none;
+}
+
+.footer-links a {
+  font-size: 13px;
+  color: var(--text-tertiary);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer-links a:hover {
+  color: var(--text-secondary);
+}
+
+/* ── Scroll Animations ── */
+.fade-up {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s var(--transition);
+}
+
+.fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Mobile Menu ── */
+.mobile-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+}
+
+.mobile-toggle span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: var(--text-secondary);
+  margin: 4px 0;
+  border-radius: 2px;
+  transition: all 0.3s;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .nav-links, .nav-cta .btn-ghost {
+    display: none;
+  }
+
+  .mobile-toggle {
+    display: block;
+  }
+
+  .hero h1 {
+    font-size: 36px;
+  }
+
+  .hero-stats {
+    gap: 24px;
+  }
+
+  .stat-value {
+    font-size: 24px;
+  }
+
+  .prompt-card {
+    padding: 20px;
+  }
+
+  .prompt-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .generate-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .gallery-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pricing-grid {
+    grid-template-columns: 1fr;
+    max-width: 400px;
+  }
+
+  .footer-inner {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* ── Selection ── */
+::selection {
+  background: rgba(108, 92, 231, 0.3);
+  color: white;
+}
+</style>
+</head>
+
+<body>
+<!-- Animated Background -->
+<div class="bg-canvas">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+
+<!-- Content Layer -->
+<div class="content-layer">
+
+  <!-- Navigation -->
+  <nav class="nav" id="navbar">
+    <div class="nav-inner glass">
+      <a href="#" class="logo">
+        <div class="logo-icon"><img src="logo.png" alt="MineVideos" style="width:100%;height:100%;border-radius:10px;object-fit:cover;"></div>
+        <div class="logo-text">Mine<span>Videos</span></div>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#create">Create</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+      </ul>
+      <div class="nav-cta">
+        <a href="#" class="btn btn-ghost">Sign In</a>
+        <a href="#" class="btn btn-primary">Get Started</a>
+      </div>
+      <button class="mobile-toggle" id="mobileToggle">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-content fade-up">
+      <div class="hero-badge">Powered by Seedance 2.0</div>
+      <h1>
+        <span class="gradient-text">Create stunning videos</span><br>
+        from your imagination
+      </h1>
+      <p>Transform text prompts into cinematic videos in minutes. No editing skills required — just describe what you see.</p>
+      <div class="hero-actions">
+        <a href="#create" class="btn btn-primary btn-large">Start Creating — Free</a>
+        <a href="#gallery" class="btn btn-ghost btn-large">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M6.5 5.5L11 8L6.5 10.5V5.5Z" fill="currentColor"/></svg>
+          Watch Demo
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-value">720p</div>
+          <div class="stat-label">Resolution</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">~4min</div>
+          <div class="stat-label">Generation</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">5-11s</div>
+          <div class="stat-label">Video Length</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">24fps</div>
+          <div class="stat-label">Frame Rate</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Create Section -->
+  <section class="create-section" id="create">
+    <div class="container">
+      <div class="section-header fade-up">
+        <div class="section-label">Create</div>
+        <h2 class="section-title">Describe your vision</h2>
+        <p class="section-desc">Write a prompt, add reference media, and let AI bring your idea to life.</p>
+      </div>
+
+      <div class="prompt-card glass fade-up">
+        <div class="prompt-input-wrapper">
+          <textarea
+            class="prompt-textarea"
+            placeholder="A golden retriever running through a field of wildflowers at sunset, cinematic slow motion, shallow depth of field, warm color grading..."
+            spellcheck="false"
+          ></textarea>
+        </div>
+
+        <div class="attachments-bar">
+          <label class="attach-btn">
+            <svg viewBox="0 0 16 16" fill="none"><path d="M14 10V13.5C14 14.33 13.33 15 12.5 15H3.5C2.67 15 2 14.33 2 13.5V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M5 7L8 4L11 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 4V11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            Image
+          </label>
+          <label class="attach-btn">
+            <svg viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M6.5 6.5L10 8L6.5 9.5V6.5Z" fill="currentColor"/></svg>
+            Video
+          </label>
+          <label class="attach-btn">
+            <svg viewBox="0 0 16 16" fill="none"><path d="M8 2V14M8 2L5 5M8 2L11 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 10V12C3 13.1 3.9 14 5 14H11C12.1 14 13 13.1 13 12V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            Audio
+          </label>
+        </div>
+
+        <div class="prompt-controls">
+          <div class="control-group">
+            <div class="control-chip active" data-ratio="16:9">
+              <svg viewBox="0 0 16 12" fill="none"><rect x="0.5" y="0.5" width="15" height="11" rx="1.5" stroke="currentColor" stroke-width="1"/></svg>
+              16:9
+            </div>
+            <div class="control-chip" data-ratio="9:16">
+              <svg viewBox="0 0 9 16" fill="none"><rect x="0.5" y="0.5" width="8" height="15" rx="1.5" stroke="currentColor" stroke-width="1"/></svg>
+              9:16
+            </div>
+            <div class="control-chip" data-ratio="1:1">
+              <svg viewBox="0 0 12 12" fill="none"><rect x="0.5" y="0.5" width="11" height="11" rx="1.5" stroke="currentColor" stroke-width="1"/></svg>
+              1:1
+            </div>
+            <div class="control-chip" data-duration="5">5s</div>
+            <div class="control-chip" data-duration="11">11s</div>
+          </div>
+          <button class="generate-btn" id="generateBtn">
+            <span class="spinner"></span>
+            <span class="btn-text">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 3L7 9M7 9L3 13M7 9L11 5M7 9L3 5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+              Generate
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery Section -->
+  <section class="gallery-section" id="gallery">
+    <div class="container">
+      <div class="section-header fade-up">
+        <div class="section-label">Gallery</div>
+        <h2 class="section-title">Recently created</h2>
+        <p class="section-desc">Explore what others have brought to life with MineVideos.</p>
+      </div>
+
+      <div class="gallery-grid fade-up">
+        <div class="video-card glass">
+          <div class="video-thumb">
+            <div class="play-icon">
+              <svg viewBox="0 0 16 16"><path d="M5 3L13 8L5 13V3Z"/></svg>
+            </div>
+          </div>
+          <div class="video-info">
+            <div class="video-prompt">A serene Japanese garden with cherry blossoms falling, koi pond reflection, golden hour light filtering through branches</div>
+            <div class="video-meta">
+              <span>720p</span>
+              <span>•</span>
+              <span>5s</span>
+              <span>•</span>
+              <span>2h ago</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="video-card glass">
+          <div class="video-thumb" style="background: linear-gradient(135deg, rgba(255,107,157,0.2), rgba(255,183,77,0.1));">
+            <div class="play-icon">
+              <svg viewBox="0 0 16 16"><path d="M5 3L13 8L5 13V3Z"/></svg>
+            </div>
+          </div>
+          <div class="video-info">
+            <div class="video-prompt">Cinematic product shot of perfume bottle on marble surface, soft studio lighting, slow camera orbit, luxury commercial style</div>
+            <div class="video-meta">
+              <span>720p</span>
+              <span>•</span>
+              <span>11s</span>
+              <span>•</span>
+              <span>5h ago</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="video-card glass">
+          <div class="video-thumb" style="background: linear-gradient(135deg, rgba(0,230,118,0.15), rgba(0,210,255,0.1));">
+            <div class="play-icon">
+              <svg viewBox="0 0 16 16"><path d="M5 3L13 8L5 13V3Z"/></svg>
+            </div>
+          </div>
+          <div class="video-info">
+            <div class="video-prompt">Drone footage flying over a misty mountain range at dawn, volumetric clouds, epic cinematic landscape</div>
+            <div class="video-meta">
+              <span>720p</span>
+              <span>•</span>
+              <span>5s</span>
+              <span>•</span>
+              <span>1d ago</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="video-card glass">
+          <div class="video-thumb" style="background: linear-gradient(135deg, rgba(108,92,231,0.2), rgba(255,107,157,0.1));">
+            <div class="play-icon">
+              <svg viewBox="0 0 16 16"><path d="M5 3L13 8L5 13V3Z"/></svg>
+            </div>
+          </div>
+          <div class="video-info">
+            <div class="video-prompt">An astronaut floating in space with Earth reflection in visor, stars slowly rotating, sci-fi film aesthetic</div>
+            <div class="video-meta">
+              <span>720p</span>
+              <span>•</span>
+              <span>11s</span>
+              <span>•</span>
+              <span>2d ago</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing Section -->
+  <section class="pricing-section" id="pricing">
+    <div class="container">
+      <div class="section-header fade-up">
+        <div class="section-label">Pricing</div>
+        <h2 class="section-title">Simple, transparent pricing</h2>
+        <p class="section-desc">Start free. Upgrade when you need more.</p>
+      </div>
+
+      <div class="pricing-grid fade-up">
+        <!-- Free -->
+        <div class="pricing-card glass">
+          <div class="pricing-label">Free</div>
+          <div class="pricing-value">
+            <span class="currency">$</span>0
+          </div>
+          <div class="pricing-desc">Try MineVideos at no cost</div>
+          <ul class="pricing-features">
+            <li>3 videos per day</li>
+            <li>720p resolution</li>
+            <li>5s duration</li>
+            <li>Text-to-video only</li>
+            <li>Community support</li>
+          </ul>
+          <button class="pricing-btn pricing-btn-outline">Get Started</button>
+        </div>
+
+        <!-- Pro -->
+        <div class="pricing-card glass featured">
+          <div class="pricing-label">Pro</div>
+          <div class="pricing-value">
+            <span class="currency">$</span>29
+            <span class="period">/mo</span>
+          </div>
+          <div class="pricing-desc">For creators & professionals</div>
+          <ul class="pricing-features">
+            <li>50 videos per day</li>
+            <li>1080p resolution</li>
+            <li>Up to 11s duration</li>
+            <li>Image & video reference</li>
+            <li>Audio generation</li>
+            <li>Priority queue</li>
+          </ul>
+          <button class="pricing-btn pricing-btn-fill">Start Pro Trial</button>
+        </div>
+
+        <!-- Studio -->
+        <div class="pricing-card glass">
+          <div class="pricing-label">Studio</div>
+          <div class="pricing-value">
+            <span class="currency">$</span>99
+            <span class="period">/mo</span>
+          </div>
+          <div class="pricing-desc">For teams & agencies</div>
+          <ul class="pricing-features">
+            <li>Unlimited videos</li>
+            <li>1080p resolution</li>
+            <li>Up to 11s duration</li>
+            <li>All reference types</li>
+            <li>API access</li>
+            <li>Dedicated support</li>
+          </ul>
+          <button class="pricing-btn pricing-btn-outline">Contact Sales</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-copy">© 2026 MineVideos AI. All rights reserved.</div>
+      <ul class="footer-links">
+        <li><a href="#">Terms</a></li>
+        <li><a href="#">Privacy</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+// ── Nav scroll effect ──
+const nav = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+});
+
+// ── Scroll reveal ──
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+// ── Aspect ratio chips ──
+document.querySelectorAll('.control-chip[data-ratio]').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.control-chip[data-ratio]').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+  });
+});
+
+// ── Duration chips ──
+document.querySelectorAll('.control-chip[data-duration]').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.control-chip[data-duration]').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+  });
+});
+
+// ── Generate button (demo) ──
+const genBtn = document.getElementById('generateBtn');
+genBtn.addEventListener('click', () => {
+  genBtn.classList.add('loading');
+  setTimeout(() => {
+    genBtn.classList.remove('loading');
+  }, 3000);
+});
+
+// ── Smooth scroll ──
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', (e) => {
+    e.preventDefault();
+    const target = document.querySelector(anchor.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+</body>
+</html>
