@@ -919,28 +919,32 @@ body {
 
 /* ── Scroll Animations ── */
 .fade-up {
-  /* Default visible: no JS dependency */
-  opacity: 1;
-  transform: translateY(0);
-  transition: all 0.8s var(--transition);
+  animation: fadeInUp 0.8s var(--transition) both;
 }
 
-/* Progressive enhancement: if JS runs, animate in */
-.fade-up.animate {
-  opacity: 0;
-  transform: translateY(30px);
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.fade-up.animate.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
+/* Stagger animations for sequential elements */
+.fade-up:nth-child(2) { animation-delay: 0.1s; }
+.fade-up:nth-child(3) { animation-delay: 0.2s; }
+.fade-up:nth-child(4) { animation-delay: 0.3s; }
 
 .hero .fade-up {
+  animation: none;
   opacity: 1;
+  transform: none;
 }
 
-/* ── Mobile Menu ── */
+/* ── Mobile Menu */
 .mobile-toggle {
   display: none;
   background: none;
@@ -1418,19 +1422,7 @@ window.addEventListener('scroll', () => {
   nav.classList.toggle('scrolled', window.scrollY > 40);
 });
 
-// ── Scroll reveal ──
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-    }
-  });
-}, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
-
-document.querySelectorAll('.fade-up').forEach(el => {
-  el.classList.add('animate');
-  observer.observe(el);
-});
+// CSS animations handle fade-up automatically, no JS observer needed
 
 // ── Aspect ratio chips ──
 document.querySelectorAll('.control-chip[data-ratio]').forEach(chip => {
@@ -1446,8 +1438,6 @@ document.querySelectorAll('.control-chip[data-duration]').forEach(chip => {
     document.querySelectorAll('.control-chip[data-duration]').forEach(c => c.classList.remove('active'));
     chip.classList.add('active');
   });
-});
-
 });
 
 // ── Smooth scroll ──
