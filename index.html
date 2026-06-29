@@ -1183,6 +1183,7 @@ body {
         <div class="prompt-input-wrapper">
           <textarea
             class="prompt-textarea"
+            id="promptInput"
             placeholder="A golden retriever running through a field of wildflowers at sunset, cinematic slow motion, shallow depth of field, warm color grading..."
             spellcheck="false"
           ></textarea>
@@ -1433,13 +1434,6 @@ document.querySelectorAll('.control-chip[data-duration]').forEach(chip => {
   });
 });
 
-// ── Generate button (demo) ──
-const genBtn = document.getElementById('generateBtn');
-genBtn.addEventListener('click', () => {
-  genBtn.classList.add('loading');
-  setTimeout(() => {
-    genBtn.classList.remove('loading');
-  }, 3000);
 });
 
 // ── Smooth scroll ──
@@ -1509,6 +1503,204 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     }
   }
 
+
+  // ── Auth: Email Login/Register ──
+  const authEmail = document.getElementById('authEmail');
+  const authPassword = document.getElementById('authPassword');
+  const emailForm = document.getElementById('emailSignInForm');
+  let isRegisterMode = false;
+  
+  // Toggle register mode
+  document.querySelector('.auth-footer a')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    isRegisterMode = !isRegisterMode;
+    const submitBtn = emailForm.querySelector('.auth-submit-btn');
+    const footerText = document.querySelector('.auth-footer');
+    if (isRegisterMode) {
+      submitBtn.textContent = 'Sign Up';
+      footerText.innerHTML = 'Already have an account? <a href="#">Sign in</a>';
+    } else {
+      submitBtn.textContent = 'Sign In';
+      footerText.innerHTML = 'Don\'t have an account? <a href="#">Sign up free</a>';
+    }
+  });
+  
+  emailForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = authEmail.value;
+    const password = authPassword.value;
+    if (!email || !password) return;
+    
+    const endpoint = isRegisterMode ? '/api/v1/auth/register' : '/api/v1/auth/login';
+    const body = isRegisterMode 
+      ? JSON.stringify({ email, password })
+      : `username=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`;
+    const headers = isRegisterMode 
+      ? { 'Content-Type': 'application/json' }
+      : { 'Content-Type': 'application/x-www-form-urlencoded' };
+    
+    try {
+      const res = await fetch(API_BASE + endpoint, { method: 'POST', headers, body });
+      const data = await res.json();
+      
+      if (!res.ok) {
+        alert(data.detail || 'Authentication failed');
+        return;
+      }
+      
+      if (isRegisterMode) {
+        alert('Account created! Please sign in.');
+        isRegisterMode = false;
+        emailForm.querySelector('.auth-submit-btn').textContent = 'Sign In';
+      } else {
+        // Login success - store token
+        localStorage.setItem('mv_token', data.access_token);
+        // Fetch user info
+        const userRes = await fetch(API_BASE + '/api/v1/auth/me', {
+          headers: { 'Authorization': 'Bearer ' + data.access_token }
+        });
+        if (userRes.ok) {
+          const user = await userRes.json();
+          localStorage.setItem('mv_user', JSON.stringify(user));
+        }
+        authOverlay.style.display = 'none';
+        updateAuthUI();
+      }
+    } catch (err) {
+      console.error('Auth error:', err);
+      alert('Connection error. Please try again.');
+    }
+  });
+  
+  // Auth UI state
+  function updateAuthUI() {
+    const token = localStorage.getItem('mv_token');
+    const userStr = localStorage.getItem('mv_user');
+    const loginBtn = document.getElementById('loginBtn');
+    if (token && userStr) {
+      const user = JSON.parse(userStr);
+      if (loginBtn) {
+        loginBtn.textContent = user.username || user.email || 'Account';
+        loginBtn.onclick = (e) => {
+          e.preventDefault();
+          if (confirm('Sign out?')) {
+            localStorage.removeItem('mv_token');
+            localStorage.removeItem('mv_user');
+            location.reload();
+          }
+        };
+      }
+    }
+  }
+  updateAuthUI();
+  
+  // ── Video Generation (Real API) ──
+  const genBtn = document.getElementById('generateBtn');
+  const promptInput = document.getElementById('promptInput');
+  let currentTaskId = null;
+  let pollInterval = null;
+  
+  // Remove demo behavior, add real generation
+  if (genBtn) {
+    genBtn.addEventListener('click', async () => {
+      const token = localStorage.getItem('mv_token');
+      if (!token) {
+        authOverlay.style.display = 'flex';
+        return;
+      }
+      
+      const prompt = promptInput?.value?.trim() || '';
+      if (!prompt) {
+        alert('Please enter a prompt');
+        return;
+      }
+      
+      // Get selected ratio and duration
+      const ratio = document.querySelector('.control-chip[data-ratio].active')?.dataset?.ratio || '16:9';
+      const duration = parseInt(document.querySelector('.control-chip[data-duration].active')?.dataset?.duration || '5');
+      
+      genBtn.classList.add('loading');
+      genBtn.querySelector('.btn-text').textContent = 'Generating...';
+      
+      try {
+        const res = await fetch(API_BASE + '/api/v1/video/generate', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          },
+          body: JSON.stringify({ prompt, ratio, duration, model: 'fast' })
+        });
+        
+        const data = await res.json();
+        
+        if (!res.ok) {
+          if (res.status === 401) {
+            localStorage.removeItem('mv_token');
+            authOverlay.style.display = 'flex';
+          }
+          alert(data.detail || 'Generation failed');
+          genBtn.classList.remove('loading');
+          genBtn.querySelector('.btn-text').textContent = 'Generate';
+          return;
+        }
+        
+        currentTaskId = data.task_id;
+        startPolling(data.task_id);
+      } catch (err) {
+        console.error('Generate error:', err);
+        alert('Connection error');
+        genBtn.classList.remove('loading');
+        genBtn.querySelector('.btn-text').textContent = 'Generate';
+      }
+    });
+  }
+  
+  function startPolling(taskId) {
+    if (pollInterval) clearInterval(pollInterval);
+    pollInterval = setInterval(async () => {
+      try {
+        const token = localStorage.getItem('mv_token');
+        const res = await fetch(API_BASE + '/api/v1/video/task/' + taskId, {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        const data = await res.json();
+        
+        if (data.status === 'completed') {
+          clearInterval(pollInterval);
+          genBtn.classList.remove('loading');
+          genBtn.querySelector('.btn-text').textContent = 'Generate';
+          
+          // Show result
+          showVideoResult(data.video_url, promptInput?.value || '');
+        } else if (data.status === 'failed') {
+          clearInterval(pollInterval);
+          genBtn.classList.remove('loading');
+          genBtn.querySelector('.btn-text').textContent = 'Generate';
+          alert('Video generation failed: ' + (data.error_message || 'Unknown error'));
+        }
+        // else still processing, continue polling
+      } catch (err) {
+        console.error('Poll error:', err);
+      }
+    }, 5000); // Poll every 5 seconds
+  }
+  
+  function showVideoResult(videoUrl, prompt) {
+    // Create a result modal or update the page
+    const resultHtml = `
+      <div id="videoResult" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.9);z-index:9999;display:flex;align-items:center;justify-content:center;padding:2rem;">
+        <div style="max-width:800px;width:100%;text-align:center;">
+          <video controls autoplay style="width:100%;border-radius:16px;margin-bottom:1rem;">
+            <source src="${videoUrl}" type="video/mp4">
+          </video>
+          <p style="color:#fff;font-size:0.9rem;opacity:0.7;">${prompt}</p>
+          <button onclick="document.getElementById('videoResult').remove()" style="margin-top:1rem;padding:0.6rem 2rem;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:8px;color:#fff;cursor:pointer;">Close</button>
+        </div>
+      </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', resultHtml);
+  }
 </script>
 
   <!-- Login Modal -->
