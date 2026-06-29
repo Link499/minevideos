@@ -958,44 +958,190 @@ body {
     display: block;
   }
 
+  .nav-inner {
+    padding: 10px 16px;
+  }
+
+  .hero {
+    padding: 100px 16px 60px;
+  }
+
   .hero h1 {
     font-size: 36px;
   }
 
+  .hero p {
+    font-size: 16px;
+  }
+
   .hero-stats {
-    gap: 24px;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 
   .stat-value {
     font-size: 24px;
   }
 
+  .create-section {
+    padding: 60px 16px;
+  }
+
   .prompt-card {
-    padding: 20px;
+    padding: 20px 16px;
+  }
+
+  .prompt-textarea {
+    padding: 16px;
+    font-size: 16px;
+    min-height: 100px;
+  }
+
+  .attachments-bar {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .attach-btn {
+    flex: 1 1 auto;
+    min-width: 80px;
+    justify-content: center;
+    padding: 8px 10px;
   }
 
   .prompt-controls {
     flex-direction: column;
     align-items: stretch;
+    gap: 16px;
+  }
+
+  .control-group {
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  .control-chip {
+    flex: 0 1 auto;
+    padding: 8px 14px;
+    font-size: 13px;
   }
 
   .generate-btn {
     width: 100%;
     justify-content: center;
+    padding: 14px 24px;
+  }
+
+  .gallery-section {
+    padding: 60px 16px;
   }
 
   .gallery-grid {
     grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .pricing-section {
+    padding: 60px 16px 100px;
   }
 
   .pricing-grid {
     grid-template-columns: 1fr;
     max-width: 400px;
+    gap: 16px;
   }
 
   .footer-inner {
     flex-direction: column;
     text-align: center;
+  }
+
+  .section-header {
+    margin-bottom: 32px;
+  }
+}
+
+/* ── Extra small devices ── */
+@media (max-width: 380px) {
+  .hero h1 {
+    font-size: 28px;
+  }
+
+  .hero-badge {
+    font-size: 12px;
+    padding: 6px 14px;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .hero-actions .btn-large {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .hero-stats {
+    gap: 12px;
+  }
+
+  .stat {
+    flex: 0 1 45%;
+  }
+
+  .stat-value {
+    font-size: 20px;
+  }
+
+  .stat-label {
+    font-size: 11px;
+  }
+
+  .prompt-card {
+    padding: 16px 12px;
+  }
+
+  .prompt-textarea {
+    padding: 14px;
+    font-size: 15px;
+  }
+
+  .control-chip {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  .attach-btn {
+    font-size: 12px;
+    padding: 6px 8px;
+  }
+
+  .section-title {
+    font-size: 24px;
+  }
+
+  .section-desc {
+    font-size: 14px;
+  }
+
+  .pricing-card {
+    padding: 28px 20px;
+  }
+
+  .pricing-value {
+    font-size: 40px;
+  }
+
+  .logo-text {
+    font-size: 17px;
+  }
+
+  .auth-modal {
+    padding: 2rem 1.2rem 1.5rem;
+    width: 95%;
   }
 }
 
