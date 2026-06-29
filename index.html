@@ -1022,6 +1022,81 @@ body {
   background: rgba(108, 92, 231, 0.3);
   color: white;
 }
+
+/* ── Auth Modal ── */
+.auth-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 9999;
+  display: flex; align-items: center; justify-content: center;
+  animation: fadeIn 0.2s ease;
+}
+.auth-modal {
+  background: rgba(30,30,50,0.85);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem 2rem 2rem;
+  width: 90%; max-width: 400px;
+  position: relative;
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+}
+.auth-close {
+  position: absolute; top: 1rem; right: 1.2rem;
+  background: none; border: none; color: var(--text-secondary);
+  font-size: 1.5rem; cursor: pointer; transition: color 0.2s;
+}
+.auth-close:hover { color: var(--text-primary); }
+.auth-logo { text-align: center; margin-bottom: 1rem; }
+.github-signin-btn {
+  display: flex; align-items: center; justify-content: center; gap: 0.7rem;
+  width: 100%; padding: 0.85rem 1rem;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary); font-size: 0.95rem; font-weight: 500;
+  cursor: pointer; transition: all 0.25s var(--transition);
+  text-decoration: none;
+}
+.github-signin-btn:hover {
+  background: rgba(255,255,255,0.14);
+  border-color: rgba(255,255,255,0.3);
+  transform: translateY(-1px);
+}
+.auth-divider {
+  display: flex; align-items: center; gap: 1rem;
+  margin: 1.2rem 0; color: var(--text-tertiary); font-size: 0.8rem;
+}
+.auth-divider::before, .auth-divider::after {
+  content: ''; flex: 1; height: 1px;
+  background: rgba(255,255,255,0.1);
+}
+.auth-input {
+  width: 100%; padding: 0.75rem 1rem; margin-bottom: 0.7rem;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary); font-size: 0.9rem;
+  outline: none; transition: border-color 0.2s;
+}
+.auth-input:focus { border-color: var(--accent); }
+.auth-input::placeholder { color: var(--text-tertiary); }
+.auth-submit-btn {
+  width: 100%; padding: 0.8rem;
+  background: var(--accent); border: none;
+  border-radius: var(--radius-sm);
+  color: #fff; font-size: 0.95rem; font-weight: 600;
+  cursor: pointer; transition: all 0.25s var(--transition);
+}
+.auth-submit-btn:hover { background: #5a4bd4; transform: translateY(-1px); }
+.auth-footer {
+  text-align: center; margin-top: 1rem;
+  font-size: 0.82rem; color: var(--text-secondary);
+}
+.auth-footer a { color: var(--accent-secondary); text-decoration: none; }
+
 </style>
 </head>
 
@@ -1049,7 +1124,7 @@ body {
         <li><a href="#pricing">Pricing</a></li>
       </ul>
       <div class="nav-cta">
-        <a href="#" class="btn btn-ghost">Sign In</a>
+        <a href="#" class="btn btn-ghost" id="loginBtn">Sign In</a>
         <a href="#" class="btn btn-primary">Get Started</a>
       </div>
       <button class="mobile-toggle" id="mobileToggle">
@@ -1377,6 +1452,94 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     }
   });
 });
+
+  // Auth Modal
+  const loginBtn = document.getElementById('loginBtn');
+  const authOverlay = document.getElementById('authOverlay');
+  const authClose = document.getElementById('authClose');
+  const githubSignIn = document.getElementById('githubSignIn');
+  
+  const API_BASE = 'https://minevideos-api.up.railway.app';
+  
+  loginBtn?.addEventListener('click', (e) => {
+    e.preventDefault();
+    authOverlay.style.display = 'flex';
+  });
+  authClose?.addEventListener('click', () => {
+    authOverlay.style.display = 'none';
+  });
+  authOverlay?.addEventListener('click', (e) => {
+    if (e.target === authOverlay) authOverlay.style.display = 'none';
+  });
+  
+  githubSignIn?.addEventListener('click', async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch(API_BASE + '/api/v1/auth/github');
+      const data = await res.json();
+      if (data.authorization_url) {
+        window.location.href = data.authorization_url;
+      }
+    } catch (err) {
+      console.error('GitHub OAuth error:', err);
+      alert('Unable to connect to authentication service. Please try again later.');
+    }
+  });
+  
+  // Check for OAuth callback (URL params after GitHub redirect)
+  if (window.location.search.includes('code=')) {
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get('code');
+    if (code) {
+      fetch(API_BASE + '/api/v1/auth/github/callback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code })
+      })
+      .then(r => r.json())
+      .then(data => {
+        if (data.access_token) {
+          localStorage.setItem('mv_token', data.access_token);
+          localStorage.setItem('mv_user', JSON.stringify(data.user));
+          window.history.replaceState({}, '', window.location.pathname);
+          location.reload();
+        }
+      })
+      .catch(err => console.error('Callback error:', err));
+    }
+  }
+
 </script>
+
+  <!-- Login Modal -->
+  <div class="auth-overlay" id="authOverlay" style="display:none;">
+    <div class="auth-modal glass">
+      <button class="auth-close" id="authClose">&times;</button>
+      <div class="auth-logo">
+        <img src="logo.png" alt="MineVideos" style="width:48px;height:48px;border-radius:12px;">
+      </div>
+      <h2 style="text-align:center;font-size:1.4rem;margin-bottom:0.3rem;">Welcome to MineVideos</h2>
+      <p style="text-align:center;color:var(--text-secondary);font-size:0.9rem;margin-bottom:1.5rem;">Sign in to start creating AI videos</p>
+      
+      <a href="#" class="github-signin-btn" id="githubSignIn">
+        <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+        </svg>
+        Continue with GitHub
+      </a>
+      
+      <div class="auth-divider"><span>or</span></div>
+      
+      <form id="emailSignInForm" onsubmit="return false;">
+        <input type="email" placeholder="Email" class="auth-input" id="authEmail" required>
+        <input type="password" placeholder="Password" class="auth-input" id="authPassword" required>
+        <button type="submit" class="auth-submit-btn">Sign In</button>
+      </form>
+      
+      <p class="auth-footer">Don't have an account? <a href="#">Sign up free</a></p>
+      <p class="auth-footer" style="margin-top:0.3rem;font-size:0.75rem;color:var(--text-tertiary);">By signing in you agree to our Terms & Privacy Policy</p>
+    </div>
+  </div>
+
 </body>
 </html>
