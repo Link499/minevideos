@@ -1412,6 +1412,147 @@ body {
 }
 .auth-footer a { color: var(--accent-secondary); text-decoration: none; }
 
+
+/* ── Generation Animation (OpenAI-style) ── */
+.gen-animation-overlay {
+  display: none;
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  background: rgba(8, 8, 20, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.gen-animation-overlay.active {
+  display: flex;
+  opacity: 1;
+}
+
+.gen-shimmer-card {
+  width: 100%;
+  max-width: 480px;
+  aspect-ratio: 16/9;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 100%);
+  background-size: 200% 200%;
+  animation: shimmerMove 2s ease-in-out infinite;
+  border: 1px solid rgba(255,255,255,0.08);
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+.gen-shimmer-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    rgba(255,255,255,0.03) 35%,
+    rgba(120, 90, 255, 0.06) 50%,
+    rgba(255,255,255,0.03) 65%,
+    transparent 100%
+  );
+  background-size: 300% 100%;
+  animation: shimmerSweep 2.5s ease-in-out infinite;
+}
+
+.gen-shimmer-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(120,90,255,0.08) 0%, transparent 70%);
+  animation: shimmerPulse 3s ease-in-out infinite;
+}
+
+@keyframes shimmerMove {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+@keyframes shimmerSweep {
+  0% { background-position: 200% 0; }
+  100% { background-position: -100% 0; }
+}
+@keyframes shimmerPulse {
+  0%, 100% { opacity: 0.3; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+.gen-progress-bar {
+  width: 100%;
+  max-width: 480px;
+  height: 4px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+.gen-progress-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #785aff, #a78bfa, #c4b5fd);
+  transition: width 0.8s ease;
+}
+
+.gen-status-text {
+  font-size: 0.95rem;
+  color: rgba(255,255,255,0.6);
+  letter-spacing: 0.02em;
+  margin-bottom: 0.5rem;
+  min-height: 1.4em;
+}
+.gen-prompt-preview {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.3);
+  max-width: 400px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.gen-sparkle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(167, 139, 250, 0.6);
+  animation: sparkle 2s ease-in-out infinite;
+}
+.gen-sparkle:nth-child(1) { top: 20%; left: 15%; animation-delay: 0s; }
+.gen-sparkle:nth-child(2) { top: 60%; left: 80%; animation-delay: 0.7s; }
+.gen-sparkle:nth-child(3) { top: 40%; left: 50%; animation-delay: 1.4s; }
+.gen-sparkle:nth-child(4) { top: 75%; left: 25%; animation-delay: 0.3s; }
+.gen-sparkle:nth-child(5) { top: 15%; left: 65%; animation-delay: 1.0s; }
+
+@keyframes sparkle {
+  0%, 100% { opacity: 0; transform: scale(0); }
+  50% { opacity: 1; transform: scale(1); }
+}
+
+/* Completion state */
+.gen-animation-overlay.completed .gen-shimmer-card {
+  animation: genComplete 0.6s ease forwards;
+}
+@keyframes genComplete {
+  0% { border-color: rgba(255,255,255,0.08); }
+  50% { border-color: rgba(120,90,255,0.4); box-shadow: 0 0 30px rgba(120,90,255,0.2); }
+  100% { border-color: rgba(120,90,255,0.15); box-shadow: 0 0 10px rgba(120,90,255,0.1); }
+}
+.gen-animation-overlay.completed .gen-progress-fill {
+  width: 100% !important;
+  background: linear-gradient(90deg, #785aff, #a78bfa);
+}
 </style>
 </head>
 
@@ -1544,6 +1685,22 @@ body {
             </span>
           </button>
         </div>
+
+      <!-- Generation Animation Overlay -->
+      <div class="gen-animation-overlay" id="genAnimation">
+        <div class="gen-shimmer-card">
+          <div class="gen-sparkle"></div>
+          <div class="gen-sparkle"></div>
+          <div class="gen-sparkle"></div>
+          <div class="gen-sparkle"></div>
+          <div class="gen-sparkle"></div>
+        </div>
+        <div class="gen-progress-bar">
+          <div class="gen-progress-fill" id="genProgressFill"></div>
+        </div>
+        <div class="gen-status-text" id="genStatusText">Preparing your video...</div>
+        <div class="gen-prompt-preview" id="genPromptPreview"></div>
+      </div>
       </div>
     </div>
   </section>
@@ -2197,6 +2354,9 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       genBtn.classList.add('loading');
       genBtn.querySelector('.btn-text').innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 3L7 9M7 9L3 13M7 9L11 5M7 9L3 5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg> Generating...';
       
+      // Show generation animation
+      showGenAnimation(prompt);
+      
       try {
         const res = await fetch(API_BASE + '/api/v1/video/generate', {
           method: 'POST',
@@ -2215,20 +2375,73 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             authOverlay.style.display = 'flex';
           }
           alert(data.detail || 'Generation failed');
+          hideGenAnimation();
           genBtn.classList.remove('loading');
           genBtn.querySelector('.btn-text').innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 3L7 9M7 9L3 13M7 9L11 5M7 9L3 5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg> Generate';
           return;
         }
         
         currentTaskId = data.task_id;
+        updateGenStatus('Sending to AI model...', 10);
         startPolling(data.task_id);
       } catch (err) {
         console.error('Generate error:', err);
         alert('Connection error');
+        hideGenAnimation();
         genBtn.classList.remove('loading');
         genBtn.querySelector('.btn-text').innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 3L7 9M7 9L3 13M7 9L11 5M7 9L3 5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg> Generate';
       }
     });
+  }
+  
+  // ── Generation Animation Functions ──
+  let genStatusInterval = null;
+  const genStatusPhases = [
+    { text: 'Analyzing your prompt...', progress: 15 },
+    { text: 'Composing scene layout...', progress: 25 },
+    { text: 'Generating keyframes...', progress: 40 },
+    { text: 'Rendering motion dynamics...', progress: 55 },
+    { text: 'Synthesizing video frames...', progress: 70 },
+    { text: 'Applying color grading...', progress: 80 },
+    { text: 'Finalizing video output...', progress: 90 },
+  ];
+  
+  function showGenAnimation(prompt) {
+    const overlay = document.getElementById('genAnimation');
+    const promptPreview = document.getElementById('genPromptPreview');
+    const progressFill = document.getElementById('genProgressFill');
+    const statusText = document.getElementById('genStatusText');
+    
+    if (!overlay) return;
+    
+    overlay.classList.add('active');
+    overlay.classList.remove('completed');
+    if (promptPreview) promptPreview.textContent = '"' + prompt + '"';
+    if (progressFill) progressFill.style.width = '5%';
+    if (statusText) statusText.textContent = 'Preparing your video...';
+    
+    // Cycle through status phases every ~8 seconds (total ~56s for full cycle)
+    let phaseIndex = 0;
+    genStatusInterval = setInterval(() => {
+      if (phaseIndex < genStatusPhases.length) {
+        const phase = genStatusPhases[phaseIndex];
+        updateGenStatus(phase.text, phase.progress);
+        phaseIndex++;
+      }
+    }, 8000);
+  }
+  
+  function updateGenStatus(text, progress) {
+    const statusText = document.getElementById('genStatusText');
+    const progressFill = document.getElementById('genProgressFill');
+    if (statusText) statusText.textContent = text;
+    if (progressFill) progressFill.style.width = progress + '%';
+  }
+  
+  function hideGenAnimation() {
+    const overlay = document.getElementById('genAnimation');
+    if (genStatusInterval) { clearInterval(genStatusInterval); genStatusInterval = null; }
+    if (overlay) { overlay.classList.remove('active'); overlay.classList.remove('completed'); }
   }
   
   function startPolling(taskId) {
@@ -2241,26 +2454,42 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         });
         const data = await res.json();
         
+        // Update animation with real progress
+        if (data.progress && data.progress > 0) {
+          updateGenStatus('Rendering video... ' + data.progress + '%', Math.max(data.progress, 50));
+        }
+        
         if (data.status === 'completed') {
           clearInterval(pollInterval);
-          genBtn.classList.remove('loading');
-          genBtn.querySelector('.btn-text').innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 3L7 9M7 9L3 13M7 9L11 5M7 9L3 5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg> Generate';
-
-          // Show result
-          showVideoResult(data.video_url, promptInput?.value || '');
-          loadMyVideos();  // Auto-refresh My Videos
+          if (genStatusInterval) { clearInterval(genStatusInterval); genStatusInterval = null; }
+          
+          // Show completion animation
+          const overlay = document.getElementById('genAnimation');
+          if (overlay) overlay.classList.add('completed');
+          updateGenStatus('Video ready!', 100);
+          
+          // Brief celebration pause then show result
+          setTimeout(() => {
+            hideGenAnimation();
+            genBtn.classList.remove('loading');
+            genBtn.querySelector('.btn-text').innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 3L7 9M7 9L3 13M7 9L11 5M7 9L3 5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg> Generate';
+            showVideoResult(data.video_url, promptInput?.value || '');
+            loadMyVideos();
+          }, 1200);
+          
         } else if (data.status === 'failed') {
           clearInterval(pollInterval);
+          if (genStatusInterval) { clearInterval(genStatusInterval); genStatusInterval = null; }
+          hideGenAnimation();
           genBtn.classList.remove('loading');
           genBtn.querySelector('.btn-text').innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 3L7 9M7 9L3 13M7 9L11 5M7 9L3 5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg> Generate';
           alert('Video generation failed: ' + (data.error_message || 'Unknown error'));
-          loadMyVideos();  // Update My Videos with failed status
+          loadMyVideos();
         }
-        // else still processing, continue polling
       } catch (err) {
         console.error('Poll error:', err);
       }
-    }, 5000); // Poll every 5 seconds
+    }, 5000);
   }
   
   function showVideoResult(videoUrl, prompt) {
