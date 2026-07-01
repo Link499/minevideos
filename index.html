@@ -542,6 +542,56 @@ body {
   gap: 12px;
 }
 
+/* Upload Preview */
+.upload-preview {
+  margin-top: 12px;
+  animation: fadeUp 0.3s ease;
+}
+.preview-item {
+  position: relative;
+  display: inline-block;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.03);
+}
+.preview-item img {
+  display: block;
+  max-width: 200px;
+  max-height: 140px;
+  object-fit: cover;
+}
+.preview-remove {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+.preview-remove:hover { background: rgba(255,60,60,0.8); }
+
+/* Voice Recording State */
+.attach-btn.recording {
+  color: #ff4757 !important;
+  border-color: rgba(255,71,87,0.4) !important;
+  background: rgba(255,71,87,0.1) !important;
+  animation: pulse-record 1.5s infinite;
+}
+@keyframes pulse-record {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255,71,87,0.3); }
+  50% { box-shadow: 0 0 0 6px rgba(255,71,87,0); }
+}
+
 .control-group {
   display: flex;
   align-items: center;
@@ -1392,6 +1442,15 @@ body {
     padding: 14px 24px;
   }
 
+  .preview-item img {
+    max-width: 150px;
+    max-height: 100px;
+  }
+
+  .gen-quiz-options {
+    grid-template-columns: 1fr;
+  }
+
   .gallery-section {
     padding: 60px 16px;
   }
@@ -1962,18 +2021,28 @@ body {
         </div>
 
         <div class="attachments-bar">
-          <label class="attach-btn">
+          <label class="attach-btn" id="imageUploadBtn">
             <svg viewBox="0 0 16 16" fill="none"><path d="M14 10V13.5C14 14.33 13.33 15 12.5 15H3.5C2.67 15 2 14.33 2 13.5V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M5 7L8 4L11 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 4V11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
             Image
+            <input type="file" id="imageFileInput" accept="image/*" style="display:none">
           </label>
-          <label class="attach-btn">
+          <label class="attach-btn" id="videoUploadBtn">
             <svg viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M6.5 6.5L10 8L6.5 9.5V6.5Z" fill="currentColor"/></svg>
             Video
+            <input type="file" id="videoFileInput" accept="video/*" style="display:none">
           </label>
-          <label class="attach-btn">
-            <svg viewBox="0 0 16 16" fill="none"><path d="M8 2V14M8 2L5 5M8 2L11 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 10V12C3 13.1 3.9 14 5 14H11C12.1 14 13 13.1 13 12V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-            Audio
-          </label>
+          <button class="attach-btn" id="voiceRecordBtn" type="button">
+            <svg viewBox="0 0 16 16" fill="none"><path d="M8 10.5a2.5 2.5 0 002.5-2.5V5a2.5 2.5 0 00-5 0v3a2.5 2.5 0 002.5 2.5z" stroke="currentColor" stroke-width="1.5"/><path d="M4 8a4 4 0 008 0M8 12.5V14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <span id="voiceBtnLabel">Voice</span>
+          </button>
+        </div>
+
+        <!-- Image Preview -->
+        <div class="upload-preview" id="uploadPreview" style="display:none;">
+          <div class="preview-item" id="imagePreview">
+            <img id="previewImg" src="" alt="Preview">
+            <button class="preview-remove" id="removePreview">&times;</button>
+          </div>
         </div>
 
         <div class="prompt-controls">
@@ -2839,13 +2908,18 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       showGenAnimation(prompt);
       
       try {
+        const requestBody = { prompt, ratio, duration, model: selectedModel === 'fast' ? 'fast' : undefined };
+        if (uploadedImageBase64) {
+          requestBody.reference_image = uploadedImageBase64;
+        }
+
         const res = await fetch(API_BASE + '/api/v1/video/generate', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + token
           },
-          body: JSON.stringify({ prompt, ratio, duration, model: selectedModel === 'fast' ? 'fast' : undefined })
+          body: JSON.stringify(requestBody)
         });
         
         const data = await res.json();
@@ -3003,6 +3077,182 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     }, 5000);
   }
   
+  // ── Image Upload ──
+  const imageFileInput = document.getElementById('imageFileInput');
+  const uploadPreview = document.getElementById('uploadPreview');
+  const previewImg = document.getElementById('previewImg');
+  const removePreview = document.getElementById('removePreview');
+  let uploadedImageBase64 = null;
+
+  if (imageFileInput) {
+    imageFileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      if (file.size > 10 * 1024 * 1024) {
+        alert('Image must be under 10MB');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        uploadedImageBase64 = ev.target.result;
+        previewImg.src = uploadedImageBase64;
+        uploadPreview.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  if (removePreview) {
+    removePreview.addEventListener('click', () => {
+      uploadedImageBase64 = null;
+      uploadPreview.style.display = 'none';
+      imageFileInput.value = '';
+    });
+  }
+
+  // ── Voice Recording (Whisper STT ready) ──
+  const voiceRecordBtn = document.getElementById('voiceRecordBtn');
+  const voiceBtnLabel = document.getElementById('voiceBtnLabel');
+  let mediaRecorder = null;
+  let audioChunks = [];
+  let isRecording = false;
+
+  if (voiceRecordBtn) {
+    voiceRecordBtn.addEventListener('click', async () => {
+      if (isRecording) {
+        // Stop recording
+        mediaRecorder.stop();
+        return;
+      }
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder = new MediaRecorder(stream);
+        audioChunks = [];
+
+        mediaRecorder.ondataavailable = (e) => {
+          if (e.data.size > 0) audioChunks.push(e.data);
+        };
+
+        mediaRecorder.onstop = async () => {
+          stream.getTracks().forEach(t => t.stop());
+          voiceRecordBtn.classList.remove('recording');
+          voiceBtnLabel.textContent = 'Voice';
+          isRecording = false;
+
+          // Send to backend for Whisper STT
+          const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+          if (audioBlob.size > 0) {
+            await transcribeAudio(audioBlob);
+          }
+        };
+
+        mediaRecorder.start();
+        isRecording = true;
+        voiceRecordBtn.classList.add('recording');
+        voiceBtnLabel.textContent = 'Stop';
+      } catch (err) {
+        console.error('Mic access denied:', err);
+        alert('Microphone access is required for voice input');
+      }
+    });
+  }
+
+  async function transcribeAudio(audioBlob) {
+    const token = localStorage.getItem('mv_token');
+    if (!token) {
+      authOverlay.style.display = 'flex';
+      return;
+    }
+    try {
+      const formData = new FormData();
+      formData.append('audio', audioBlob, 'recording.webm');
+      const res = await fetch(API_BASE + '/api/v1/audio/transcribe', {
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer ' + token },
+        body: formData
+      });
+      const data = await res.json();
+      if (data.text && promptInput) {
+        promptInput.value = data.text;
+        promptInput.focus();
+      }
+    } catch (err) {
+      console.error('Transcription error:', err);
+      // Fallback: try browser SpeechRecognition
+      fallbackSpeechRecognition();
+    }
+  }
+
+  function fallbackSpeechRecognition() {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert('Voice input is not supported in this browser');
+      return;
+    }
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'en-US';
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      if (promptInput) {
+        promptInput.value = transcript;
+        promptInput.focus();
+      }
+    };
+    recognition.onerror = (e) => console.error('Speech recognition error:', e);
+    recognition.start();
+  }
+
+  // ── Dynamic Questionnaire (DeepSeek-powered) ──
+  // When backend is ready, quiz questions will be fetched from DeepSeek
+  // instead of using hardcoded quizQuestions array
+  let dynamicQuizLoaded = false;
+
+  async function loadDynamicQuiz(context) {
+    const token = localStorage.getItem('mv_token');
+    if (!token) return;
+    try {
+      const res = await fetch(API_BASE + '/api/v1/questionnaire/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({ context: context || 'video_creation' })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.questions && data.questions.length > 0) {
+          // Replace hardcoded questions with dynamic ones
+          quizQuestions.length = 0;
+          data.questions.forEach(q => {
+            quizQuestions.push({
+              question: q.question,
+              options: q.options.map(opt => ({
+                icon: opt.icon || '✨',
+                text: opt.label,
+                value: opt.value
+              }))
+            });
+          });
+          dynamicQuizLoaded = true;
+        }
+      }
+    } catch (err) {
+      console.log('Dynamic quiz not available, using defaults');
+    }
+  }
+
+  // Load dynamic quiz when generation starts
+  const originalShowQuiz = showQuiz;
+  showQuiz = function() {
+    if (!dynamicQuizLoaded) {
+      loadDynamicQuiz('video_creation');
+    }
+    originalShowQuiz();
+  };
+
   function showVideoResult(videoUrl, prompt) {
     // Create a result modal or update the page
     const resultHtml = `
