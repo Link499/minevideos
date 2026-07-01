@@ -2462,31 +2462,57 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   
   emailForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const email = authEmail.value;
+    const email = authEmail.value.trim();
     const password = authPassword.value;
-    if (!email || !password) return;
-    
+    if (!email || !password) {
+      alert('Please enter both email and password');
+      return;
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      alert('Please enter a valid email address');
+      return;
+    }
+
+    // Validate password length
+    if (password.length < 6) {
+      alert('Password must be at least 6 characters');
+      return;
+    }
+
     const endpoint = isRegisterMode ? '/api/v1/auth/register' : '/api/v1/auth/login';
-    const body = isRegisterMode 
+    const body = isRegisterMode
       ? JSON.stringify({ email, password })
       : `username=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`;
-    const headers = isRegisterMode 
+    const headers = isRegisterMode
       ? { 'Content-Type': 'application/json' }
       : { 'Content-Type': 'application/x-www-form-urlencoded' };
-    
+
+    console.log('Auth request:', { endpoint, isRegisterMode, email });
+
     try {
       const res = await fetch(API_BASE + endpoint, { method: 'POST', headers, body });
       const data = await res.json();
-      
+
+      console.log('Auth response:', { status: res.status, data });
+
       if (!res.ok) {
-        alert(data.detail || 'Authentication failed');
+        const errorMsg = data.detail || data.message || `Error ${res.status}`;
+        console.error('Auth failed:', errorMsg);
+        alert(isRegisterMode
+          ? `Registration failed: ${errorMsg}`
+          : `Login failed: ${errorMsg}`);
         return;
       }
-      
+
       if (isRegisterMode) {
-        alert('Account created! Please sign in.');
+        alert('Account created successfully! Please sign in with your credentials.');
         isRegisterMode = false;
         emailForm.querySelector('.auth-submit-btn').textContent = 'Sign In';
+        document.querySelector('.auth-footer').innerHTML = 'Don\'t have an account? <a href="#">Sign up free</a>';
+        authPassword.value = '';
       } else {
         // Login success - store token
         localStorage.setItem('mv_token', data.access_token);
@@ -2499,25 +2525,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
           localStorage.setItem('mv_user', JSON.stringify(user));
         }
         authOverlay.style.display = 'none';
-        // Validate stored token on page load
-  (async function validateToken() {
-    const token = localStorage.getItem('mv_token');
-    if (token) {
-      try {
-        const res = await fetch(API_BASE + '/api/v1/auth/me', {
-          headers: { 'Authorization': 'Bearer ' + token }
-        });
-        if (!res.ok) {
-          // Token is invalid (expired, server reset, etc.)
-          localStorage.removeItem('mv_token');
-          localStorage.removeItem('mv_user');
-        }
-      } catch (e) {
-        // Network error, keep token for offline
-      }
-    }
-    updateAuthUI();
-  })();
+        updateAuthUI();
       }
     } catch (err) {
       console.error('Auth error:', err);
@@ -2887,31 +2895,37 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     genBtn.addEventListener('click', async () => {
       const token = localStorage.getItem('mv_token');
       if (!token) {
+        alert('Please sign in to generate videos');
         authOverlay.style.display = 'flex';
         return;
       }
-      
+
       const prompt = promptInput?.value?.trim() || '';
       if (!prompt) {
-        alert('Please enter a prompt');
+        alert('Please enter a prompt describing the video you want to create');
+        promptInput?.focus();
         return;
       }
-      
+
       // Get selected ratio and duration
       const ratio = document.querySelector('.control-chip[data-ratio].active')?.dataset?.ratio || '16:9';
       const duration = parseInt(document.querySelector('.control-chip[data-duration].active')?.dataset?.duration || '5');
-      
+
+      console.log('Starting video generation:', { prompt, ratio, duration, model: selectedModel });
+
       genBtn.classList.add('loading');
       genBtn.querySelector('.btn-text').innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 3L7 9M7 9L3 13M7 9L11 5M7 9L3 5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg> Generating...';
-      
+
       // Show generation animation
       showGenAnimation(prompt);
-      
+
       try {
         const requestBody = { prompt, ratio, duration, model: selectedModel === 'fast' ? 'fast' : undefined };
         if (uploadedImageBase64) {
           requestBody.reference_image = uploadedImageBase64;
         }
+
+        console.log('Sending generation request:', requestBody);
 
         const res = await fetch(API_BASE + '/api/v1/video/generate', {
           method: 'POST',
@@ -2921,27 +2935,55 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
           },
           body: JSON.stringify(requestBody)
         });
-        
+
         const data = await res.json();
-        
+        console.log('Generation response:', { status: res.status, data });
+
         if (!res.ok) {
+          let errorMsg = data.detail || data.message || 'Generation failed';
+
           if (res.status === 401) {
+            errorMsg = 'Session expired. Please sign in again.';
             localStorage.removeItem('mv_token');
-            authOverlay.style.display = 'flex';
+            localStorage.removeItem('mv_user');
+            setTimeout(() => {
+              authOverlay.style.display = 'flex';
+            }, 1500);
+          } else if (res.status === 402) {
+            errorMsg = 'Insufficient tokens. Please purchase more tokens to continue.';
+          } else if (res.status === 429) {
+            errorMsg = 'Too many requests. Please wait a moment and try again.';
+          } else if (res.status >= 500) {
+            errorMsg = 'Server error. Please try again later.';
           }
-          alert(data.detail || 'Generation failed');
+
+          console.error('Generation failed:', errorMsg);
+          alert(errorMsg);
           hideGenAnimation();
           genBtn.classList.remove('loading');
           genBtn.querySelector('.btn-text').innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 3L7 9M7 9L3 13M7 9L11 5M7 9L3 5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg> Generate';
           return;
         }
-        
+
+        if (!data.task_id) {
+          console.error('No task_id in response:', data);
+          alert('Generation failed: Invalid server response');
+          hideGenAnimation();
+          genBtn.classList.remove('loading');
+          genBtn.querySelector('.btn-text').innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 3L7 9M7 9L3 13M7 9L11 5M7 9L3 5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg> Generate';
+          return;
+        }
+
         currentTaskId = data.task_id;
+        console.log('Task started:', currentTaskId);
         updateGenStatus('Sending to AI model...', 10);
         startPolling(data.task_id);
       } catch (err) {
         console.error('Generate error:', err);
-        alert('Connection error');
+        const errorMsg = err.name === 'AbortError'
+          ? 'Request timed out. Please check your connection and try again.'
+          : 'Connection error. Please check your internet connection and try again.';
+        alert(errorMsg);
         hideGenAnimation();
         genBtn.classList.remove('loading');
         genBtn.querySelector('.btn-text').innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 3L7 9M7 9L3 13M7 9L11 5M7 9L3 5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg> Generate';
@@ -3023,37 +3065,85 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   
   function startPolling(taskId) {
     if (pollInterval) clearInterval(pollInterval);
+    let pollCount = 0;
+    const maxPolls = 120; // 10 minutes max (120 * 5 seconds)
+
     pollInterval = setInterval(async () => {
+      pollCount++;
+
+      // Timeout after 10 minutes
+      if (pollCount > maxPolls) {
+        clearInterval(pollInterval);
+        if (genStatusInterval) { clearInterval(genStatusInterval); genStatusInterval = null; }
+        hideGenAnimation();
+        genBtn.classList.remove('loading');
+        genBtn.querySelector('.btn-text').innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 3L7 9M7 9L3 13M7 9L11 5M7 9L3 5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg> Generate';
+        alert('Video generation timed out. Please try again or check your video history.');
+        loadMyVideos();
+        return;
+      }
+
       try {
         const token = localStorage.getItem('mv_token');
+        if (!token) {
+          clearInterval(pollInterval);
+          hideGenAnimation();
+          authOverlay.style.display = 'flex';
+          return;
+        }
+
         const res = await fetch(API_BASE + '/api/v1/video/task/' + taskId, {
           headers: { 'Authorization': 'Bearer ' + token }
         });
+
+        if (!res.ok) {
+          console.error('Polling error:', res.status);
+          if (res.status === 401) {
+            clearInterval(pollInterval);
+            hideGenAnimation();
+            genBtn.classList.remove('loading');
+            genBtn.querySelector('.btn-text').innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 3L7 9M7 9L3 13M7 9L11 5M7 9L3 5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg> Generate';
+            localStorage.removeItem('mv_token');
+            authOverlay.style.display = 'flex';
+            return;
+          }
+          // Continue polling for other errors
+          return;
+        }
+
         const data = await res.json();
-        
+        console.log('Poll status:', data.status, 'progress:', data.progress);
+
         // Update animation with real progress
         if (data.progress && data.progress > 0) {
           updateGenStatus('Rendering video... ' + data.progress + '%', Math.max(data.progress, 50));
         }
-        
+
         if (data.status === 'completed') {
           clearInterval(pollInterval);
           if (genStatusInterval) { clearInterval(genStatusInterval); genStatusInterval = null; }
-          
+
           // Show completion animation
           const overlay = document.getElementById('genAnimation');
           if (overlay) overlay.classList.add('completed');
           updateGenStatus('Video ready!', 100);
-          
+
           // Brief celebration pause then show result
           setTimeout(() => {
             hideGenAnimation();
             genBtn.classList.remove('loading');
             genBtn.querySelector('.btn-text').innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 3L7 9M7 9L3 13M7 9L11 5M7 9L3 5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg> Generate';
+
+            if (!data.video_url) {
+              alert('Video generation completed but no video URL was returned. Please check your video history.');
+              loadMyVideos();
+              return;
+            }
+
             showVideoResult(data.video_url, promptInput?.value || '');
             lastVideoUrl = data.video_url;
             loadMyVideos();
-            
+
             // Auto-generate next video if user made quiz choices
             if (nextGenQueued && quizSelections.length > 0) {
               setTimeout(() => autoGenerateNext(), 3000);
@@ -3061,18 +3151,21 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             // Reset quiz state for next round
             nextGenQueued = false;
           }, 1200);
-          
+
         } else if (data.status === 'failed') {
           clearInterval(pollInterval);
           if (genStatusInterval) { clearInterval(genStatusInterval); genStatusInterval = null; }
           hideGenAnimation();
           genBtn.classList.remove('loading');
           genBtn.querySelector('.btn-text').innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 3L7 9M7 9L3 13M7 9L11 5M7 9L3 5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg> Generate';
-          alert('Video generation failed: ' + (data.error_message || 'Unknown error'));
+          const errorMsg = data.error_message || data.error || 'Unknown error occurred';
+          console.error('Generation failed:', errorMsg);
+          alert('Video generation failed: ' + errorMsg);
           loadMyVideos();
         }
       } catch (err) {
         console.error('Poll error:', err);
+        // Continue polling on network errors (transient failures)
       }
     }, 5000);
   }
