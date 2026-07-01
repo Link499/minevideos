@@ -439,6 +439,49 @@ body {
   margin: 0 auto;
 }
 
+
+/* ── Features Section ── */
+.features-section {
+  padding: 80px 24px;
+}
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.feature-card {
+  padding: 32px 24px;
+  border-radius: var(--radius-lg);
+  transition: all 0.4s var(--transition);
+}
+.feature-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255,255,255,0.15);
+}
+.feature-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(108,92,231,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  color: var(--accent);
+}
+.feature-card h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.feature-card p {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
 /* ── Prompt Card ── */
 .prompt-card {
   max-width: 800px;
@@ -622,6 +665,306 @@ body {
 .attach-btn svg {
   width: 16px;
   height: 16px;
+}
+
+/* ── My Videos Section ── */
+.my-videos-section {
+  padding: 80px 0 100px;
+  display: none;
+}
+
+.my-videos-section.visible {
+  display: block;
+}
+
+.my-videos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+  margin-top: 40px;
+}
+
+.video-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: all 0.4s var(--transition);
+  animation: cardSlideIn 0.5s var(--transition) forwards;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+@keyframes cardSlideIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.video-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+.video-card-media {
+  position: relative;
+  aspect-ratio: 16/9;
+  background: rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+}
+
+.video-card-media video,
+.video-card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.video-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.video-card:hover .video-card-overlay {
+  opacity: 1;
+}
+
+.video-card-play {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: scale(0.8);
+  transition: transform 0.3s;
+}
+
+.video-card:hover .video-card-play {
+  transform: scale(1);
+}
+
+.video-card-play svg {
+  width: 24px;
+  height: 24px;
+  color: #0a0a1a;
+  margin-left: 3px;
+}
+
+.video-card-status {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 6px 12px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.video-card-status.completed {
+  background: rgba(0, 230, 118, 0.2);
+  color: var(--success);
+  border: 1px solid rgba(0, 230, 118, 0.3);
+}
+
+.video-card-status.generating {
+  background: rgba(108, 92, 231, 0.2);
+  color: var(--accent);
+  border: 1px solid rgba(108, 92, 231, 0.3);
+}
+
+.video-card-status.failed {
+  background: rgba(255, 107, 157, 0.2);
+  color: #FF6B9D;
+  border: 1px solid rgba(255, 107, 157, 0.3);
+}
+
+.video-card-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.video-card-loading .spinner-lg {
+  width: 48px;
+  height: 48px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.video-card-loading-text {
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.video-card-content {
+  padding: 16px 20px 20px;
+}
+
+.video-card-prompt {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-primary);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.video-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
+.video-card-meta span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.my-videos-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-secondary);
+}
+
+.my-videos-empty-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 24px;
+  opacity: 0.3;
+}
+
+.my-videos-empty h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+
+.my-videos-empty p {
+  font-size: 14px;
+  color: var(--text-tertiary);
+}
+
+/* ── Nav User Dropdown ── */
+.nav-user-menu {
+  position: relative;
+}
+
+.nav-user-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s var(--transition);
+}
+
+.nav-user-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.nav-user-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 180px;
+  background: rgba(15, 15, 30, 0.95);
+  backdrop-filter: blur(40px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-sm);
+  padding: 8px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: all 0.2s var(--transition);
+  z-index: 200;
+}
+
+.nav-user-menu:hover .nav-user-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.nav-user-dropdown a,
+.nav-user-dropdown button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+
+.nav-user-dropdown a:hover,
+.nav-user-dropdown button:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-primary);
+}
+
+.nav-user-dropdown .signout-btn {
+  color: #FF6B9D;
+}
+
+.nav-user-dropdown .signout-btn:hover {
+  background: rgba(255, 107, 157, 0.1);
+  color: #FF6B9D;
+}
+
+.nav-credits {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  background: rgba(0, 210, 255, 0.1);
+  border: 1px solid rgba(0, 210, 255, 0.2);
+  color: var(--accent-secondary);
+  font-size: 13px;
+  font-weight: 500;
 }
 
 /* ── Gallery Section ── */
@@ -919,17 +1262,32 @@ body {
 
 /* ── Scroll Animations ── */
 .fade-up {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: all 0.8s var(--transition);
+  animation: fadeInUp 0.8s var(--transition) both;
 }
 
-.fade-up.visible {
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Stagger animations for sequential elements */
+.fade-up:nth-child(2) { animation-delay: 0.1s; }
+.fade-up:nth-child(3) { animation-delay: 0.2s; }
+.fade-up:nth-child(4) { animation-delay: 0.3s; }
+
+.hero .fade-up {
+  animation: none;
   opacity: 1;
-  transform: translateY(0);
+  transform: none;
 }
 
-/* ── Mobile Menu ── */
+/* ── Mobile Menu */
 .mobile-toggle {
   display: none;
   background: none;
@@ -1243,6 +1601,233 @@ body {
 }
 .auth-footer a { color: var(--accent-secondary); text-decoration: none; }
 
+
+/* ── Generation Animation (OpenAI-style) ── */
+.gen-animation-overlay {
+  display: none;
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  background: rgba(8, 8, 20, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.gen-animation-overlay.active {
+  display: flex;
+  opacity: 1;
+}
+
+.gen-shimmer-card {
+  width: 100%;
+  max-width: 480px;
+  aspect-ratio: 16/9;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 100%);
+  background-size: 200% 200%;
+  animation: shimmerMove 2s ease-in-out infinite;
+  border: 1px solid rgba(255,255,255,0.08);
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+.gen-shimmer-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    rgba(255,255,255,0.03) 35%,
+    rgba(120, 90, 255, 0.06) 50%,
+    rgba(255,255,255,0.03) 65%,
+    transparent 100%
+  );
+  background-size: 300% 100%;
+  animation: shimmerSweep 2.5s ease-in-out infinite;
+}
+
+.gen-shimmer-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(120,90,255,0.08) 0%, transparent 70%);
+  animation: shimmerPulse 3s ease-in-out infinite;
+}
+
+@keyframes shimmerMove {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+@keyframes shimmerSweep {
+  0% { background-position: 200% 0; }
+  100% { background-position: -100% 0; }
+}
+@keyframes shimmerPulse {
+  0%, 100% { opacity: 0.3; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+.gen-progress-bar {
+  width: 100%;
+  max-width: 480px;
+  height: 4px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+.gen-progress-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #785aff, #a78bfa, #c4b5fd);
+  transition: width 0.8s ease;
+}
+
+.gen-status-text {
+  font-size: 0.95rem;
+  color: rgba(255,255,255,0.6);
+  letter-spacing: 0.02em;
+  margin-bottom: 0.5rem;
+  min-height: 1.4em;
+}
+.gen-prompt-preview {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.3);
+  max-width: 400px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.gen-sparkle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(167, 139, 250, 0.6);
+  animation: sparkle 2s ease-in-out infinite;
+}
+.gen-sparkle:nth-child(1) { top: 20%; left: 15%; animation-delay: 0s; }
+.gen-sparkle:nth-child(2) { top: 60%; left: 80%; animation-delay: 0.7s; }
+.gen-sparkle:nth-child(3) { top: 40%; left: 50%; animation-delay: 1.4s; }
+.gen-sparkle:nth-child(4) { top: 75%; left: 25%; animation-delay: 0.3s; }
+.gen-sparkle:nth-child(5) { top: 15%; left: 65%; animation-delay: 1.0s; }
+
+@keyframes sparkle {
+  0%, 100% { opacity: 0; transform: scale(0); }
+  50% { opacity: 1; transform: scale(1); }
+}
+
+
+/* ── Generation Quiz (Interactive choices while waiting) ── */
+.gen-quiz {
+  display: none;
+  margin-top: 2rem;
+  width: 100%;
+  max-width: 480px;
+  animation: fadeIn 0.5s ease;
+}
+.gen-quiz.active { display: block; }
+
+.gen-quiz-title {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.gen-quiz-title svg { opacity: 0.5; }
+
+.gen-quiz-question {
+  font-size: 0.95rem;
+  color: rgba(255,255,255,0.85);
+  margin-bottom: 0.75rem;
+  font-weight: 500;
+}
+
+.gen-quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.gen-quiz-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.7);
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: left;
+}
+.gen-quiz-option:hover {
+  background: rgba(120, 90, 255, 0.1);
+  border-color: rgba(120, 90, 255, 0.3);
+  color: rgba(255,255,255,0.95);
+}
+.gen-quiz-option.selected {
+  background: rgba(120, 90, 255, 0.15);
+  border-color: rgba(120, 90, 255, 0.5);
+  color: #fff;
+  box-shadow: 0 0 20px rgba(120, 90, 255, 0.1);
+}
+.gen-quiz-option .option-icon {
+  font-size: 1.1rem;
+  width: 24px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.gen-quiz-queue {
+  margin-top: 1rem;
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: rgba(120, 90, 255, 0.08);
+  border: 1px solid rgba(120, 90, 255, 0.2);
+  font-size: 0.8rem;
+  color: rgba(167, 139, 250, 0.9);
+  display: none;
+  align-items: center;
+  gap: 8px;
+}
+.gen-quiz-queue.active { display: flex; }
+.gen-quiz-queue svg { animation: spin 2s linear infinite; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Completion state */
+.gen-animation-overlay.completed .gen-shimmer-card {
+  animation: genComplete 0.6s ease forwards;
+}
+@keyframes genComplete {
+  0% { border-color: rgba(255,255,255,0.08); }
+  50% { border-color: rgba(120,90,255,0.4); box-shadow: 0 0 30px rgba(120,90,255,0.2); }
+  100% { border-color: rgba(120,90,255,0.15); box-shadow: 0 0 10px rgba(120,90,255,0.1); }
+}
+.gen-animation-overlay.completed .gen-progress-fill {
+  width: 100% !important;
+  background: linear-gradient(90deg, #785aff, #a78bfa);
+}
 </style>
 </head>
 
@@ -1271,7 +1856,7 @@ body {
       </ul>
       <div class="nav-cta">
         <a href="#" class="btn btn-ghost" id="loginBtn">Sign In</a>
-        <a href="#" class="btn btn-primary">Get Started</a>
+        <a href="#" class="btn btn-primary nav-get-started">Get Started</a>
       </div>
       <button class="mobile-toggle" id="mobileToggle">
         <span></span><span></span><span></span>
@@ -1282,35 +1867,76 @@ body {
   <!-- Hero -->
   <section class="hero">
     <div class="hero-content fade-up">
-      <div class="hero-badge">Powered by Seedance 2.0</div>
+      <div class="hero-badge">Next-Gen AI Video Creation</div>
       <h1>
-        <span class="gradient-text">Create stunning videos</span><br>
-        from your imagination
+        <span class="gradient-text">One prompt,</span><br>
+        infinite creations
       </h1>
-      <p>Transform text prompts into cinematic videos in minutes. No editing skills required — just describe what you see.</p>
+      <p>Transform your ideas into cinematic videos. Shape each creation with interactive choices — every video leads to the next.</p>
       <div class="hero-actions">
         <a href="#create" class="btn btn-primary btn-large">Start Creating — Free</a>
         <a href="#gallery" class="btn btn-ghost btn-large">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M6.5 5.5L11 8L6.5 10.5V5.5Z" fill="currentColor"/></svg>
-          Watch Demo
+          See Examples
         </a>
       </div>
       <div class="hero-stats">
         <div class="stat">
-          <div class="stat-value">720p</div>
-          <div class="stat-label">Resolution</div>
+          <div class="stat-value">100+</div>
+          <div class="stat-label">Styles</div>
         </div>
         <div class="stat">
           <div class="stat-value">~4min</div>
           <div class="stat-label">Generation</div>
         </div>
         <div class="stat">
-          <div class="stat-value">5-11s</div>
-          <div class="stat-label">Video Length</div>
+          <div class="stat-value">∞</div>
+          <div class="stat-label">Chain</div>
         </div>
         <div class="stat">
           <div class="stat-value">24fps</div>
           <div class="stat-label">Frame Rate</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features-section" id="features">
+    <div class="container">
+      <div class="section-header fade-up">
+        <div class="section-label">Features</div>
+        <h2 class="section-title">Not just generation. Creation loop.</h2>
+        <p class="section-desc">MineVideos turns a single prompt into a chain of inspired creations — no other platform does this.</p>
+      </div>
+      <div class="features-grid fade-up">
+        <div class="feature-card glass">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>Creative Chain</h3>
+          <p>Every video sparks the next. Interactive choices during generation automatically compose your next prompt — an infinite creation flywheel.</p>
+        </div>
+        <div class="feature-card glass">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M8 12l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>Interactive Wait</h3>
+          <p>No more staring at a progress bar. Answer style questions while your video generates — your choices shape the next creation.</p>
+        </div>
+        <div class="feature-card glass">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" stroke-width="2"/><path d="M8 21h8M12 17v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <h3>Cinema Quality</h3>
+          <p>720p resolution, 24fps cinematic output. Choose 16:9, 9:16, or 1:1 aspect ratios. 5s or 11s duration options.</p>
+        </div>
+        <div class="feature-card glass">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <h3>Fast Model</h3>
+          <p>Switch between Standard quality and Fast mode. Get results quicker when speed matters, or max out quality for final renders.</p>
         </div>
       </div>
     </div>
@@ -1329,6 +1955,7 @@ body {
         <div class="prompt-input-wrapper">
           <textarea
             class="prompt-textarea"
+            id="promptInput"
             placeholder="A golden retriever running through a field of wildflowers at sunset, cinematic slow motion, shallow depth of field, warm color grading..."
             spellcheck="false"
           ></textarea>
@@ -1365,6 +1992,15 @@ body {
             </div>
             <div class="control-chip" data-duration="5">5s</div>
             <div class="control-chip" data-duration="11">11s</div>
+
+            <div class="control-chip active" data-model="standard" title="Standard quality">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1l1.5 3.5L11 5.5l-2.8 2.2.8 3.8L6 9.5 3 11.5l.8-3.8L1 5.5l3.5-1z" stroke="currentColor" stroke-width="1" fill="none"/></svg>
+              HD
+            </div>
+            <div class="control-chip" data-model="fast" title="Fast generation">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M10 3L4 9M4 9L2 7M4 9l2 2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+              Fast
+            </div>
           </div>
           <button class="generate-btn" id="generateBtn">
             <span class="spinner"></span>
@@ -1374,6 +2010,60 @@ body {
             </span>
           </button>
         </div>
+
+      <!-- Generation Animation Overlay -->
+      <div class="gen-animation-overlay" id="genAnimation">
+        <div class="gen-shimmer-card">
+          <div class="gen-sparkle"></div>
+          <div class="gen-sparkle"></div>
+          <div class="gen-sparkle"></div>
+          <div class="gen-sparkle"></div>
+          <div class="gen-sparkle"></div>
+        </div>
+        <div class="gen-progress-bar">
+          <div class="gen-progress-fill" id="genProgressFill"></div>
+        </div>
+        <div class="gen-status-text" id="genStatusText">Preparing your video...</div>
+        <div class="gen-prompt-preview" id="genPromptPreview"></div>
+
+        <div class="gen-quiz" id="genQuiz">
+          <div class="gen-quiz-title">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v2M7 11v2M1 7h2M11 7h2M2.8 2.8l1.4 1.4M9.8 9.8l1.4 1.4M2.8 11.2l1.4-1.4M9.8 4.2l1.4-1.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            While you wait, shape your next video
+          </div>
+          <div class="gen-quiz-question" id="genQuizQuestion">Loading...</div>
+          <div class="gen-quiz-options" id="genQuizOptions"></div>
+          <div class="gen-quiz-queue" id="genQuizQueue">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5" stroke-dasharray="20 10"/></svg>
+            <span id="genQuizQueueText">Queued for next generation</span>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- My Videos Section -->
+  <section class="my-videos-section" id="myvideos">
+    <div class="container">
+      <div class="section-header fade-up">
+        <div class="section-label">Dashboard</div>
+        <h2 class="section-title">My Videos</h2>
+        <p class="section-desc">Your generation history and saved videos.</p>
+      </div>
+
+      <div class="my-videos-grid" id="myVideosGrid">
+        <!-- Video cards will be dynamically inserted here -->
+      </div>
+
+      <div class="my-videos-empty" id="myVideosEmpty" style="display: none;">
+        <svg class="my-videos-empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="2" y="2" width="20" height="20" rx="4"/>
+          <path d="M2 8h20M8 2v20"/>
+          <circle cx="12" cy="12" r="3"/>
+        </svg>
+        <h3>No videos yet</h3>
+        <p>Start creating to see your videos here</p>
       </div>
     </div>
   </section>
@@ -1481,7 +2171,7 @@ body {
           </div>
           <div class="pricing-desc">Try MineVideos at no cost</div>
           <ul class="pricing-features">
-            <li>3 videos per day</li>
+            <li>2 videos per day</li>
             <li>720p resolution</li>
             <li>5s duration</li>
             <li>Text-to-video only</li>
@@ -1494,16 +2184,16 @@ body {
         <div class="pricing-card glass featured">
           <div class="pricing-label">Pro</div>
           <div class="pricing-value">
-            <span class="currency">$</span>29
+            <span class="currency">$</span>19
             <span class="period">/mo</span>
           </div>
           <div class="pricing-desc">For creators & professionals</div>
           <ul class="pricing-features">
-            <li>50 videos per day</li>
-            <li>1080p resolution</li>
+            <li>30 videos per day</li>
+            <li>720p resolution</li>
             <li>Up to 11s duration</li>
-            <li>Image & video reference</li>
-            <li>Audio generation</li>
+            <li>Creative chain (interactive quiz)</li>
+            <li>Fast model access</li>
             <li>Priority queue</li>
           </ul>
           <button class="pricing-btn pricing-btn-fill">Start Pro Trial</button>
@@ -1513,7 +2203,7 @@ body {
         <div class="pricing-card glass">
           <div class="pricing-label">Studio</div>
           <div class="pricing-value">
-            <span class="currency">$</span>99
+            <span class="currency">$</span>79
             <span class="period">/mo</span>
           </div>
           <div class="pricing-desc">For teams & agencies</div>
@@ -1521,7 +2211,7 @@ body {
             <li>Unlimited videos</li>
             <li>1080p resolution</li>
             <li>Up to 11s duration</li>
-            <li>All reference types</li>
+            <li>All creation features</li>
             <li>API access</li>
             <li>Dedicated support</li>
           </ul>
@@ -1545,6 +2235,38 @@ body {
 
 </div>
 
+
+
+  <!-- Login Modal -->
+  <div class="auth-overlay" id="authOverlay" style="display:none;">
+    <div class="auth-modal glass">
+      <button class="auth-close" id="authClose">&times;</button>
+      <div class="auth-logo">
+        <img src="logo.png" alt="MineVideos" style="width:48px;height:48px;border-radius:12px;">
+      </div>
+      <h2 style="text-align:center;font-size:1.4rem;margin-bottom:0.3rem;">Welcome to MineVideos</h2>
+      <p style="text-align:center;color:var(--text-secondary);font-size:0.9rem;margin-bottom:1.5rem;">Sign in to start creating AI videos</p>
+      
+      <a href="#" class="github-signin-btn" id="githubSignIn" style="display:none">
+        <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+        </svg>
+        Continue with GitHub
+      </a>
+      
+      <div class="auth-divider" style="display:none"><span>or</span></div>
+      
+      <form id="emailSignInForm" onsubmit="return false;">
+        <input type="email" placeholder="Email" class="auth-input" id="authEmail" required>
+        <input type="password" placeholder="Password" class="auth-input" id="authPassword" required>
+        <button type="submit" class="auth-submit-btn">Sign In</button>
+      </form>
+      
+      <p class="auth-footer">Don't have an account? <a href="#">Sign up free</a></p>
+      <p class="auth-footer" style="margin-top:0.3rem;font-size:0.75rem;color:var(--text-tertiary);">By signing in you agree to our Terms & Privacy Policy</p>
+    </div>
+  </div>
+
 <script>
 // ── Nav scroll effect ──
 const nav = document.getElementById('navbar');
@@ -1552,16 +2274,7 @@ window.addEventListener('scroll', () => {
   nav.classList.toggle('scrolled', window.scrollY > 40);
 });
 
-// ── Scroll reveal ──
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-    }
-  });
-}, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
-
-document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+// CSS animations handle fade-up automatically, no JS observer needed
 
 // ── Aspect ratio chips ──
 document.querySelectorAll('.control-chip[data-ratio]').forEach(chip => {
@@ -1579,13 +2292,14 @@ document.querySelectorAll('.control-chip[data-duration]').forEach(chip => {
   });
 });
 
-// ── Generate button (demo) ──
-const genBtn = document.getElementById('generateBtn');
-genBtn.addEventListener('click', () => {
-  genBtn.classList.add('loading');
-  setTimeout(() => {
-    genBtn.classList.remove('loading');
-  }, 3000);
+// ── Model chips
+let selectedModel = 'standard';
+document.querySelectorAll('.control-chip[data-model]').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.control-chip[data-model]').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    selectedModel = chip.dataset.model;
+  });
 });
 
 // ── Smooth scroll ──
@@ -1655,37 +2369,656 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     }
   }
 
-</script>
 
-  <!-- Login Modal -->
-  <div class="auth-overlay" id="authOverlay" style="display:none;">
-    <div class="auth-modal glass">
-      <button class="auth-close" id="authClose">&times;</button>
-      <div class="auth-logo">
-        <img src="logo.png" alt="MineVideos" style="width:48px;height:48px;border-radius:12px;">
+  // ── Auth: Email Login/Register ──
+  const authEmail = document.getElementById('authEmail');
+  const authPassword = document.getElementById('authPassword');
+  const emailForm = document.getElementById('emailSignInForm');
+  let isRegisterMode = false;
+  
+  // Toggle register mode
+  document.querySelector('.auth-footer a')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    isRegisterMode = !isRegisterMode;
+    const submitBtn = emailForm.querySelector('.auth-submit-btn');
+    const footerText = document.querySelector('.auth-footer');
+    if (isRegisterMode) {
+      submitBtn.textContent = 'Sign Up';
+      footerText.innerHTML = 'Already have an account? <a href="#">Sign in</a>';
+    } else {
+      submitBtn.textContent = 'Sign In';
+      footerText.innerHTML = 'Don\'t have an account? <a href="#">Sign up free</a>';
+    }
+  });
+  
+  emailForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = authEmail.value;
+    const password = authPassword.value;
+    if (!email || !password) return;
+    
+    const endpoint = isRegisterMode ? '/api/v1/auth/register' : '/api/v1/auth/login';
+    const body = isRegisterMode 
+      ? JSON.stringify({ email, password })
+      : `username=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`;
+    const headers = isRegisterMode 
+      ? { 'Content-Type': 'application/json' }
+      : { 'Content-Type': 'application/x-www-form-urlencoded' };
+    
+    try {
+      const res = await fetch(API_BASE + endpoint, { method: 'POST', headers, body });
+      const data = await res.json();
+      
+      if (!res.ok) {
+        alert(data.detail || 'Authentication failed');
+        return;
+      }
+      
+      if (isRegisterMode) {
+        alert('Account created! Please sign in.');
+        isRegisterMode = false;
+        emailForm.querySelector('.auth-submit-btn').textContent = 'Sign In';
+      } else {
+        // Login success - store token
+        localStorage.setItem('mv_token', data.access_token);
+        // Fetch user info
+        const userRes = await fetch(API_BASE + '/api/v1/auth/me', {
+          headers: { 'Authorization': 'Bearer ' + data.access_token }
+        });
+        if (userRes.ok) {
+          const user = await userRes.json();
+          localStorage.setItem('mv_user', JSON.stringify(user));
+        }
+        authOverlay.style.display = 'none';
+        // Validate stored token on page load
+  (async function validateToken() {
+    const token = localStorage.getItem('mv_token');
+    if (token) {
+      try {
+        const res = await fetch(API_BASE + '/api/v1/auth/me', {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        if (!res.ok) {
+          // Token is invalid (expired, server reset, etc.)
+          localStorage.removeItem('mv_token');
+          localStorage.removeItem('mv_user');
+        }
+      } catch (e) {
+        // Network error, keep token for offline
+      }
+    }
+    updateAuthUI();
+  })();
+      }
+    } catch (err) {
+      console.error('Auth error:', err);
+      alert('Connection error. Please try again.');
+    }
+  });
+  
+  // ── Enhanced Auth UI ──
+  function updateAuthUI() {
+    const token = localStorage.getItem('mv_token');
+    const userStr = localStorage.getItem('mv_user');
+    const loginBtn = document.getElementById('loginBtn');
+    const getStartedBtn = document.querySelector('.nav-get-started');
+    const myVideosSection = document.getElementById('myvideos');
+    
+    if (token && userStr) {
+      const user = JSON.parse(userStr);
+      
+      // Show user menu and credits
+      if (loginBtn) {
+        loginBtn.outerHTML = `
+          <div class="nav-user-menu">
+            <button class="nav-user-btn">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <circle cx="8" cy="6" r="3" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+              ${user.username || user.email || 'Account'}
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </button>
+            <div class="nav-user-dropdown">
+              <a href="#myvideos">My Videos</a>
+              <button class="signout-btn" onclick="signOut()">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <path d="M5 12H2a1 1 0 01-1-1V3a1 1 0 011-1h3M10 10l3-3-3-3M13 7H5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Sign Out
+              </button>
+            </div>
+          </div>
+        `;
+      }
+      
+      // Update Get Started to show credits
+      if (getStartedBtn) {
+        getStartedBtn.className = 'nav-credits';
+        getStartedBtn.innerHTML = `
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M7 4v3.5l2 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <span id="navCredits">Loading...</span>
+        `;
+        
+        // Fetch user credits
+        fetchUserCredits(token);
+      }
+      
+      // Show My Videos section
+      if (myVideosSection) {
+        myVideosSection.classList.add('visible');
+        loadMyVideos();
+      }
+    }
+  }
+  
+  function signOut() {
+    localStorage.removeItem('mv_token');
+    localStorage.removeItem('mv_user');
+    location.reload();
+  }
+  
+  async function fetchUserCredits(token) {
+    try {
+      const res = await fetch(API_BASE + '/api/v1/auth/me', {
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+      if (res.ok) {
+        const user = await res.json();
+        const creditsSpan = document.getElementById('navCredits');
+        if (creditsSpan) {
+          creditsSpan.textContent = (user.credits || user.remaining_credits || 0) + ' Credits';
+        }
+      }
+    } catch (err) {
+      console.error('Failed to fetch credits:', err);
+    }
+  }
+  
+  // ── My Videos Functions ──
+  async function loadMyVideos() {
+    const token = localStorage.getItem('mv_token');
+    if (!token) return;
+    
+    const grid = document.getElementById('myVideosGrid');
+    const emptyState = document.getElementById('myVideosEmpty');
+    
+    if (!grid) return;
+    
+    try {
+      const res = await fetch(API_BASE + '/api/v1/video/tasks', {
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+      
+      if (res.status === 401) {
+        signOut();
+        return;
+      }
+      
+      const data = await res.json();
+      const tasks = data.tasks || [];
+      
+      if (tasks.length === 0) {
+        grid.innerHTML = '';
+        grid.style.display = 'none';
+        emptyState.style.display = 'block';
+        return;
+      }
+      
+      grid.style.display = 'grid';
+      emptyState.style.display = 'none';
+      
+      grid.innerHTML = tasks.map((task, index) => {
+        const statusClass = task.status === 'completed' ? 'completed' : 
+                           task.status === 'failed' ? 'failed' : 'generating';
+        const statusText = task.status === 'completed' ? 'Completed' : 
+                          task.status === 'failed' ? 'Failed' : 'Generating';
+        
+        const mediaContent = task.status === 'completed' && task.video_url ? `
+          <video src="${task.video_url}" muted loop></video>
+          <div class="video-card-overlay">
+            <div class="video-card-play">
+              <svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 3l10 5-10 5V3z"/></svg>
+            </div>
+          </div>
+        ` : `
+          <div class="video-card-loading">
+            <div class="spinner-lg"></div>
+            <span class="video-card-loading-text">${task.status === 'failed' ? 'Generation failed' : 'Creating your video...'}</span>
+          </div>
+        `;
+        
+        const date = new Date(task.created_at).toLocaleDateString('en-US', {
+          month: 'short', day: 'numeric', year: 'numeric'
+        });
+        
+        return `
+          <div class="video-card" style="animation-delay: ${index * 0.1}s">
+            <div class="video-card-media">
+              ${mediaContent}
+              <span class="video-card-status ${statusClass}">${statusText}</span>
+            </div>
+            <div class="video-card-content">
+              <p class="video-card-prompt">${task.prompt || 'No prompt'}</p>
+              <div class="video-card-meta">
+                <span>
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <rect x="1" y="2" width="10" height="8" rx="1.5" stroke="currentColor"/>
+                    <path d="M4 5.5l1.5 1L7.5 4" stroke="currentColor"/>
+                  </svg>
+                  ${task.ratio || '16:9'}
+                </span>
+                <span>
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <circle cx="6" cy="6" r="5" stroke="currentColor"/>
+                    <path d="M6 3v3l2 1" stroke="currentColor"/>
+                  </svg>
+                  ${task.duration || 5}s
+                </span>
+                <span>
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <rect x="1.5" y="2" width="9" height="8" rx="1" stroke="currentColor"/>
+                    <path d="M1.5 4.5h9" stroke="currentColor"/>
+                  </svg>
+                  ${date}
+                </span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+      
+      // Add click handlers for videos
+      grid.querySelectorAll('video').forEach(video => {
+        video.closest('.video-card').querySelector('.video-card-play')?.addEventListener('click', () => {
+          const modal = document.createElement('div');
+          modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.95);z-index:9999;display:flex;align-items:center;justify-content:center;padding:2rem;';
+          modal.innerHTML = `
+            <video controls autoplay style="max-width:100%;max-height:90vh;border-radius:16px;">
+              <source src="${video.src}" type="video/mp4">
+            </video>
+            <button onclick="this.closest('div').remove()" style="position:absolute;top:2rem;right:2rem;padding:0.8rem 1.5rem;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:8px;color:#fff;cursor:pointer;">Close</button>
+          `;
+          document.body.appendChild(modal);
+        });
+      });
+      
+    } catch (err) {
+      console.error('Failed to load my videos:', err);
+    }
+  }
+  
+  
+  // Validate stored token on page load
+  (async function validateToken() {
+    const token = localStorage.getItem('mv_token');
+    if (token) {
+      try {
+        const res = await fetch(API_BASE + '/api/v1/auth/me', {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        if (!res.ok) {
+          // Token is invalid (expired, server reset, etc.)
+          localStorage.removeItem('mv_token');
+          localStorage.removeItem('mv_user');
+        }
+      } catch (e) {
+        // Network error, keep token for offline
+      }
+    }
+    updateAuthUI();
+  })();
+  
+  // ── Video Generation (Real API) ──
+  const genBtn = document.getElementById('generateBtn');
+  const promptInput = document.getElementById('promptInput');
+  let currentTaskId = null;
+  let pollInterval = null;
+  
+  // Remove demo behavior, add real generation
+
+  // ── Quiz System ──
+  const quizQuestions = [
+    {
+      question: "What mood should your next video have?",
+      options: [
+        { icon: "🎬", text: "Cinematic & dramatic", value: "cinematic dramatic mood" },
+        { icon: "🌸", text: "Soft & dreamy", value: "soft dreamy ethereal mood" },
+        { icon: "⚡", text: "Energetic & dynamic", value: "energetic dynamic fast-paced" },
+        { icon: "🌙", text: "Dark & mysterious", value: "dark mysterious moody atmosphere" },
+      ]
+    },
+    {
+      question: "Which camera style do you prefer?",
+      options: [
+        { icon: "🔄", text: "Orbiting around subject", value: "slow orbit camera around subject" },
+        { icon: "📏", text: "Tracking follow shot", value: "tracking follow shot steady cam" },
+        { icon: "🔭", text: "Zoom into details", value: "macro zoom into fine details" },
+        { icon: "🦅", text: "Aerial drone view", value: "aerial drone birds-eye view sweeping" },
+      ]
+    },
+    {
+      question: "What time of day fits your vision?",
+      options: [
+        { icon: "🌅", text: "Golden hour sunrise", value: "golden hour warm sunrise lighting" },
+        { icon: "☀️", text: "Bright midday", value: "bright midday natural lighting clear" },
+        { icon: "🌆", text: "Blue hour twilight", value: "blue hour twilight cool tones" },
+        { icon: "🌃", text: "Night with neon", value: "nighttime neon-lit cityscape glowing" },
+      ]
+    },
+    {
+      question: "Add a creative twist?",
+      options: [
+        { icon: "💧", text: "Slow motion water", value: "slow motion water splash liquid dynamics" },
+        { icon: "🔥", text: "Fire & particles", value: "fire particles embers floating magical" },
+        { icon: "❄️", text: "Frost & ice crystals", value: "frost ice crystals forming freezing cold" },
+        { icon: "✨", text: "Light rays & bokeh", value: "light rays bokeh lens flare god rays" },
+      ]
+    }
+  ];
+  
+  let currentQuizIndex = 0;
+  let quizSelections = [];
+  let lastVideoUrl = null;
+  let nextGenQueued = false;
+  
+  function showQuiz() {
+    const quiz = document.getElementById('genQuiz');
+    if (!quiz) return;
+    
+    // Pick a random question
+    currentQuizIndex = Math.floor(Math.random() * quizQuestions.length);
+    renderQuizQuestion(currentQuizIndex);
+    
+    // Show quiz after 5 seconds (let user see the animation first)
+    setTimeout(() => {
+      quiz.classList.add('active');
+    }, 5000);
+    
+    // Rotate questions every 15 seconds if no selection
+    quiz._rotateTimer = setInterval(() => {
+      if (!quiz.classList.contains('active')) return;
+      // Only rotate if user hasn't selected on current question
+      const hasSelected = document.querySelector('.gen-quiz-option.selected');
+      if (!hasSelected) {
+        currentQuizIndex = (currentQuizIndex + 1) % quizQuestions.length;
+        renderQuizQuestion(currentQuizIndex);
+      }
+    }, 15000);
+  }
+  
+  function renderQuizQuestion(index) {
+    const q = quizQuestions[index];
+    const questionEl = document.getElementById('genQuizQuestion');
+    const optionsEl = document.getElementById('genQuizOptions');
+    if (!questionEl || !optionsEl) return;
+    
+    questionEl.textContent = q.question;
+    optionsEl.innerHTML = q.options.map((opt, i) => `
+      <button class="gen-quiz-option" data-index="${i}" data-value="${opt.value}">
+        <span class="option-icon">${opt.icon}</span>
+        <span>${opt.text}</span>
+      </button>
+    `).join('');
+    
+    // Add click handlers
+    optionsEl.querySelectorAll('.gen-quiz-option').forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Mark selected
+        optionsEl.querySelectorAll('.gen-quiz-option').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        
+        // Record selection
+        quizSelections.push(btn.dataset.value);
+        
+        // Update queue text
+        const queueText = document.getElementById('genQuizQueueText');
+        if (queueText) queueText.textContent = `Queued! ${quizSelections.length} style choice${quizSelections.length > 1 ? 's' : ''} applied`;
+        
+        // Queue next generation
+        if (!nextGenQueued) {
+          nextGenQueued = true;
+          const queueEl = document.getElementById('genQuizQueue');
+          if (queueEl) queueEl.classList.add('active');
+        }
+        
+        // After 2s, show next question
+        setTimeout(() => {
+          currentQuizIndex = (currentQuizIndex + 1) % quizQuestions.length;
+          renderQuizQuestion(currentQuizIndex);
+        }, 2000);
+      });
+    });
+  }
+  
+  function hideQuiz() {
+    const quiz = document.getElementById('genQuiz');
+    if (quiz) {
+      quiz.classList.remove('active');
+      if (quiz._rotateTimer) { clearInterval(quiz._rotateTimer); quiz._rotateTimer = null; }
+    }
+    const queueEl = document.getElementById('genQuizQueue');
+    if (queueEl) queueEl.classList.remove('active');
+  }
+  
+  function buildNextPrompt(originalPrompt) {
+    let nextPrompt = originalPrompt || 'A beautiful scene';
+    if (quizSelections.length > 0) {
+      nextPrompt += ', ' + quizSelections.join(', ');
+    }
+    return nextPrompt;
+  }
+
+  if (genBtn) {
+    genBtn.addEventListener('click', async () => {
+      const token = localStorage.getItem('mv_token');
+      if (!token) {
+        authOverlay.style.display = 'flex';
+        return;
+      }
+      
+      const prompt = promptInput?.value?.trim() || '';
+      if (!prompt) {
+        alert('Please enter a prompt');
+        return;
+      }
+      
+      // Get selected ratio and duration
+      const ratio = document.querySelector('.control-chip[data-ratio].active')?.dataset?.ratio || '16:9';
+      const duration = parseInt(document.querySelector('.control-chip[data-duration].active')?.dataset?.duration || '5');
+      
+      genBtn.classList.add('loading');
+      genBtn.querySelector('.btn-text').innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 3L7 9M7 9L3 13M7 9L11 5M7 9L3 5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg> Generating...';
+      
+      // Show generation animation
+      showGenAnimation(prompt);
+      
+      try {
+        const res = await fetch(API_BASE + '/api/v1/video/generate', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          },
+          body: JSON.stringify({ prompt, ratio, duration, model: selectedModel === 'fast' ? 'fast' : undefined })
+        });
+        
+        const data = await res.json();
+        
+        if (!res.ok) {
+          if (res.status === 401) {
+            localStorage.removeItem('mv_token');
+            authOverlay.style.display = 'flex';
+          }
+          alert(data.detail || 'Generation failed');
+          hideGenAnimation();
+          genBtn.classList.remove('loading');
+          genBtn.querySelector('.btn-text').innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 3L7 9M7 9L3 13M7 9L11 5M7 9L3 5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg> Generate';
+          return;
+        }
+        
+        currentTaskId = data.task_id;
+        updateGenStatus('Sending to AI model...', 10);
+        startPolling(data.task_id);
+      } catch (err) {
+        console.error('Generate error:', err);
+        alert('Connection error');
+        hideGenAnimation();
+        genBtn.classList.remove('loading');
+        genBtn.querySelector('.btn-text').innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 3L7 9M7 9L3 13M7 9L11 5M7 9L3 5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg> Generate';
+      }
+    });
+  }
+  
+  // ── Generation Animation Functions ──
+  let genStatusInterval = null;
+  const genStatusPhases = [
+    { text: 'Analyzing your prompt...', progress: 15 },
+    { text: 'Composing scene layout...', progress: 25 },
+    { text: 'Generating keyframes...', progress: 40 },
+    { text: 'Rendering motion dynamics...', progress: 55 },
+    { text: 'Synthesizing video frames...', progress: 70 },
+    { text: 'Applying color grading...', progress: 80 },
+    { text: 'Finalizing video output...', progress: 90 },
+  ];
+  
+  function showGenAnimation(prompt) {
+    const overlay = document.getElementById('genAnimation');
+    const promptPreview = document.getElementById('genPromptPreview');
+    const progressFill = document.getElementById('genProgressFill');
+    const statusText = document.getElementById('genStatusText');
+    
+    if (!overlay) return;
+    
+    overlay.classList.add('active');
+    overlay.classList.remove('completed');
+    if (promptPreview) promptPreview.textContent = '"' + prompt + '"';
+    if (progressFill) progressFill.style.width = '5%';
+    if (statusText) statusText.textContent = 'Preparing your video...';
+    
+    // Cycle through status phases every ~8 seconds (total ~56s for full cycle)
+    let phaseIndex = 0;
+    genStatusInterval = setInterval(() => {
+      if (phaseIndex < genStatusPhases.length) {
+        const phase = genStatusPhases[phaseIndex];
+        updateGenStatus(phase.text, phase.progress);
+        phaseIndex++;
+      }
+    }, 8000);
+    
+    // Show quiz after a delay
+    showQuiz();
+  }
+  
+  function updateGenStatus(text, progress) {
+    const statusText = document.getElementById('genStatusText');
+    const progressFill = document.getElementById('genProgressFill');
+    if (statusText) statusText.textContent = text;
+    if (progressFill) progressFill.style.width = progress + '%';
+  }
+  
+
+  async function autoGenerateNext() {
+    const token = localStorage.getItem('mv_token');
+    if (!token) return;
+    
+    const originalPrompt = promptInput?.value?.trim() || '';
+    const nextPrompt = buildNextPrompt(originalPrompt);
+    
+    // Update prompt input to show what's being generated
+    if (promptInput) promptInput.value = nextPrompt;
+    
+    // Reset quiz selections
+    quizSelections = [];
+    
+    // Trigger generation
+    genBtn.click();
+  }
+
+  function hideGenAnimation() {
+    const overlay = document.getElementById('genAnimation');
+    if (genStatusInterval) { clearInterval(genStatusInterval); genStatusInterval = null; }
+    if (overlay) { overlay.classList.remove('active'); overlay.classList.remove('completed'); }
+    hideQuiz();
+  }
+  
+  function startPolling(taskId) {
+    if (pollInterval) clearInterval(pollInterval);
+    pollInterval = setInterval(async () => {
+      try {
+        const token = localStorage.getItem('mv_token');
+        const res = await fetch(API_BASE + '/api/v1/video/task/' + taskId, {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        const data = await res.json();
+        
+        // Update animation with real progress
+        if (data.progress && data.progress > 0) {
+          updateGenStatus('Rendering video... ' + data.progress + '%', Math.max(data.progress, 50));
+        }
+        
+        if (data.status === 'completed') {
+          clearInterval(pollInterval);
+          if (genStatusInterval) { clearInterval(genStatusInterval); genStatusInterval = null; }
+          
+          // Show completion animation
+          const overlay = document.getElementById('genAnimation');
+          if (overlay) overlay.classList.add('completed');
+          updateGenStatus('Video ready!', 100);
+          
+          // Brief celebration pause then show result
+          setTimeout(() => {
+            hideGenAnimation();
+            genBtn.classList.remove('loading');
+            genBtn.querySelector('.btn-text').innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 3L7 9M7 9L3 13M7 9L11 5M7 9L3 5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg> Generate';
+            showVideoResult(data.video_url, promptInput?.value || '');
+            lastVideoUrl = data.video_url;
+            loadMyVideos();
+            
+            // Auto-generate next video if user made quiz choices
+            if (nextGenQueued && quizSelections.length > 0) {
+              setTimeout(() => autoGenerateNext(), 3000);
+            }
+            // Reset quiz state for next round
+            nextGenQueued = false;
+          }, 1200);
+          
+        } else if (data.status === 'failed') {
+          clearInterval(pollInterval);
+          if (genStatusInterval) { clearInterval(genStatusInterval); genStatusInterval = null; }
+          hideGenAnimation();
+          genBtn.classList.remove('loading');
+          genBtn.querySelector('.btn-text').innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 3L7 9M7 9L3 13M7 9L11 5M7 9L3 5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg> Generate';
+          alert('Video generation failed: ' + (data.error_message || 'Unknown error'));
+          loadMyVideos();
+        }
+      } catch (err) {
+        console.error('Poll error:', err);
+      }
+    }, 5000);
+  }
+  
+  function showVideoResult(videoUrl, prompt) {
+    // Create a result modal or update the page
+    const resultHtml = `
+      <div id="videoResult" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.9);z-index:9999;display:flex;align-items:center;justify-content:center;padding:2rem;">
+        <div style="max-width:800px;width:100%;text-align:center;">
+          <video controls autoplay style="width:100%;border-radius:16px;margin-bottom:1rem;">
+            <source src="${videoUrl}" type="video/mp4">
+          </video>
+          <p style="color:#fff;font-size:0.9rem;opacity:0.7;">${prompt}</p>
+          <button onclick="document.getElementById('videoResult').remove()" style="margin-top:1rem;padding:0.6rem 2rem;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:8px;color:#fff;cursor:pointer;">Close</button>
+        </div>
       </div>
-      <h2 style="text-align:center;font-size:1.4rem;margin-bottom:0.3rem;">Welcome to MineVideos</h2>
-      <p style="text-align:center;color:var(--text-secondary);font-size:0.9rem;margin-bottom:1.5rem;">Sign in to start creating AI videos</p>
-      
-      <a href="#" class="github-signin-btn" id="githubSignIn">
-        <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
-          <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
-        </svg>
-        Continue with GitHub
-      </a>
-      
-      <div class="auth-divider"><span>or</span></div>
-      
-      <form id="emailSignInForm" onsubmit="return false;">
-        <input type="email" placeholder="Email" class="auth-input" id="authEmail" required>
-        <input type="password" placeholder="Password" class="auth-input" id="authPassword" required>
-        <button type="submit" class="auth-submit-btn">Sign In</button>
-      </form>
-      
-      <p class="auth-footer">Don't have an account? <a href="#">Sign up free</a></p>
-      <p class="auth-footer" style="margin-top:0.3rem;font-size:0.75rem;color:var(--text-tertiary);">By signing in you agree to our Terms & Privacy Policy</p>
-    </div>
-  </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', resultHtml);
+  }
+</script>
 
 </body>
 </html>
