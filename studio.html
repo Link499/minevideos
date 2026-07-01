@@ -10,6 +10,7 @@
 /* ═══════════════════════════════════════════════
    MineVideos Studio — AI Assistant Platform
    Catppuccin Mocha Theme
+   四栏布局重构版
    ═══════════════════════════════════════════════ */
 
 *, *::before, *::after {
@@ -50,10 +51,11 @@
   --warning: var(--ctp-yellow);
   --danger: var(--ctp-red);
   
-  /* Layout */
+  /* Layout - 四栏 */
   --toolbar-height: 60px;
   --dock-height: 56px;
-  --left-width: 260px;
+  --icon-bar-width: 56px;
+  --left-width: 220px;
   --right-width: 340px;
   
   /* Typography */
@@ -162,10 +164,6 @@ body {
   gap: 8px;
 }
 
-.toolbar-center .agent-icon {
-  font-size: 16px;
-}
-
 .toolbar-right {
   display: flex;
   align-items: center;
@@ -220,15 +218,106 @@ body {
   box-shadow: 0 4px 16px var(--accent-glow);
 }
 
-/* ── Main Layout ── */
+/* ── Main Layout: 四栏 ── */
 .studio-container {
   display: grid;
-  grid-template-columns: var(--left-width) 1fr var(--right-width);
+  grid-template-columns: var(--icon-bar-width) var(--left-width) 1fr var(--right-width);
   height: calc(100vh - var(--toolbar-height) - var(--dock-height));
   margin-top: var(--toolbar-height);
 }
 
-/* ── Left Column: Agent Panel ── */
+/* ── Col 1: Icon Sidebar (56px) ── */
+.icon-sidebar {
+  background: var(--ctp-crust);
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 0;
+  gap: 4px;
+}
+
+.icon-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s var(--transition);
+  background: transparent;
+  border: none;
+  color: var(--ctp-overlay1);
+}
+
+.icon-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--ctp-subtext1);
+}
+
+.icon-btn.active {
+  color: var(--ctp-mauve);
+}
+
+.icon-btn.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 24px;
+  background: var(--ctp-mauve);
+  border-radius: 0 2px 2px 0;
+}
+
+.icon-btn svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.icon-btn[data-tooltip]:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 4px 8px;
+  background: var(--ctp-surface0);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  font-size: 11px;
+  color: var(--ctp-text);
+  white-space: nowrap;
+  z-index: 1000;
+}
+
+.icon-sidebar-divider {
+  width: 32px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.06);
+  margin: 8px 0;
+}
+
+.icon-sidebar-spacer {
+  flex: 1;
+}
+
+/* System Status Dot in Icon Bar */
+.system-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--success);
+  box-shadow: 0 0 6px var(--success);
+  animation: statusPulse 2s ease-in-out infinite;
+  margin-top: 8px;
+}
+
+/* ── Col 2: Agent List (220px) ── */
 .agent-column {
   background: var(--ctp-mantle);
   border-right: 1px solid rgba(255, 255, 255, 0.06);
@@ -240,6 +329,9 @@ body {
 .agent-panel-header {
   padding: 16px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .agent-panel-title {
@@ -250,44 +342,69 @@ body {
   letter-spacing: 0.08em;
 }
 
+.new-project-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  background: rgba(139, 92, 246, 0.15);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  color: var(--ctp-mauve);
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s var(--transition);
+}
+
+.new-project-btn:hover {
+  background: rgba(139, 92, 246, 0.25);
+  border-color: rgba(139, 92, 246, 0.5);
+}
+
+.new-project-btn svg {
+  width: 12px;
+  height: 12px;
+}
+
 .agent-list {
   flex: 1;
   overflow-y: auto;
   padding: 12px;
 }
 
-.agent-card {
-  padding: 14px;
+/* Project Card */
+.project-card {
+  padding: 12px;
   border-radius: var(--radius-md);
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.06);
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   cursor: pointer;
   transition: all 0.3s var(--transition);
   position: relative;
-  overflow: hidden;
 }
 
-.agent-card:hover {
+.project-card:hover {
   background: rgba(255, 255, 255, 0.05);
   border-color: rgba(255, 255, 255, 0.1);
 }
 
-.agent-card.active {
+.project-card.active {
   background: rgba(139, 92, 246, 0.12);
   border-color: rgba(139, 92, 246, 0.35);
   box-shadow: 0 0 20px rgba(139, 92, 246, 0.15);
 }
 
-.agent-card.active::before {
+.project-card.active::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), transparent);
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.08), transparent);
   animation: breathingGlow 3s ease-in-out infinite;
+  pointer-events: none;
 }
 
 @keyframes breathingGlow {
@@ -295,121 +412,99 @@ body {
   50% { opacity: 0.7; }
 }
 
-.agent-card.planning {
-  opacity: 0.5;
-  border-style: dashed;
-  cursor: default;
-}
-
-.agent-card.planning::after {
-  content: '规划中';
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  padding: 2px 8px;
-  border-radius: 10px;
-  font-size: 9px;
-  font-weight: 600;
-  background: rgba(255, 255, 255, 0.1);
-  color: var(--ctp-overlay1);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.agent-card.coming-soon::after {
-  content: '敬请期待';
-}
-
-.agent-card-header {
+.project-card-header {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+  margin-bottom: 6px;
   position: relative;
   z-index: 1;
 }
 
-.agent-card-icon {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--ctp-surface1);
-  flex-shrink: 0;
+.project-type-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(139, 92, 246, 0.15);
+  color: var(--ctp-mauve);
 }
 
-.agent-card.active .agent-card-icon {
-  background: var(--ctp-mauve);
-  box-shadow: 0 0 6px rgba(203, 164, 247, 0.5);
+.project-type-icon svg {
+  width: 12px;
+  height: 12px;
 }
 
-.agent-card-info {
+.project-name {
   flex: 1;
-}
-
-.agent-card-name {
   font-size: 13px;
   font-weight: 600;
   color: var(--ctp-text);
-  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.agent-card-desc {
-  font-size: 11px;
-  color: var(--ctp-overlay1);
-}
-
-.agent-card-status {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--success);
-  box-shadow: 0 0 8px var(--success);
-}
-
-.agent-card.planning .agent-card-status {
-  background: var(--ctp-surface1);
-  box-shadow: none;
-}
-
-/* System Status Footer */
-.system-status {
-  padding: 12px 16px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  background: rgba(0, 0, 0, 0.2);
-}
-
-.system-status-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
-  font-size: 11px;
-  color: var(--ctp-subtext0);
-}
-
-.system-status-item:last-child {
-  margin-bottom: 0;
-}
-
-.provider-dot {
+.project-status-dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
+  background: var(--success);
+  box-shadow: 0 0 4px var(--success);
 }
 
-.provider-dot.healthy { background: var(--success); }
-.provider-dot.degraded { background: var(--warning); }
-.provider-dot.offline { background: var(--danger); }
+.project-summary {
+  font-size: 11px;
+  color: var(--ctp-overlay1);
+  line-height: 1.4;
+  margin-bottom: 8px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
 
-.system-status-footer {
-  margin-top: 10px;
-  padding-top: 10px;
-  border-top: 1px solid rgba(255, 255, 255, 0.04);
+.project-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-size: 10px;
   color: var(--ctp-overlay0);
-  text-align: center;
+  position: relative;
+  z-index: 1;
 }
 
-/* ── Center Column: Conversation ── */
+.project-meta .divider {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--ctp-surface1);
+}
+
+/* Empty State */
+.agent-list-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--ctp-overlay1);
+}
+
+.agent-list-empty-icon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 12px;
+  opacity: 0.3;
+}
+
+.agent-list-empty-text {
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* ── Col 3: Conversation (flexible) ── */
 .conversation-column {
   background: linear-gradient(180deg, var(--ctp-base) 0%, var(--ctp-mantle) 100%);
   display: flex;
@@ -732,6 +827,10 @@ body {
   border-color: rgba(255, 255, 255, 0.15);
 }
 
+#imageInput, #videoInput {
+  display: none;
+}
+
 /* Upload Preview */
 .upload-preview {
   display: flex;
@@ -771,7 +870,7 @@ body {
   justify-content: center;
 }
 
-/* ── Right Column: Output Panel ── */
+/* ── Col 4: Video Workflow (340px) ── */
 .output-column {
   background: var(--ctp-mantle);
   border-left: 1px solid rgba(255, 255, 255, 0.06);
@@ -1229,16 +1328,28 @@ body {
 }
 
 /* ── Responsive ── */
+@media (max-width: 1400px) {
+  :root {
+    --icon-bar-width: 48px;
+    --left-width: 200px;
+    --right-width: 300px;
+  }
+}
+
 @media (max-width: 1200px) {
   :root {
-    --left-width: 220px;
-    --right-width: 300px;
+    --left-width: 180px;
+    --right-width: 280px;
+  }
+  
+  .icon-btn[data-tooltip]:hover::after {
+    display: none;
   }
 }
 
 @media (max-width: 900px) {
   .studio-container {
-    grid-template-columns: 1fr;
+    grid-template-columns: var(--icon-bar-width) 1fr;
   }
   
   .agent-column,
@@ -1254,6 +1365,16 @@ body {
     width: 40px;
   }
 }
+
+@media (max-width: 600px) {
+  .studio-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .icon-sidebar {
+    display: none;
+  }
+}
 </style>
 </head>
 <body>
@@ -1266,310 +1387,291 @@ body {
       <div class="toolbar-logo-text">MineVideos <span>Studio</span></div>
     </a>
     <a href="/" class="back-home-btn">
-      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M7.5 10L3.5 6L7.5 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L4 6L8 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       返回首页
     </a>
   </div>
   
-  <div class="toolbar-center">
-    <span class="agent-icon">🎬</span>
-    <span>视频策划助理</span>
+  <div class="toolbar-center" id="toolbarCenter">
+    <span id="currentAgentName">选择 Agent 开始</span>
   </div>
   
   <div class="toolbar-right">
     <div class="status-indicator">
       <span class="status-dot online"></span>
-      <span>Agent 在线</span>
+      <span>系统就绪</span>
     </div>
-    <button class="toolbar-login-btn">登录</button>
+    <a href="#" class="toolbar-login-btn">登录</a>
   </div>
 </header>
 
-<!-- Main Content -->
+<!-- Main Container: 四栏布局 -->
 <div class="studio-container">
-
-<!-- Left Column: Agent Panel -->
-<aside class="agent-column">
-  <div class="agent-panel-header">
-    <div class="agent-panel-title">AI 助理</div>
-  </div>
   
-  <div class="agent-list">
-    <!-- Active Agent -->
-    <div class="agent-card active" data-agent="planner">
-      <div class="agent-card-header">
-        <span class="agent-card-icon"></span>
-        <div class="agent-card-info">
-          <div class="agent-card-name">视频策划助理</div>
-          <div class="agent-card-desc">智能生成视频脚本</div>
-        </div>
-        <span class="agent-card-status"></span>
-      </div>
+  <!-- Col 1: Icon Sidebar -->
+  <nav class="icon-sidebar">
+    <button class="icon-btn active" data-agent="video" data-tooltip="视频策划助理">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="4" width="20" height="16" rx="2"/>
+        <path d="M10 9L15 12L10 15V9Z"/>
+      </svg>
+    </button>
+    
+    <button class="icon-btn" data-agent="analytics" data-tooltip="数据分析助理">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 20V10M12 20V4M6 20V14"/>
+      </svg>
+    </button>
+    
+    <button class="icon-btn" data-agent="translator" data-tooltip="多语言翻译助理">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M2 12H22"/>
+        <path d="M12 2C14.5 4.5 16 8 16 12S14.5 19.5 12 22C9.5 19.5 8 16 8 12S9.5 4.5 12 2Z"/>
+      </svg>
+    </button>
+    
+    <button class="icon-btn" data-agent="social" data-tooltip="社媒运营助理">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="5" y="2" width="14" height="20" rx="2"/>
+        <path d="M12 18V12"/>
+        <circle cx="12" cy="6" r="1" fill="currentColor"/>
+      </svg>
+    </button>
+    
+    <div class="icon-sidebar-divider"></div>
+    
+    <button class="icon-btn" data-agent="custom" data-tooltip="自定义 Agent">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+      </svg>
+    </button>
+    
+    <div class="icon-sidebar-spacer"></div>
+    
+    <div class="system-dot" title="Provider 健康"></div>
+  </nav>
+  
+  <!-- Col 2: Agent Projects List -->
+  <aside class="agent-column">
+    <div class="agent-panel-header">
+      <span class="agent-panel-title" id="agentListTitle">视频策划</span>
+      <button class="new-project-btn" id="newProjectBtn">
+        <svg viewBox="0 0 12 12" fill="none"><path d="M6 1V11M1 6H11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        新建
+      </button>
     </div>
     
-    <!-- Future Agents -->
-    <div class="agent-card planning" data-agent="analytics">
-      <div class="agent-card-header">
-        <span class="agent-card-icon"></span>
-        <div class="agent-card-info">
-          <div class="agent-card-name">数据分析助理</div>
-          <div class="agent-card-desc">洞察视频表现数据</div>
-        </div>
-      </div>
+    <div class="agent-list" id="agentList">
+      <!-- Projects will be dynamically loaded -->
+    </div>
+  </aside>
+  
+  <!-- Col 3: Conversation Area -->
+  <main class="conversation-column">
+    <div class="conversation-header">
+      <div class="conversation-title" id="conversationTitle">智能对话式需求挖掘</div>
+      <div class="conversation-subtitle">AI 将逐步引导你完善视频需求</div>
     </div>
     
-    <div class="agent-card planning" data-agent="translator">
-      <div class="agent-card-header">
-        <span class="agent-card-icon"></span>
-        <div class="agent-card-info">
-          <div class="agent-card-name">多语言翻译助理</div>
-          <div class="agent-card-desc">一键翻译视频文案</div>
-        </div>
-      </div>
+    <div class="message-area" id="messageArea">
+      <!-- Messages will be inserted here -->
     </div>
     
-    <div class="agent-card planning" data-agent="social">
-      <div class="agent-card-header">
-        <span class="agent-card-icon"></span>
-        <div class="agent-card-info">
-          <div class="agent-card-name">社媒运营助理</div>
-          <div class="agent-card-desc">多平台内容分发</div>
+    <div class="input-area">
+      <div class="upload-preview" id="uploadPreview" style="display: none;"></div>
+      <div class="input-container">
+        <div class="input-row">
+          <textarea 
+            class="input-textarea" 
+            id="inputText" 
+            rows="1" 
+            placeholder="描述你的需求，或回答上面的问题..."
+          ></textarea>
+          <button class="send-btn" id="sendBtn">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M14 2L7 9M14 2L9 14L7 9M14 2L2 7L7 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+        <div class="attach-row">
+          <label class="attach-btn" for="imageInput">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.2"/><circle cx="4.5" cy="4.5" r="1.5" fill="currentColor"/><path d="M1 10L4 7L6 9L9 6L13 10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            图片
+          </label>
+          <input type="file" id="imageInput" accept="image/*">
+          
+          <label class="attach-btn" for="videoInput">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="3" width="9" height="8" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M10 5.5L13 4V10L10 8.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            视频
+          </label>
+          <input type="file" id="videoInput" accept="video/*">
+          
+          <button class="attach-btn" id="voiceBtn">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="4" y="1" width="6" height="8" rx="3" stroke="currentColor" stroke-width="1.2"/><path d="M2 6C2 8.2 3.8 10 6 10C8.2 10 10 8.2 10 6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><path d="M6 10V13M4 13H8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+            语音
+          </button>
         </div>
       </div>
+    </div>
+  </main>
+  
+  <!-- Col 4: Output Panel (Video Workflow) -->
+  <aside class="output-column">
+    <div class="output-tabs">
+      <div class="output-tab active" data-tab="copywriting">文案</div>
+      <div class="output-tab" data-tab="storyboard">分镜</div>
+      <div class="output-tab" data-tab="video">成片</div>
+      <div class="output-tab" data-tab="history">历史</div>
     </div>
     
-    <div class="agent-card planning coming-soon" data-agent="custom">
-      <div class="agent-card-header">
-        <span class="agent-card-icon"></span>
-        <div class="agent-card-info">
-          <div class="agent-card-name">自定义 Agent</div>
-          <div class="agent-card-desc">创建专属智能助手</div>
+    <div class="output-content">
+      <!-- Copywriting Tab -->
+      <div class="tab-panel active" id="tab-copywriting">
+        <div class="empty-state" id="copywritingEmpty">
+          <div class="empty-state-text">完成需求探询后将生成视频文案</div>
         </div>
-      </div>
-    </div>
-  </div>
-  
-  <!-- System Status -->
-  <div class="system-status">
-    <div class="system-status-item">
-      <span class="provider-dot healthy"></span>
-      <span>Provider 健康</span>
-      <span style="margin-left: auto; color: var(--success);">● 3 在线</span>
-    </div>
-    <div class="system-status-footer">
-      Powered by Seedance + Local GPU
-    </div>
-  </div>
-</aside>
-
-<!-- Center Column: Conversation -->
-<main class="conversation-column">
-  <div class="conversation-header">
-    <div class="conversation-title">智能对话式需求挖掘</div>
-    <div class="conversation-subtitle">AI 将逐步引导你完善视频需求</div>
-  </div>
-  
-  <div class="message-area" id="messageArea">
-    <!-- Messages will be inserted here -->
-  </div>
-  
-  <div class="input-area">
-    <div class="upload-preview" id="uploadPreview" style="display: none;"></div>
-    <div class="input-container">
-      <div class="input-row">
-        <textarea 
-          class="input-textarea" 
-          id="inputText" 
-          rows="1" 
-          placeholder="描述你的需求，或回答上面的问题..."
-        ></textarea>
-        <button class="send-btn" id="sendBtn">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M14 2L7 9M14 2L9 14L7 9M14 2L2 7L7 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-      </div>
-      <div class="attach-row">
-        <label class="attach-btn" for="imageInput">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.2"/><circle cx="4.5" cy="4.5" r="1.5" fill="currentColor"/><path d="M1 10L4 7L6 9L9 6L13 10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          图片
-        </label>
-        <input type="file" id="imageInput" accept="image/*" style="display: none;">
         
-        <label class="attach-btn" for="videoInput">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="3" width="9" height="8" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M10 5.5L13 4V10L10 8.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          视频
-        </label>
-        <input type="file" id="videoInput" accept="video/*" style="display: none;">
-        
-        <button class="attach-btn" id="voiceBtn">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="4" y="1" width="6" height="8" rx="3" stroke="currentColor" stroke-width="1.2"/><path d="M2 6C2 8.2 3.8 10 6 10C8.2 10 10 8.2 10 6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><path d="M6 10V13M4 13H8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
-          语音
-        </button>
-      </div>
-    </div>
-  </div>
-</main>
-
-<!-- Right Column: Output Panel -->
-<aside class="output-column">
-  <div class="output-tabs">
-    <div class="output-tab active" data-tab="copywriting">文案</div>
-    <div class="output-tab" data-tab="storyboard">分镜</div>
-    <div class="output-tab" data-tab="video">成片</div>
-    <div class="output-tab" data-tab="history">历史</div>
-  </div>
-  
-  <div class="output-content">
-    <!-- Copywriting Tab -->
-    <div class="tab-panel active" id="tab-copywriting">
-      <div class="empty-state" id="copywritingEmpty">
-        
-        <div class="empty-state-text">完成需求探询后将生成视频文案</div>
-      </div>
-      
-      <div class="copywriting-content" id="copywritingContent" style="display: none;">
-        <div class="copywriting-section">
-          <div class="copywriting-label">视频标题</div>
-          <div class="copywriting-text">
-            <textarea id="copyTitle" rows="2">温暖每一刻 - 双层真空保温杯</textarea>
+        <div class="copywriting-content" id="copywritingContent" style="display: none;">
+          <div class="copywriting-section">
+            <div class="copywriting-label">视频标题</div>
+            <div class="copywriting-text">
+              <textarea id="copyTitle" rows="2">温暖每一刻 - 双层真空保温杯</textarea>
+            </div>
           </div>
-        </div>
-        
-        <div class="copywriting-section">
-          <div class="copywriting-label">开场钩子</div>
-          <div class="copywriting-text">
-            <textarea id="copyHook">"还在为喝不到热水烦恼？这款保温杯，让你随时享受温暖！"</textarea>
+          
+          <div class="copywriting-section">
+            <div class="copywriting-label">开场钩子</div>
+            <div class="copywriting-text">
+              <textarea id="copyHook">"还在为喝不到热水烦恼？这款保温杯，让你随时享受温暖！"</textarea>
+            </div>
           </div>
-        </div>
-        
-        <div class="copywriting-section">
-          <div class="copywriting-label">核心卖点</div>
-          <div class="copywriting-text">
-            <textarea id="copyHighlights" rows="3">• 12小时长效保温保冷
+          
+          <div class="copywriting-section">
+            <div class="copywriting-label">核心卖点</div>
+            <div class="copywriting-text">
+              <textarea id="copyHighlights" rows="3">• 12小时长效保温保冷
 • 双层真空技术，锁住温度
 • 304不锈钢材质，安全健康
 • 500ml大容量，满足全天需求</textarea>
+            </div>
           </div>
-        </div>
-        
-        <div class="copywriting-section">
-          <div class="copywriting-label">场景演绎文案</div>
-          <div class="copywriting-text">
-            <textarea id="copyScene" rows="4">[场景1：清晨办公室]
+          
+          <div class="copywriting-section">
+            <div class="copywriting-label">场景演绎文案</div>
+            <div class="copywriting-text">
+              <textarea id="copyScene" rows="4">[场景1：清晨办公室]
 特写：咖啡热气缓缓升起
 旁白："清晨的第一杯咖啡，从办公室开始..."
 
 [场景2：户外露营]
 全景：山野间，阳光正好
 旁白："周末露营，温暖相伴..."</textarea>
-          </div>
-        </div>
-        
-        <div class="copywriting-section">
-          <div class="copywriting-label">结尾号召</div>
-          <div class="copywriting-text">
-            <textarea id="copyCta">"温暖，从这一刻开始。点击下方链接，把温暖带回家！"</textarea>
-          </div>
-        </div>
-        
-        <button class="confirm-btn" id="confirmCopyBtn">确认文案</button>
-      </div>
-    </div>
-    
-    <!-- Storyboard Tab -->
-    <div class="tab-panel" id="tab-storyboard">
-      <div class="empty-state" id="storyboardEmpty">
-        
-        <div class="empty-state-text">确认文案后生成分镜画板</div>
-      </div>
-      
-      <div class="storyboard-grid" id="storyboardContent" style="display: none;">
-        <div class="storyboard-card">
-          <div class="storyboard-thumb"></div>
-          <div class="storyboard-info">
-            <div class="storyboard-scene">清晨办公室环境，特写咖啡杯</div>
-            <div class="storyboard-meta">
-              <span>3s</span>
-              <span>推进</span>
             </div>
           </div>
-        </div>
-        
-        <div class="storyboard-card">
-          <div class="storyboard-thumb"></div>
-          <div class="storyboard-info">
-            <div class="storyboard-scene">产品展示，双层结构演示</div>
-            <div class="storyboard-meta">
-              <span>4s</span>
-              <span>环绕</span>
-            </div>
-          </div>
-        </div>
-        
-        <div class="storyboard-card">
-          <div class="storyboard-thumb"></div>
-          <div class="storyboard-info">
-            <div class="storyboard-scene">户外露营场景，阳光明媚</div>
-            <div class="storyboard-meta">
-              <span>5s</span>
-              <span>航拍</span>
-            </div>
-          </div>
-        </div>
-        
-        <div class="storyboard-card">
-          <div class="storyboard-thumb"></div>
-          <div class="storyboard-info">
-            <div class="storyboard-scene">人物使用产品特写</div>
-            <div class="storyboard-meta">
-              <span>3s</span>
-              <span>跟拍</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <button class="confirm-btn" id="confirmStoryBtn" style="display: none; margin-top: 16px;">确认分镜，开始生成视频</button>
-    </div>
-    
-    <!-- Video Tab -->
-    <div class="tab-panel" id="tab-video">
-      <div class="empty-state" id="videoEmpty">
-        
-        <div class="empty-state-text">视频生成完成后将在此显示</div>
-      </div>
-      
-      <div id="videoContent" style="display: none;">
-        <div class="video-player">
-          <video id="resultVideo" controls></video>
-        </div>
-        <div class="video-info">
-          <div class="video-info-row">
-            <span>分辨率</span>
-            <span>1920 × 1080</span>
-          </div>
-          <div class="video-info-row">
-            <span>时长</span>
-            <span>30s</span>
-          </div>
-          <div class="video-info-row">
-            <span>Provider</span>
-            <span>Seedance</span>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <!-- History Tab -->
-    <div class="tab-panel" id="tab-history">
-      <div class="history-list" id="historyList">
-        <div class="empty-state">
           
-          <div class="empty-state-text">暂无历史任务</div>
+          <div class="copywriting-section">
+            <div class="copywriting-label">结尾号召</div>
+            <div class="copywriting-text">
+              <textarea id="copyCta">"温暖，从这一刻开始。点击下方链接，把温暖带回家！"</textarea>
+            </div>
+          </div>
+          
+          <button class="confirm-btn" id="confirmCopyBtn">确认文案</button>
+        </div>
+      </div>
+      
+      <!-- Storyboard Tab -->
+      <div class="tab-panel" id="tab-storyboard">
+        <div class="empty-state" id="storyboardEmpty">
+          <div class="empty-state-text">确认文案后生成分镜画板</div>
+        </div>
+        
+        <div class="storyboard-grid" id="storyboardContent" style="display: none;">
+          <div class="storyboard-card">
+            <div class="storyboard-thumb"></div>
+            <div class="storyboard-info">
+              <div class="storyboard-scene">清晨办公室环境，特写咖啡杯</div>
+              <div class="storyboard-meta">
+                <span>3s</span>
+                <span>推进</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="storyboard-card">
+            <div class="storyboard-thumb"></div>
+            <div class="storyboard-info">
+              <div class="storyboard-scene">产品展示，双层结构演示</div>
+              <div class="storyboard-meta">
+                <span>4s</span>
+                <span>环绕</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="storyboard-card">
+            <div class="storyboard-thumb"></div>
+            <div class="storyboard-info">
+              <div class="storyboard-scene">户外露营场景，阳光明媚</div>
+              <div class="storyboard-meta">
+                <span>5s</span>
+                <span>航拍</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="storyboard-card">
+            <div class="storyboard-thumb"></div>
+            <div class="storyboard-info">
+              <div class="storyboard-scene">人物使用产品特写</div>
+              <div class="storyboard-meta">
+                <span>3s</span>
+                <span>跟拍</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <button class="confirm-btn" id="confirmStoryBtn" style="display: none; margin-top: 16px;">确认分镜，开始生成视频</button>
+      </div>
+      
+      <!-- Video Tab -->
+      <div class="tab-panel" id="tab-video">
+        <div class="empty-state" id="videoEmpty">
+          <div class="empty-state-text">视频生成完成后将在此显示</div>
+        </div>
+        
+        <div id="videoContent" style="display: none;">
+          <div class="video-player">
+            <video id="resultVideo" controls></video>
+          </div>
+          <div class="video-info">
+            <div class="video-info-row">
+              <span>分辨率</span>
+              <span>1920 × 1080</span>
+            </div>
+            <div class="video-info-row">
+              <span>时长</span>
+              <span>30s</span>
+            </div>
+            <div class="video-info-row">
+              <span>Provider</span>
+              <span>Seedance</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- History Tab -->
+      <div class="tab-panel" id="tab-history">
+        <div class="history-list" id="historyList">
+          <div class="empty-state">
+            <div class="empty-state-text">暂无历史任务</div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</aside>
+  </aside>
 </div>
 
 <!-- Bottom Dock: Quantum Progress -->
@@ -1620,7 +1722,8 @@ body {
 
 <script>
 // ═══════════════════════════════════════════════
-// MineVideos Studio — AI Assistant Logic
+// MineVideos Studio — 四栏布局重构版
+// Agent 切换 & 项目管理逻辑
 // ═══════════════════════════════════════════════
 
 // State
@@ -1629,11 +1732,66 @@ let conversationRound = 0;
 let userResponses = {};
 let isTyping = false;
 let uploadedImages = [];
+let currentAgent = 'video';
+let currentProject = null;
+
+// Agent 类型定义
+const agentTypes = {
+  video: {
+    name: '视频策划助理',
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M10 9L15 12L10 15V9Z"/></svg>`,
+    color: 'var(--ctp-mauve)'
+  },
+  analytics: {
+    name: '数据分析助理',
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10M12 20V4M6 20V14"/></svg>`,
+    color: 'var(--ctp-blue)'
+  },
+  translator: {
+    name: '多语言翻译助理',
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12H22"/><path d="M12 2C14.5 4.5 16 8 16 12S14.5 19.5 12 22C9.5 19.5 8 16 8 12S9.5 4.5 12 2Z"/></svg>`,
+    color: 'var(--ctp-teal)'
+  },
+  social: {
+    name: '社媒运营助理',
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18V12"/><circle cx="12" cy="6" r="1" fill="currentColor"/></svg>`,
+    color: 'var(--ctp-peach)'
+  },
+  custom: {
+    name: '自定义 Agent',
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`,
+    color: 'var(--ctp-overlay1)'
+  }
+};
+
+// 示例项目数据
+const sampleProjects = {
+  video: [
+    { id: 'v1', name: '保温杯产品视频', summary: '双层真空保温杯，12小时长效保温，适合户外和办公场景', time: '2小时前', status: 'active' },
+    { id: 'v2', name: '运动耳机宣传', summary: '无线蓝牙耳机，主打降噪和运动佩戴舒适性', time: '昨天', status: 'completed' },
+    { id: 'v3', name: '美妆教程系列', summary: '三集护肤产品使用教程，自然光风格', time: '3天前', status: 'completed' }
+  ],
+  analytics: [
+    { id: 'a1', name: 'Q4视频表现分析', summary: '分析50条视频的播放量、转化率和用户互动数据', time: '1天前', status: 'active' },
+    { id: 'a2', name: '竞品账号对比', summary: '对比同类账号的粉丝增长和内容策略', time: '上周', status: 'completed' }
+  ],
+  translator: [
+    { id: 't1', name: '产品视频多语言', summary: '将中文视频文案翻译为英、日、韩三语版本', time: '3小时前', status: 'active' },
+    { id: 't2', name: '海外社媒内容', summary: '本地化8条海外社交媒体推广文案', time: '昨天', status: 'completed' }
+  ],
+  social: [
+    { id: 's1', name: '双十一活动运营', summary: '策划并执行抖音、小红书双平台营销活动', time: '5小时前', status: 'active' },
+    { id: 's2', name: '品牌账号矩阵', summary: '搭建品牌在抖音、小红书、视频号的账号体系', time: '2周前', status: 'completed' }
+  ],
+  custom: [
+    { id: 'c1', name: '我的自定义助手', summary: '针对电商直播场景优化的AI助手', time: '1周前', status: 'completed' }
+  ]
+};
 
 // Conversation Flow
 const conversationFlow = [
   {
-    ai: "👋 你好！我是 MineVideos 视频策划助理。\n\n上传你的产品图片，或者告诉我你想做什么样的视频，我来帮你策划。",
+    ai: "你好！我是 MineVideos 视频策划助理。\n\n上传你的产品图片，或者告诉我你想做什么样的视频，我来帮你策划。",
     quickOptions: ["上传产品图片", "描述视频需求", "查看示例"]
   },
   {
@@ -1664,21 +1822,164 @@ const inputText = document.getElementById('inputText');
 const sendBtn = document.getElementById('sendBtn');
 const uploadPreview = document.getElementById('uploadPreview');
 const imageInput = document.getElementById('imageInput');
+const agentList = document.getElementById('agentList');
+const agentListTitle = document.getElementById('agentListTitle');
+const currentAgentName = document.getElementById('currentAgentName');
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
+  initIconSidebar();
+  initAgentList();
   initConversation();
   initTabs();
   initInputHandlers();
   initDockProgress();
+  initNewProject();
 });
+
+// Icon Sidebar Logic
+function initIconSidebar() {
+  const iconBtns = document.querySelectorAll('.icon-btn[data-agent]');
+  
+  iconBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const agentType = btn.dataset.agent;
+      switchAgent(agentType);
+      
+      // Update active state
+      iconBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+}
+
+function switchAgent(agentType) {
+  currentAgent = agentType;
+  const agent = agentTypes[agentType];
+  
+  // Update toolbar
+  currentAgentName.textContent = agent.name;
+  
+  // Update conversation title
+  document.getElementById('conversationTitle').textContent = agent.name;
+  
+  // Update agent list title
+  agentListTitle.textContent = agent.name.replace('助理', '').replace(' ', '');
+  
+  // Load projects for this agent
+  loadAgentProjects(agentType);
+  
+  // Reset conversation
+  resetConversation();
+}
+
+function loadAgentProjects(agentType) {
+  const projects = sampleProjects[agentType] || [];
+  const agent = agentTypes[agentType];
+  
+  if (projects.length === 0) {
+    agentList.innerHTML = `
+      <div class="agent-list-empty">
+        <div class="agent-list-empty-icon">
+          ${agent.icon}
+        </div>
+        <div class="agent-list-empty-text">暂无项目<br>点击「新建」开始创作</div>
+      </div>
+    `;
+    return;
+  }
+  
+  agentList.innerHTML = projects.map((project, index) => `
+    <div class="project-card ${project.status === 'active' ? 'active' : ''}" data-project-id="${project.id}" data-index="${index}">
+      <div class="project-card-header">
+        <div class="project-type-icon" style="background: ${agent.color}20; color: ${agent.color}">
+          ${agent.icon}
+        </div>
+        <div class="project-name">${project.name}</div>
+        <div class="project-status-dot"></div>
+      </div>
+      <div class="project-summary">${project.summary}</div>
+      <div class="project-meta">
+        <span>${project.time}</span>
+        <span class="divider"></span>
+        <span>${project.status === 'active' ? '进行中' : '已完成'}</span>
+      </div>
+    </div>
+  `).join('');
+  
+  // Add click handlers
+  agentList.querySelectorAll('.project-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const projectId = card.dataset.projectId;
+      selectProject(projectId);
+      
+      // Update active state
+      agentList.querySelectorAll('.project-card').forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+    });
+  });
+}
+
+function selectProject(projectId) {
+  const projects = sampleProjects[currentAgent] || [];
+  const project = projects.find(p => p.id === projectId);
+  
+  if (project) {
+    currentProject = project;
+    
+    // Update toolbar
+    currentAgentName.textContent = `${agentTypes[currentAgent].name} - ${project.name}`;
+    
+    // Update conversation
+    resetConversation();
+    
+    // Start conversation for this project
+    setTimeout(() => {
+      if (currentAgent === 'video') {
+        addAIMessage(conversationFlow[0].ai, conversationFlow[0].quickOptions);
+      } else {
+        addAIMessage(`已加载项目「${project.name}」，请问需要我帮你做什么？`, null);
+      }
+    }, 500);
+  }
+}
+
+function initAgentList() {
+  loadAgentProjects(currentAgent);
+}
+
+function initNewProject() {
+  document.getElementById('newProjectBtn').addEventListener('click', () => {
+    // Create new project
+    const newProject = {
+      id: `new_${Date.now()}`,
+      name: '新项目',
+      summary: '点击开始新的创作...',
+      time: '刚刚',
+      status: 'active'
+    };
+    
+    if (!sampleProjects[currentAgent]) {
+      sampleProjects[currentAgent] = [];
+    }
+    
+    sampleProjects[currentAgent].unshift(newProject);
+    loadAgentProjects(currentAgent);
+    selectProject(newProject.id);
+  });
+}
 
 // Conversation Logic
 function initConversation() {
-  // Auto-send welcome message
   setTimeout(() => {
     addAIMessage(conversationFlow[0].ai, conversationFlow[0].quickOptions);
-  }, 500);
+  }, 800);
+}
+
+function resetConversation() {
+  messageArea.innerHTML = '';
+  conversationRound = 0;
+  userResponses = {};
 }
 
 function addAIMessage(text, quickOptions = null) {
@@ -1820,14 +2121,12 @@ function showSummary() {
   });
   
   document.getElementById('modifySummaryBtn').addEventListener('click', () => {
-    // Reset to specific round based on what needs modification
-    conversationRound = 1; // Go back to product question
+    conversationRound = 1;
     addAIMessage("好的，让我们重新完善需求。", conversationFlow[1].quickOptions);
   });
 }
 
 function startPlanning() {
-  // Add generating message
   const genMsg = document.createElement('div');
   genMsg.className = 'message ai';
   genMsg.id = 'generatingMsg';
@@ -1843,26 +2142,18 @@ function startPlanning() {
   messageArea.appendChild(genMsg);
   scrollToBottom();
   
-  // Show dock status
   document.getElementById('genStatus').style.display = 'flex';
-  
-  // Advance dock progress
   advanceStep();
   
-  // Simulate generation
   setTimeout(() => {
     document.getElementById('generatingMsg').remove();
     
     addAIMessage("🎉 文案已生成！请查看右侧面板进行编辑和调整。", null);
     
-    // Show copywriting content
     document.getElementById('copywritingEmpty').style.display = 'none';
     document.getElementById('copywritingContent').style.display = 'block';
     
-    // Switch to copywriting tab
     switchTab('copywriting');
-    
-    // Hide generating status
     document.getElementById('genStatus').style.display = 'none';
   }, 3000);
 }
@@ -1879,24 +2170,20 @@ function initTabs() {
 }
 
 function switchTab(tabName) {
-  // Update tabs
   document.querySelectorAll('.output-tab').forEach(t => t.classList.remove('active'));
   document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
   
-  // Update panels
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
   document.getElementById(`tab-${tabName}`).classList.add('active');
 }
 
 // Input Handlers
 function initInputHandlers() {
-  // Auto-resize textarea
   inputText.addEventListener('input', () => {
     inputText.style.height = 'auto';
     inputText.style.height = Math.min(inputText.scrollHeight, 120) + 'px';
   });
   
-  // Send button
   sendBtn.addEventListener('click', () => {
     const text = inputText.value.trim();
     if (text && !isTyping) {
@@ -1906,7 +2193,6 @@ function initInputHandlers() {
     }
   });
   
-  // Enter to send
   inputText.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -1914,7 +2200,6 @@ function initInputHandlers() {
     }
   });
   
-  // Image upload
   imageInput.addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -1923,7 +2208,6 @@ function initInputHandlers() {
         uploadedImages.push(ev.target.result);
         renderUploadPreviews();
         
-        // Trigger conversation with image
         if (conversationRound === 0) {
           handleUserInput(`我上传了产品图片: ${file.name}`);
         }
@@ -1932,7 +2216,6 @@ function initInputHandlers() {
     }
   });
   
-  // Voice button (placeholder)
   document.getElementById('voiceBtn').addEventListener('click', () => {
     alert('语音输入功能开发中...');
   });
@@ -1952,7 +2235,6 @@ function renderUploadPreviews() {
     </div>
   `).join('');
   
-  // Remove handlers
   uploadPreview.querySelectorAll('.preview-remove').forEach(btn => {
     btn.addEventListener('click', () => {
       const index = parseInt(btn.dataset.index);
@@ -2033,7 +2315,6 @@ document.getElementById('confirmStoryBtn')?.addEventListener('click', () => {
   `;
   document.getElementById('genStatus').style.display = 'flex';
   
-  // Simulate video generation
   setTimeout(() => {
     document.getElementById('genStatus').style.display = 'none';
     advanceStep();
