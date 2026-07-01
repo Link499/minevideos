@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MineVideos Studio — Create Stunning Videos with AI</title>
+<title>MineVideos Studio — AI 助理平台</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 /* ═══════════════════════════════════════════════
-   MineVideos Studio — V3.0 Three-Column Layout
-   Apple-inspired, minimal & elegant
+   MineVideos Studio — AI Assistant Platform
+   Catppuccin Mocha Theme
    ═══════════════════════════════════════════════ */
 
 *, *::before, *::after {
@@ -19,23 +19,49 @@
 }
 
 :root {
-  --glass-bg: rgba(255, 255, 255, 0.08);
-  --glass-border: rgba(255, 255, 255, 0.15);
-  --glass-shadow: rgba(0, 0, 0, 0.3);
-  --text-primary: rgba(255, 255, 255, 0.95);
-  --text-secondary: rgba(255, 255, 255, 0.6);
-  --text-tertiary: rgba(255, 255, 255, 0.35);
-  --accent: #6C5CE7;
-  --accent-glow: rgba(108, 92, 231, 0.4);
-  --accent-secondary: #00D2FF;
-  --success: #00E676;
-  --warning: #FFB74D;
-  --radius-sm: 12px;
-  --radius-md: 20px;
-  --radius-lg: 28px;
-  --blur: 40px;
+  /* Catppuccin Mocha Colors */
+  --ctp-base: #1e1e2e;
+  --ctp-mantle: #181825;
+  --ctp-crust: #11111b;
+  --ctp-surface0: #313244;
+  --ctp-surface1: #45475a;
+  --ctp-surface2: #585b70;
+  --ctp-overlay0: #6c7086;
+  --ctp-overlay1: #7f849c;
+  --ctp-overlay2: #9399b2;
+  --ctp-subtext0: #a6adc8;
+  --ctp-subtext1: #bac2de;
+  --ctp-text: #cdd6f4;
+  --ctp-mauve: #cba4f7;
+  --ctp-blue: #89b4fa;
+  --ctp-teal: #94e2d5;
+  --ctp-green: #a6e3a1;
+  --ctp-yellow: #f9e2af;
+  --ctp-peach: #fab387;
+  --ctp-maroon: #eba0ac;
+  --ctp-red: #f38ba8;
+  --ctp-lavender: #b4befe;
+  
+  /* Semantic Colors */
+  --accent: var(--ctp-mauve);
+  --accent-glow: rgba(203, 164, 247, 0.4);
+  --accent-secondary: var(--ctp-blue);
+  --success: var(--ctp-green);
+  --warning: var(--ctp-yellow);
+  --danger: var(--ctp-red);
+  
+  /* Layout */
+  --toolbar-height: 60px;
+  --dock-height: 64px;
+  --left-width: 260px;
+  --right-width: 340px;
+  
+  /* Typography */
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
   --transition: cubic-bezier(0.4, 0, 0.2, 1);
-  --studio-bg: #08080f;
 }
 
 html, body {
@@ -44,11 +70,10 @@ html, body {
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
-  background: var(--studio-bg);
-  color: var(--text-primary);
+  font-family: var(--font-family);
+  background: var(--ctp-crust);
+  color: var(--ctp-text);
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 /* ── Top Toolbar ── */
@@ -57,11 +82,11 @@ body {
   top: 0;
   left: 0;
   right: 0;
-  height: 60px;
-  background: rgba(8, 8, 15, 0.95);
+  height: var(--toolbar-height);
+  background: rgba(24, 24, 37, 0.95);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(139, 92, 246, 0.15);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -85,19 +110,25 @@ body {
 .toolbar-logo-icon {
   width: 32px;
   height: 32px;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   overflow: hidden;
+  background: linear-gradient(135deg, var(--ctp-mauve), var(--ctp-blue));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
   box-shadow: 0 4px 12px var(--accent-glow);
 }
 
 .toolbar-logo-text {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
-  color: var(--text-primary);
+  color: var(--ctp-text);
+  letter-spacing: -0.02em;
 }
 
 .toolbar-logo-text span {
-  background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+  background: linear-gradient(135deg, var(--ctp-mauve), var(--ctp-blue));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -108,23 +139,31 @@ body {
   align-items: center;
   gap: 6px;
   padding: 6px 12px;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  color: var(--text-secondary);
-  font-size: 13px;
+  color: var(--ctp-subtext0);
+  font-size: 12px;
   text-decoration: none;
   transition: all 0.2s var(--transition);
 }
 
 .back-home-btn:hover {
   background: rgba(255, 255, 255, 0.08);
-  color: var(--text-primary);
+  color: var(--ctp-text);
 }
 
 .toolbar-center {
   font-size: 13px;
-  color: var(--text-tertiary);
+  font-weight: 500;
+  color: var(--ctp-subtext1);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toolbar-center .agent-icon {
+  font-size: 16px;
 }
 
 .toolbar-right {
@@ -133,7 +172,7 @@ body {
   gap: 12px;
 }
 
-.provider-health-indicator {
+.status-indicator {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -142,33 +181,34 @@ body {
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
   font-size: 11px;
-  color: var(--text-tertiary);
+  color: var(--ctp-subtext0);
 }
 
-.provider-health-dot {
+.status-dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
   flex-shrink: 0;
 }
 
-.provider-health-dot.online { background: #00E676; box-shadow: 0 0 4px #00E676; }
-.provider-health-dot.degraded { background: #FFB74D; box-shadow: 0 0 4px #FFB74D; }
-.provider-health-dot.offline { background: #FF6B9D; box-shadow: 0 0 4px #FF6B9D; }
-.provider-health-dot.loading { background: var(--text-tertiary); animation: pulse 1s infinite; }
+.status-dot.online {
+  background: var(--success);
+  box-shadow: 0 0 6px var(--success);
+  animation: statusPulse 2s ease-in-out infinite;
+}
 
-@keyframes pulse {
+@keyframes statusPulse {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
+  50% { opacity: 0.5; }
 }
 
 .toolbar-login-btn {
   padding: 8px 16px;
-  border-radius: 8px;
-  background: linear-gradient(135deg, var(--accent), #8B5CF6);
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--ctp-mauve), #9d7cd8);
   border: none;
   color: white;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s var(--transition);
@@ -180,859 +220,764 @@ body {
   box-shadow: 0 4px 16px var(--accent-glow);
 }
 
-.nav-user-menu {
-  position: relative;
-}
-
-.nav-user-btn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 12px;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: var(--text-primary);
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s var(--transition);
-}
-
-.nav-user-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.nav-user-dropdown {
-  position: absolute;
-  top: calc(100% + 8px);
-  right: 0;
-  min-width: 160px;
-  background: rgba(15, 15, 30, 0.95);
-  backdrop-filter: blur(40px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 10px;
-  padding: 6px;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-8px);
-  transition: all 0.2s var(--transition);
-  z-index: 200;
-}
-
-.nav-user-menu:hover .nav-user-dropdown {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
-
-.nav-user-dropdown button {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-  padding: 8px 12px;
-  border-radius: 6px;
-  font-size: 13px;
-  color: var(--text-secondary);
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.nav-user-dropdown button:hover {
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--text-primary);
-}
-
-.nav-user-dropdown .signout-btn { color: #FF6B9D; }
-.nav-user-dropdown .signout-btn:hover { background: rgba(255, 107, 157, 0.1); color: #FF6B9D; }
-
-/* ── Three Column Layout ── */
+/* ── Main Layout ── */
 .studio-container {
   display: grid;
-  grid-template-columns: 280px 1fr 360px;
-  height: calc(100vh - 60px);
-  margin-top: 60px;
+  grid-template-columns: var(--left-width) 1fr var(--right-width);
+  height: calc(100vh - var(--toolbar-height) - var(--dock-height));
+  margin-top: var(--toolbar-height);
 }
 
-/* ── Left Column: Provider Panel ── */
-.provider-column {
-  background: rgba(10, 10, 20, 0.6);
+/* ── Left Column: Agent Panel ── */
+.agent-column {
+  background: var(--ctp-mantle);
   border-right: 1px solid rgba(255, 255, 255, 0.06);
-  overflow-y: auto;
-  padding: 16px;
-}
-
-.provider-column-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 16px;
-}
-
-.provider-column-title {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.provider-refresh-btn {
-  width: 28px;
-  height: 28px;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  color: var(--text-tertiary);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
-}
-
-.provider-refresh-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--text-primary);
-}
-
-.provider-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  overflow: hidden;
 }
 
-.provider-card {
+.agent-panel-header {
+  padding: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.agent-panel-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ctp-overlay1);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.agent-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+}
+
+.agent-card {
   padding: 14px;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.06);
+  margin-bottom: 10px;
   cursor: pointer;
   transition: all 0.3s var(--transition);
   position: relative;
+  overflow: hidden;
 }
 
-.provider-card:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.12);
+.agent-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
-.provider-card.selected {
-  background: rgba(108, 92, 231, 0.12);
-  border-color: rgba(108, 92, 231, 0.35);
+.agent-card.active {
+  background: rgba(139, 92, 246, 0.12);
+  border-color: rgba(139, 92, 246, 0.35);
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.15);
 }
 
-.provider-card.recommended::before {
-  content: 'Recommended';
+.agent-card.active::before {
+  content: '';
   position: absolute;
-  top: -8px;
-  right: 12px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), transparent);
+  animation: breathingGlow 3s ease-in-out infinite;
+}
+
+@keyframes breathingGlow {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.7; }
+}
+
+.agent-card.planning {
+  opacity: 0.5;
+  border-style: dashed;
+  cursor: default;
+}
+
+.agent-card.planning::after {
+  content: '规划中';
+  position: absolute;
+  top: 8px;
+  right: 8px;
   padding: 2px 8px;
-  border-radius: 6px;
-  font-size: 10px;
+  border-radius: 10px;
+  font-size: 9px;
   font-weight: 600;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--ctp-overlay1);
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  background: linear-gradient(135deg, #6C5CE7, #8B5CF6);
-  color: white;
 }
 
-.provider-card-header {
+.agent-card.coming-soon::after {
+  content: '敬请期待';
+}
+
+.agent-card-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 8px;
+  gap: 10px;
+  position: relative;
+  z-index: 1;
 }
 
-.provider-name {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text-primary);
+.agent-card-icon {
+  font-size: 20px;
 }
 
-.provider-type-icon {
-  width: 26px;
-  height: 26px;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.agent-card-info {
+  flex: 1;
+}
+
+.agent-card-name {
   font-size: 13px;
-  background: rgba(108, 92, 231, 0.15);
+  font-weight: 600;
+  color: var(--ctp-text);
+  margin-bottom: 2px;
 }
 
-.provider-status {
+.agent-card-desc {
+  font-size: 11px;
+  color: var(--ctp-overlay1);
+}
+
+.agent-card-status {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--success);
+  box-shadow: 0 0 8px var(--success);
+}
+
+.agent-card.planning .agent-card-status {
+  background: var(--ctp-surface1);
+  box-shadow: none;
+}
+
+/* System Status Footer */
+.system-status {
+  padding: 12px 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.system-status-item {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
+  margin-bottom: 8px;
   font-size: 11px;
-  color: var(--text-tertiary);
-  margin-bottom: 10px;
+  color: var(--ctp-subtext0);
 }
 
-.provider-status-dot {
+.system-status-item:last-child {
+  margin-bottom: 0;
+}
+
+.provider-dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
 }
 
-.provider-status-dot.online { background: #00E676; }
-.provider-status-dot.degraded { background: #FFB74D; }
-.provider-status-dot.offline { background: #FF6B9D; }
+.provider-dot.healthy { background: var(--success); }
+.provider-dot.degraded { background: var(--warning); }
+.provider-dot.offline { background: var(--danger); }
 
-.provider-overall-score {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 4px;
-}
-
-.provider-score-label {
-  font-size: 10px;
-  color: var(--text-tertiary);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.provider-score-value {
-  font-size: 14px;
-  font-weight: 700;
-  color: #00E676;
-}
-
-.provider-score-bar {
-  height: 4px;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 2px;
-  overflow: hidden;
-  margin-bottom: 12px;
-}
-
-.provider-score-fill {
-  height: 100%;
-  border-radius: 2px;
-  transition: width 0.5s ease;
-}
-
-.provider-score-fill.high { background: linear-gradient(90deg, #00E676, #00C853); }
-.provider-score-fill.medium { background: linear-gradient(90deg, #FFB74D, #FFA726); }
-.provider-score-fill.low { background: linear-gradient(90deg, #FF6B9D, #FF5252); }
-
-/* Provider Detail Expansion */
-.provider-detail {
-  padding-top: 12px;
+.system-status-footer {
+  margin-top: 10px;
+  padding-top: 10px;
   border-top: 1px solid rgba(255, 255, 255, 0.04);
-  display: none;
-}
-
-.provider-detail.visible { display: block; }
-
-.provider-detail-title {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text-secondary);
-  margin-bottom: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.provider-dimensions {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-
-.provider-dimension {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-
-.provider-dimension-label {
-  font-size: 9px;
-  color: var(--text-tertiary);
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-}
-
-.provider-dimension-bar {
-  height: 3px;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 2px;
-  overflow: hidden;
-}
-
-.provider-dimension-fill {
-  height: 100%;
-  border-radius: 2px;
-}
-
-.provider-dimension-fill.runtime { background: linear-gradient(90deg, #00E676, #00C853); }
-.provider-dimension-fill.stability { background: linear-gradient(90deg, #89b4fa, #74c7ec); }
-.provider-dimension-fill.quality { background: linear-gradient(90deg, #cba6f7, #b794f6); }
-.provider-dimension-fill.cost { background: linear-gradient(90deg, #f9e2af, #f5c542); }
-.provider-dimension-fill.control { background: linear-gradient(90deg, #f38ba8, #f5a8c8); }
-.provider-dimension-fill.latency { background: linear-gradient(90deg, #94e2d5, #7dcfff); }
-.provider-dimension-fill.continuity { background: linear-gradient(90deg, #a6e3a1, #c9f0b0); }
-
-.provider-dimension-value {
   font-size: 10px;
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-/* Provider Footer Health */
-.provider-footer {
-  margin-top: 16px;
-  padding-top: 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.04);
-}
-
-.provider-footer-status {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 11px;
-  color: var(--text-tertiary);
-}
-
-/* ── Center Column: Creation Zone ── */
-.creation-column {
-  background: linear-gradient(180deg, #0a0a1a 0%, #08080f 100%);
-  overflow-y: auto;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.creation-header {
+  color: var(--ctp-overlay0);
   text-align: center;
-  margin-bottom: 8px;
 }
 
-.creation-title {
-  font-size: 20px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  margin-bottom: 6px;
-  background: linear-gradient(135deg, var(--text-primary), var(--accent-secondary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.creation-subtitle {
-  font-size: 13px;
-  color: var(--text-tertiary);
-}
-
-.prompt-card {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: var(--radius-md);
-  padding: 24px;
-  flex: 1;
+/* ── Center Column: Conversation ── */
+.conversation-column {
+  background: linear-gradient(180deg, var(--ctp-base) 0%, var(--ctp-mantle) 100%);
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
-.prompt-textarea {
-  width: 100%;
-  min-height: 140px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 12px;
-  padding: 16px;
-  color: var(--text-primary);
-  font-size: 15px;
-  font-family: inherit;
-  line-height: 1.6;
-  resize: vertical;
-  transition: all 0.3s var(--transition);
-  letter-spacing: -0.01em;
+.conversation-header {
+  padding: 16px 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  text-align: center;
 }
 
-.prompt-textarea::placeholder {
-  color: var(--text-tertiary);
+.conversation-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ctp-text);
 }
 
-.prompt-textarea:focus {
-  outline: none;
-  border-color: rgba(108, 92, 231, 0.5);
-  box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.1);
-  background: rgba(255, 255, 255, 0.05);
+.conversation-subtitle {
+  font-size: 12px;
+  color: var(--ctp-overlay1);
+  margin-top: 4px;
 }
 
-.attachments-bar {
+/* Message Area */
+.message-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.message {
+  display: flex;
+  gap: 12px;
+  max-width: 85%;
+  animation: messageSlide 0.3s var(--transition);
+}
+
+@keyframes messageSlide {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.message.user {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.message-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.message.ai .message-avatar {
+  background: linear-gradient(135deg, var(--ctp-mauve), var(--ctp-blue));
+}
+
+.message.user .message-avatar {
+  background: var(--ctp-surface1);
+}
+
+.message-content {
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.message.ai .message-content {
+  background: rgba(139, 92, 246, 0.1);
+  border-left: 3px solid var(--ctp-mauve);
+  color: var(--ctp-text);
+}
+
+.message.user .message-content {
+  background: rgba(205, 214, 244, 0.08);
+  color: var(--ctp-text);
+}
+
+/* Quick Options */
+.quick-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.quick-option {
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  color: var(--ctp-subtext1);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: all 0.2s var(--transition);
+}
+
+.quick-option:hover {
+  background: rgba(139, 92, 246, 0.15);
+  border-color: rgba(139, 92, 246, 0.3);
+  color: var(--ctp-mauve);
+}
+
+/* Summary Card */
+.summary-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin-top: 8px;
+}
+
+.summary-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ctp-mauve);
+}
+
+.summary-items {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.summary-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--ctp-subtext1);
+}
+
+.summary-item .check {
+  color: var(--success);
+  flex-shrink: 0;
+}
+
+.summary-item .label {
+  color: var(--ctp-overlay1);
+  min-width: 60px;
+}
+
+.summary-actions {
+  display: flex;
   gap: 10px;
   margin-top: 16px;
   padding-top: 16px;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
+.summary-btn {
+  flex: 1;
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s var(--transition);
+}
+
+.summary-btn.primary {
+  background: linear-gradient(135deg, var(--ctp-mauve), #9d7cd8);
+  border: none;
+  color: white;
+}
+
+.summary-btn.primary:hover {
+  box-shadow: 0 4px 16px var(--accent-glow);
+}
+
+.summary-btn.secondary {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--ctp-subtext1);
+}
+
+.summary-btn.secondary:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Typing Indicator */
+.typing-indicator {
+  display: flex;
+  gap: 4px;
+  padding: 4px 0;
+}
+
+.typing-indicator span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--ctp-mauve);
+  animation: typingBounce 1.4s ease-in-out infinite;
+}
+
+.typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+.typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typingBounce {
+  0%, 60%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-4px); }
+}
+
+/* Input Area */
+.input-area {
+  padding: 16px 24px 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  background: var(--ctp-mantle);
+}
+
+.input-container {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-lg);
+  padding: 12px;
+  transition: all 0.2s var(--transition);
+}
+
+.input-container:focus-within {
+  border-color: rgba(139, 92, 246, 0.4);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+.input-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.input-textarea {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--ctp-text);
+  font-size: 13px;
+  font-family: var(--font-family);
+  line-height: 1.5;
+  resize: none;
+  min-height: 24px;
+  max-height: 120px;
+  outline: none;
+}
+
+.input-textarea::placeholder {
+  color: var(--ctp-overlay1);
+}
+
+.send-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--ctp-mauve), #9d7cd8);
+  border: none;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s var(--transition);
+}
+
+.send-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px var(--accent-glow);
+}
+
+.send-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.attach-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
 .attach-btn {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: 6px;
-  padding: 8px 14px;
-  border-radius: 10px;
-  font-size: 13px;
-  color: var(--text-tertiary);
-  background: rgba(255, 255, 255, 0.03);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  color: var(--ctp-overlay1);
+  background: rgba(255, 255, 255, 0.04);
   border: 1px dashed rgba(255, 255, 255, 0.1);
   cursor: pointer;
-  transition: all 0.3s var(--transition);
+  transition: all 0.2s var(--transition);
 }
 
 .attach-btn:hover {
-  color: var(--text-secondary);
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--ctp-subtext1);
   border-color: rgba(255, 255, 255, 0.15);
 }
 
-.attach-btn.recording {
-  color: #ff4757 !important;
-  border-color: rgba(255, 71, 87, 0.4) !important;
-  background: rgba(255, 71, 87, 0.1) !important;
-  animation: pulse-record 1.5s infinite;
-}
-
-@keyframes pulse-record {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.3); }
-  50% { box-shadow: 0 0 0 6px rgba(255, 71, 87, 0); }
-}
-
+/* Upload Preview */
 .upload-preview {
-  margin-top: 12px;
-  animation: fadeUp 0.3s ease;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
 }
 
 .preview-item {
   position: relative;
-  display: inline-block;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.03);
 }
 
 .preview-item img {
   display: block;
-  max-width: 160px;
-  max-height: 100px;
+  max-width: 80px;
+  max-height: 60px;
   object-fit: cover;
 }
 
 .preview-remove {
   position: absolute;
-  top: 4px;
-  right: 4px;
-  width: 22px;
-  height: 22px;
+  top: 2px;
+  right: 2px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   background: rgba(0, 0, 0, 0.6);
-  color: #fff;
+  color: white;
   border: none;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s;
 }
 
-.preview-remove:hover { background: rgba(255, 60, 60, 0.8); }
-
-.prompt-controls {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 20px;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-
-.control-group {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.control-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 14px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--text-secondary);
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  cursor: pointer;
-  transition: all 0.3s var(--transition);
-  user-select: none;
-}
-
-.control-chip:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--text-primary);
-}
-
-.control-chip.active {
-  background: rgba(108, 92, 231, 0.15);
-  border-color: rgba(108, 92, 231, 0.3);
-  color: var(--accent);
-}
-
-.generate-btn {
-  padding: 12px 28px;
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 600;
-  color: white;
-  background: linear-gradient(135deg, var(--accent), #8B5CF6);
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s var(--transition);
-  box-shadow: 0 4px 20px var(--accent-glow);
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.generate-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 32px var(--accent-glow);
-}
-
-.generate-btn.loading {
-  pointer-events: none;
-  opacity: 0.7;
-}
-
-.generate-btn .spinner {
-  width: 14px;
-  height: 14px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top-color: white;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-  display: none;
-}
-
-.generate-btn.loading .spinner { display: block; }
-.generate-btn.loading .btn-text { display: none; }
-
-@keyframes spin { to { transform: rotate(360deg); } }
-@keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-
-/* Provider Selection Hint */
-.provider-selection-hint {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
-  border-radius: 8px;
-  background: rgba(108, 92, 231, 0.08);
-  border: 1px solid rgba(108, 92, 231, 0.2);
-  font-size: 12px;
-  color: var(--accent);
-  margin-top: 12px;
-}
-
-.provider-selection-hint.hidden { display: none; }
-
-.provider-selection-hint .spinner {
-  width: 12px;
-  height: 12px;
-  border: 2px solid rgba(108, 92, 231, 0.2);
-  border-top-color: var(--accent);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-
-/* Generation Quiz */
-.gen-quiz {
-  margin-top: 20px;
-  padding: 16px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 12px;
-  display: none;
-}
-
-.gen-quiz.active { display: block; }
-
-.gen-quiz-title {
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.4);
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.gen-quiz-question {
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.85);
-  margin-bottom: 10px;
-  font-weight: 500;
-}
-
-.gen-quiz-options {
+/* ── Right Column: Output Panel ── */
+.output-column {
+  background: var(--ctp-mantle);
+  border-left: 1px solid rgba(255, 255, 255, 0.06);
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  overflow: hidden;
 }
 
-.gen-quiz-option {
+.output-tabs {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 13px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 0 16px;
 }
 
-.gen-quiz-option:hover {
-  background: rgba(120, 90, 255, 0.1);
-  border-color: rgba(120, 90, 255, 0.3);
-  color: rgba(255, 255, 255, 0.95);
-}
-
-.gen-quiz-option.selected {
-  background: rgba(120, 90, 255, 0.15);
-  border-color: rgba(120, 90, 255, 0.5);
-  color: #fff;
-}
-
-.gen-quiz-queue {
-  margin-top: 10px;
-  padding: 8px 12px;
-  border-radius: 8px;
-  background: rgba(120, 90, 255, 0.08);
-  border: 1px solid rgba(120, 90, 255, 0.2);
+.output-tab {
+  padding: 14px 16px;
   font-size: 12px;
-  color: rgba(167, 139, 250, 0.9);
-  display: none;
-  align-items: center;
-  gap: 8px;
+  font-weight: 500;
+  color: var(--ctp-overlay1);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s var(--transition);
 }
 
-.gen-quiz-queue.active { display: flex; }
+.output-tab:hover {
+  color: var(--ctp-subtext1);
+}
 
-/* ── Right Column: Preview Panel ── */
-.preview-column {
-  background: rgba(10, 10, 20, 0.6);
-  border-left: 1px solid rgba(255, 255, 255, 0.06);
+.output-tab.active {
+  color: var(--ctp-mauve);
+  border-bottom-color: var(--ctp-mauve);
+}
+
+.output-content {
+  flex: 1;
   overflow-y: auto;
   padding: 16px;
+}
+
+.tab-panel {
+  display: none;
+}
+
+.tab-panel.active {
+  display: block;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--ctp-overlay1);
+}
+
+.empty-state-icon {
+  font-size: 40px;
+  margin-bottom: 12px;
+  opacity: 0.5;
+}
+
+.empty-state-text {
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* Copywriting Content */
+.copywriting-content {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.preview-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.preview-title {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.preview-clear-btn {
-  font-size: 11px;
-  color: var(--text-tertiary);
-  background: none;
-  border: none;
-  cursor: pointer;
-  transition: color 0.2s;
-}
-
-.preview-clear-btn:hover { color: var(--text-primary); }
-
-/* Generation Animation */
-.gen-animation-area {
+.copywriting-section {
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 12px;
-  overflow: hidden;
-  display: none;
+  border-radius: var(--radius-md);
+  padding: 14px;
 }
 
-.gen-animation-area.active { display: block; }
+.copywriting-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ctp-mauve);
+  margin-bottom: 8px;
+}
 
-.gen-shimmer-card {
+.copywriting-text {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--ctp-subtext1);
+}
+
+.copywriting-text textarea {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: var(--ctp-text);
+  font-size: 12px;
+  font-family: var(--font-family);
+  line-height: 1.6;
+  resize: vertical;
+  outline: none;
+}
+
+.confirm-btn {
+  width: 100%;
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--ctp-mauve), #9d7cd8);
+  border: none;
+  color: white;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s var(--transition);
+  margin-top: 8px;
+}
+
+.confirm-btn:hover {
+  box-shadow: 0 4px 16px var(--accent-glow);
+}
+
+/* Storyboard Grid */
+.storyboard-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.storyboard-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: all 0.2s var(--transition);
+}
+
+.storyboard-card:hover {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.storyboard-thumb {
   aspect-ratio: 16/9;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.03) 100%);
-  background-size: 200% 200%;
-  animation: shimmerMove 2s ease-in-out infinite;
-  position: relative;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(137, 180, 250, 0.1));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  opacity: 0.5;
+}
+
+.storyboard-info {
+  padding: 10px;
+}
+
+.storyboard-scene {
+  font-size: 11px;
+  color: var(--ctp-subtext1);
+  line-height: 1.4;
+  margin-bottom: 6px;
+}
+
+.storyboard-meta {
+  display: flex;
+  gap: 8px;
+  font-size: 10px;
+  color: var(--ctp-overlay1);
+}
+
+.storyboard-meta span {
+  padding: 2px 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+/* Video Player */
+.video-player {
+  aspect-ratio: 16/9;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: var(--radius-md);
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.gen-shimmer-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(105deg, transparent 0%, rgba(120, 90, 255, 0.06) 50%, transparent 100%);
-  background-size: 300% 100%;
-  animation: shimmerSweep 2.5s ease-in-out infinite;
-}
-
-@keyframes shimmerMove {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
-@keyframes shimmerSweep {
-  0% { background-position: 200% 0; }
-  100% { background-position: -100% 0; }
-}
-
-.gen-sparkle {
-  position: absolute;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: rgba(167, 139, 250, 0.6);
-  animation: sparkle 2s ease-in-out infinite;
-}
-
-.gen-sparkle:nth-child(1) { top: 20%; left: 15%; animation-delay: 0s; }
-.gen-sparkle:nth-child(2) { top: 60%; left: 80%; animation-delay: 0.7s; }
-.gen-sparkle:nth-child(3) { top: 40%; left: 50%; animation-delay: 1.4s; }
-
-@keyframes sparkle {
-  0%, 100% { opacity: 0; transform: scale(0); }
-  50% { opacity: 1; transform: scale(1); }
-}
-
-.gen-progress-section {
-  padding: 12px;
-}
-
-.gen-progress-bar {
-  height: 4px;
-  background: rgba(255, 255, 255, 0.06);
-  border-radius: 2px;
-  overflow: hidden;
-  margin-bottom: 8px;
-}
-
-.gen-progress-fill {
-  height: 100%;
-  width: 0%;
-  border-radius: 2px;
-  background: linear-gradient(90deg, #785aff, #a78bfa);
-  transition: width 0.8s ease;
-}
-
-.gen-status-text {
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.6);
-  text-align: center;
-}
-
-.gen-prompt-preview {
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.3);
-  margin-top: 4px;
-  text-align: center;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-}
-
-/* Video Result */
-.video-result-area {
-  display: none;
-}
-
-.video-result-area.active { display: block; }
-
-.video-result-card {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-.video-result-player {
-  aspect-ratio: 16/9;
-  background: rgba(0, 0, 0, 0.4);
-}
-
-.video-result-player video {
+.video-player video {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.video-result-info {
+.video-info {
+  margin-top: 12px;
   padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius-sm);
 }
 
-.video-result-prompt {
-  font-size: 12px;
-  color: var(--text-secondary);
-  line-height: 1.5;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-/* History Section */
-.history-section {
-  flex: 1;
-  min-height: 0;
+.video-info-row {
   display: flex;
-  flex-direction: column;
-}
-
-.history-header {
-  display: flex;
-  align-items: center;
   justify-content: space-between;
-  margin-bottom: 12px;
+  font-size: 11px;
+  color: var(--ctp-subtext0);
+  margin-bottom: 4px;
 }
 
-.history-title {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+.video-info-row:last-child {
+  margin-bottom: 0;
 }
 
+/* History List */
 .history-list {
-  flex: 1;
-  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -1043,11 +988,11 @@ body {
   align-items: center;
   gap: 10px;
   padding: 10px;
-  border-radius: 10px;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s var(--transition);
 }
 
 .history-item:hover {
@@ -1056,36 +1001,18 @@ body {
 }
 
 .history-thumb {
-  width: 64px;
-  height: 36px;
-  border-radius: 6px;
-  background: rgba(108, 92, 231, 0.2);
+  width: 56px;
+  height: 32px;
+  border-radius: 4px;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(137, 180, 250, 0.1));
   overflow: hidden;
-  flex-shrink: 0;
 }
 
-.history-thumb video,
-.history-thumb img {
+.history-thumb img,
+.history-thumb video {
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-
-.history-loading-thumb {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-}
-
-.history-loading-thumb .spinner {
-  width: 16px;
-  height: 16px;
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  border-top-color: var(--accent);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
 }
 
 .history-info {
@@ -1093,9 +1020,9 @@ body {
   min-width: 0;
 }
 
-.history-prompt {
-  font-size: 11px;
-  color: var(--text-secondary);
+.history-title {
+  font-size: 12px;
+  color: var(--ctp-text);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1103,7 +1030,7 @@ body {
 
 .history-meta {
   font-size: 10px;
-  color: var(--text-tertiary);
+  color: var(--ctp-overlay1);
   margin-top: 2px;
 }
 
@@ -1116,1347 +1043,997 @@ body {
 }
 
 .history-status.completed {
-  background: rgba(0, 230, 118, 0.15);
-  color: #00E676;
+  background: rgba(166, 227, 161, 0.15);
+  color: var(--success);
 }
 
 .history-status.generating {
-  background: rgba(108, 92, 231, 0.15);
-  color: var(--accent);
+  background: rgba(203, 164, 247, 0.15);
+  color: var(--ctp-mauve);
 }
 
-.history-status.failed {
-  background: rgba(255, 107, 157, 0.15);
-  color: #FF6B9D;
-}
-
-.history-empty {
-  text-align: center;
-  padding: 24px 12px;
-  color: var(--text-tertiary);
-  font-size: 12px;
-}
-
-/* Auth Overlay */
-.auth-overlay {
+/* ── Bottom Dock: Quantum Progress ── */
+.dock-bar {
   position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.6);
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--dock-height);
+  background: rgba(24, 24, 37, 0.95);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  z-index: 9999;
+  border-top: 1px solid rgba(139, 92, 246, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
-  animation: fadeIn 0.2s ease;
+  z-index: 100;
 }
 
-.auth-modal {
-  background: rgba(30, 30, 50, 0.95);
-  border: 1px solid var(--glass-border);
-  border-radius: 20px;
-  padding: 2rem;
-  width: 90%;
-  max-width: 380px;
+.dock-container {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 0 40px;
+}
+
+.quantum-node {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  transition: all 0.5s var(--transition);
   position: relative;
+  z-index: 2;
+  background: rgba(49, 50, 68, 0.5);
+  border: 2px solid var(--ctp-surface1);
 }
 
-.auth-close {
+.quantum-node.completed {
+  background: rgba(139, 92, 246, 0.3);
+  border: 2px solid var(--ctp-mauve);
+  box-shadow: 0 0 12px rgba(203, 164, 247, 0.4);
+}
+
+.quantum-node.current {
+  background: rgba(139, 92, 246, 0.2);
+  border: 2px solid var(--ctp-mauve);
+  animation: quantumPulse 2s ease-in-out infinite;
+}
+
+@keyframes quantumPulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(203, 164, 247, 0.3); transform: scale(1); }
+  50% { box-shadow: 0 0 20px rgba(203, 164, 247, 0.6); transform: scale(1.08); }
+}
+
+.quantum-node.pending {
+  background: rgba(49, 50, 68, 0.5);
+  border: 2px solid var(--ctp-surface1);
+}
+
+.quantum-line {
+  position: relative;
+  height: 2px;
+  width: 60px;
+  background: rgba(49, 50, 68, 0.6);
+  overflow: visible;
+}
+
+.quantum-line.completed {
+  background: linear-gradient(90deg, var(--ctp-mauve), var(--ctp-blue));
+}
+
+.quantum-line.active {
+  background: rgba(49, 50, 68, 0.6);
+}
+
+.quantum-particle {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: none;
-  border: none;
-  color: var(--text-secondary);
-  font-size: 1.4rem;
-  cursor: pointer;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--ctp-mauve), var(--ctp-blue));
+  box-shadow: 0 0 8px var(--ctp-mauve), 0 0 16px rgba(137, 180, 250, 0.5);
+  top: -3px;
+  opacity: 0;
 }
 
-.auth-logo {
-  text-align: center;
-  margin-bottom: 1rem;
+.quantum-line.completed .quantum-particle {
+  animation: quantumFlow 2s linear infinite;
 }
 
-.auth-logo img {
-  width: 44px;
-  height: 44px;
-  border-radius: 10px;
+.quantum-line.active .quantum-particle {
+  animation: quantumFlow 2s linear infinite;
+  opacity: 0.7;
 }
 
-.github-signin-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.6rem;
-  width: 100%;
-  padding: 0.8rem 1rem;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 10px;
-  color: var(--text-primary);
-  font-size: 0.9rem;
+@keyframes quantumFlow {
+  0% { left: 0; opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { left: calc(100% - 8px); opacity: 0; }
+}
+
+.node-label {
+  position: absolute;
+  top: 48px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  color: var(--ctp-overlay1);
+  white-space: nowrap;
   font-weight: 500;
-  cursor: pointer;
-  transition: all 0.25s;
-  text-decoration: none;
 }
 
-.github-signin-btn:hover {
-  background: rgba(255, 255, 255, 0.14);
-  border-color: rgba(255, 255, 255, 0.3);
+.quantum-node.completed + .quantum-line + .quantum-node .node-label,
+.quantum-node.current .node-label {
+  color: var(--ctp-subtext1);
 }
 
-.auth-divider {
+/* Generation Status */
+.generation-status {
+  margin-left: 40px;
+  font-size: 12px;
+  color: var(--ctp-subtext0);
   display: flex;
   align-items: center;
-  gap: 1rem;
-  margin: 1rem 0;
-  color: var(--text-tertiary);
-  font-size: 0.8rem;
+  gap: 8px;
 }
 
-.auth-divider::before,
-.auth-divider::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: rgba(255, 255, 255, 0.1);
+.generation-status .spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(139, 92, 246, 0.2);
+  border-top-color: var(--ctp-mauve);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
 }
 
-.auth-input {
-  width: 100%;
-  padding: 0.7rem 1rem;
-  margin-bottom: 0.6rem;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  color: var(--text-primary);
-  font-size: 0.9rem;
-  outline: none;
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
-.auth-input:focus { border-color: var(--accent); }
-.auth-input::placeholder { color: var(--text-tertiary); }
-
-.auth-submit-btn {
-  width: 100%;
-  padding: 0.75rem;
-  background: var(--accent);
-  border: none;
-  border-radius: 10px;
-  color: #fff;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
+/* ── Scrollbar ── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
 }
 
-.auth-footer {
-  text-align: center;
-  margin-top: 0.8rem;
-  font-size: 0.8rem;
-  color: var(--text-secondary);
+::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-.auth-footer a {
-  color: var(--accent-secondary);
-  text-decoration: none;
+::-webkit-scrollbar-thumb {
+  background: var(--ctp-surface1);
+  border-radius: 3px;
 }
 
-/* Scrollbar */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); }
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ctp-surface2);
+}
+
+/* ── Responsive ── */
+@media (max-width: 1200px) {
+  :root {
+    --left-width: 220px;
+    --right-width: 300px;
+  }
+}
+
+@media (max-width: 900px) {
+  .studio-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .agent-column,
+  .output-column {
+    display: none;
+  }
+  
+  .dock-container {
+    padding: 0 20px;
+  }
+  
+  .quantum-line {
+    width: 40px;
+  }
+}
 </style>
 </head>
-
 <body>
 
 <!-- Top Toolbar -->
-<nav class="studio-toolbar">
+<header class="studio-toolbar">
   <div class="toolbar-left">
-    <a href="index.html" class="toolbar-logo">
-      <div class="toolbar-logo-icon"><img src="logo.png" alt="MineVideos" style="width:100%;height:100%;object-fit:cover;border-radius:8px;"></div>
-      <div class="toolbar-logo-text">Mine<span>Videos</span></div>
+    <a href="/" class="toolbar-logo">
+      <div class="toolbar-logo-icon">🎬</div>
+      <div class="toolbar-logo-text">MineVideos <span>Studio</span></div>
     </a>
-    <a href="index.html" class="back-home-btn">
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      Home
+    <a href="/" class="back-home-btn">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M7.5 10L3.5 6L7.5 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      返回首页
     </a>
   </div>
   
   <div class="toolbar-center">
-    MineVideos Studio
+    <span class="agent-icon">🎬</span>
+    <span>视频策划助理</span>
   </div>
   
   <div class="toolbar-right">
-    <div class="provider-health-indicator" id="navProviderHealth">
-      <span class="provider-health-dot loading"></span>
-      <span id="navProviderHealthText">Checking...</span>
+    <div class="status-indicator">
+      <span class="status-dot online"></span>
+      <span>Agent 在线</span>
     </div>
-    <a href="#" class="toolbar-login-btn" id="loginBtn">Sign In</a>
+    <button class="toolbar-login-btn">登录</button>
   </div>
-</nav>
+</header>
 
-<!-- Three Column Layout -->
+<!-- Main Content -->
 <div class="studio-container">
 
-  <!-- Left Column: Provider Panel -->
-  <aside class="provider-column">
-    <div class="provider-column-header">
-      <span class="provider-column-title">Providers</span>
-      <button class="provider-refresh-btn" id="refreshProviders" title="Refresh">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M12 7a5 5 0 11-1.2-3.2M12 7V4M12 7H9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-      </button>
-    </div>
-    
-    <div class="provider-list" id="providerList">
-      <!-- Provider cards will be dynamically inserted -->
-      <div style="text-align:center;padding:20px;color:var(--text-tertiary);font-size:12px;">
-        Loading providers...
+<!-- Left Column: Agent Panel -->
+<aside class="agent-column">
+  <div class="agent-panel-header">
+    <div class="agent-panel-title">AI 助理</div>
+  </div>
+  
+  <div class="agent-list">
+    <!-- Active Agent -->
+    <div class="agent-card active" data-agent="planner">
+      <div class="agent-card-header">
+        <span class="agent-card-icon">🎬</span>
+        <div class="agent-card-info">
+          <div class="agent-card-name">视频策划助理</div>
+          <div class="agent-card-desc">智能生成视频脚本</div>
+        </div>
+        <span class="agent-card-status"></span>
       </div>
     </div>
     
-    <div class="provider-footer">
-      <div class="provider-footer-status" id="providerFooterStatus">
-        <span class="provider-health-dot loading"></span>
-        <span>Checking provider status...</span>
-      </div>
-    </div>
-  </aside>
-
-  <!-- Center Column: Creation Zone -->
-  <main class="creation-column">
-    <div class="creation-header">
-      <h1 class="creation-title">Create Your Video</h1>
-      <p class="creation-subtitle">Describe your vision and let AI bring it to life</p>
-    </div>
-    
-    <div class="prompt-card">
-      <textarea
-        class="prompt-textarea"
-        id="promptInput"
-        placeholder="A golden retriever running through a field of wildflowers at sunset, cinematic slow motion, shallow depth of field, warm color grading..."
-        spellcheck="false"
-      ></textarea>
-      
-      <div class="attachments-bar">
-        <label class="attach-btn" id="imageUploadBtn">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M14 10V13.5C14 14.33 13.33 15 12.5 15H3.5C2.67 15 2 14.33 2 13.5V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M5 7L8 4L11 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 4V11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-          Image
-          <input type="file" id="imageFileInput" accept="image/*" style="display:none">
-        </label>
-        <label class="attach-btn" id="videoUploadBtn">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M6.5 6.5L10 8L6.5 9.5V6.5Z" fill="currentColor"/></svg>
-          Video
-          <input type="file" id="videoFileInput" accept="video/*" style="display:none">
-        </label>
-        <button class="attach-btn" id="voiceRecordBtn" type="button">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 10.5a2.5 2.5 0 002.5-2.5V5a2.5 2.5 0 00-5 0v3a2.5 2.5 0 002.5 2.5z" stroke="currentColor" stroke-width="1.5"/><path d="M4 8a4 4 0 008 0M8 12.5V14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-          <span id="voiceBtnLabel">Voice</span>
-        </button>
-      </div>
-      
-      <!-- Image Preview -->
-      <div class="upload-preview" id="uploadPreview" style="display:none;">
-        <div class="preview-item">
-          <img id="previewImg" src="" alt="Preview">
-          <button class="preview-remove" id="removePreview">&times;</button>
+    <!-- Future Agents -->
+    <div class="agent-card planning" data-agent="analytics">
+      <div class="agent-card-header">
+        <span class="agent-card-icon">📊</span>
+        <div class="agent-card-info">
+          <div class="agent-card-name">数据分析助理</div>
+          <div class="agent-card-desc">洞察视频表现数据</div>
         </div>
       </div>
+    </div>
+    
+    <div class="agent-card planning" data-agent="translator">
+      <div class="agent-card-header">
+        <span class="agent-card-icon">🌐</span>
+        <div class="agent-card-info">
+          <div class="agent-card-name">多语言翻译助理</div>
+          <div class="agent-card-desc">一键翻译视频文案</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="agent-card planning" data-agent="social">
+      <div class="agent-card-header">
+        <span class="agent-card-icon">📱</span>
+        <div class="agent-card-info">
+          <div class="agent-card-name">社媒运营助理</div>
+          <div class="agent-card-desc">多平台内容分发</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="agent-card planning coming-soon" data-agent="custom">
+      <div class="agent-card-header">
+        <span class="agent-card-icon">🤖</span>
+        <div class="agent-card-info">
+          <div class="agent-card-name">自定义 Agent</div>
+          <div class="agent-card-desc">创建专属智能助手</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- System Status -->
+  <div class="system-status">
+    <div class="system-status-item">
+      <span class="provider-dot healthy"></span>
+      <span>Provider 健康</span>
+      <span style="margin-left: auto; color: var(--success);">● 3 在线</span>
+    </div>
+    <div class="system-status-footer">
+      Powered by Seedance + Local GPU
+    </div>
+  </div>
+</aside>
+
+<!-- Center Column: Conversation -->
+<main class="conversation-column">
+  <div class="conversation-header">
+    <div class="conversation-title">智能对话式需求挖掘</div>
+    <div class="conversation-subtitle">AI 将逐步引导你完善视频需求</div>
+  </div>
+  
+  <div class="message-area" id="messageArea">
+    <!-- Messages will be inserted here -->
+  </div>
+  
+  <div class="input-area">
+    <div class="upload-preview" id="uploadPreview" style="display: none;"></div>
+    <div class="input-container">
+      <div class="input-row">
+        <textarea 
+          class="input-textarea" 
+          id="inputText" 
+          rows="1" 
+          placeholder="描述你的需求，或回答上面的问题..."
+        ></textarea>
+        <button class="send-btn" id="sendBtn">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M14 2L7 9M14 2L9 14L7 9M14 2L2 7L7 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+      <div class="attach-row">
+        <label class="attach-btn" for="imageInput">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.2"/><circle cx="4.5" cy="4.5" r="1.5" fill="currentColor"/><path d="M1 10L4 7L6 9L9 6L13 10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          图片
+        </label>
+        <input type="file" id="imageInput" accept="image/*" style="display: none;">
+        
+        <label class="attach-btn" for="videoInput">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="3" width="9" height="8" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M10 5.5L13 4V10L10 8.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          视频
+        </label>
+        <input type="file" id="videoInput" accept="video/*" style="display: none;">
+        
+        <button class="attach-btn" id="voiceBtn">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="4" y="1" width="6" height="8" rx="3" stroke="currentColor" stroke-width="1.2"/><path d="M2 6C2 8.2 3.8 10 6 10C8.2 10 10 8.2 10 6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><path d="M6 10V13M4 13H8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          语音
+        </button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Right Column: Output Panel -->
+<aside class="output-column">
+  <div class="output-tabs">
+    <div class="output-tab active" data-tab="copywriting">📋 文案</div>
+    <div class="output-tab" data-tab="storyboard">🎞️ 分镜</div>
+    <div class="output-tab" data-tab="video">🎬 成片</div>
+    <div class="output-tab" data-tab="history">📁 历史</div>
+  </div>
+  
+  <div class="output-content">
+    <!-- Copywriting Tab -->
+    <div class="tab-panel active" id="tab-copywriting">
+      <div class="empty-state" id="copywritingEmpty">
+        <div class="empty-state-icon">📋</div>
+        <div class="empty-state-text">完成需求探询后将生成视频文案</div>
+      </div>
       
-      <div class="prompt-controls">
-        <div class="control-group">
-          <div class="control-chip active" data-ratio="16:9">
-            <svg width="12" height="12" viewBox="0 0 16 12" fill="none"><rect x="0.5" y="0.5" width="15" height="11" rx="1.5" stroke="currentColor" stroke-width="1"/></svg>
-            16:9
-          </div>
-          <div class="control-chip" data-ratio="9:16">
-            <svg width="9" height="14" viewBox="0 0 9 16" fill="none"><rect x="0.5" y="0.5" width="8" height="15" rx="1.5" stroke="currentColor" stroke-width="1"/></svg>
-            9:16
-          </div>
-          <div class="control-chip" data-ratio="1:1">
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="0.5" y="0.5" width="11" height="11" rx="1.5" stroke="currentColor" stroke-width="1"/></svg>
-            1:1
-          </div>
-          <div class="control-chip" data-duration="5">5s</div>
-          <div class="control-chip" data-duration="11">11s</div>
-          
-          <div class="control-chip active" data-model="standard" title="HD quality">
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1l1.5 3.5 3.5 1-3.5 1.5L6 13l-1.5-3.5L1 5.5l3.5-1z" stroke="currentColor" stroke-width="1" fill="none"/></svg>
-            HD
-          </div>
-          <div class="control-chip" data-model="fast" title="Fast generation">
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M10 3L4 9M4 9L2 7M4 9l2 2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
-            Fast
+      <div class="copywriting-content" id="copywritingContent" style="display: none;">
+        <div class="copywriting-section">
+          <div class="copywriting-label">视频标题</div>
+          <div class="copywriting-text">
+            <textarea id="copyTitle" rows="2">温暖每一刻 - 双层真空保温杯</textarea>
           </div>
         </div>
         
-        <button class="generate-btn" id="generateBtn">
-          <span class="spinner"></span>
-          <span class="btn-text">
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M13 3L7 9M7 9L3 13M7 9L11 5M7 9L3 5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
-            Generate
-          </span>
-        </button>
+        <div class="copywriting-section">
+          <div class="copywriting-label">开场钩子</div>
+          <div class="copywriting-text">
+            <textarea id="copyHook">"还在为喝不到热水烦恼？这款保温杯，让你随时享受温暖！"</textarea>
+          </div>
+        </div>
+        
+        <div class="copywriting-section">
+          <div class="copywriting-label">核心卖点</div>
+          <div class="copywriting-text">
+            <textarea id="copyHighlights" rows="3">• 12小时长效保温保冷
+• 双层真空技术，锁住温度
+• 304不锈钢材质，安全健康
+• 500ml大容量，满足全天需求</textarea>
+          </div>
+        </div>
+        
+        <div class="copywriting-section">
+          <div class="copywriting-label">场景演绎文案</div>
+          <div class="copywriting-text">
+            <textarea id="copyScene" rows="4">[场景1：清晨办公室]
+特写：咖啡热气缓缓升起
+旁白："清晨的第一杯咖啡，从办公室开始..."
+
+[场景2：户外露营]
+全景：山野间，阳光正好
+旁白："周末露营，温暖相伴..."</textarea>
+          </div>
+        </div>
+        
+        <div class="copywriting-section">
+          <div class="copywriting-label">结尾号召</div>
+          <div class="copywriting-text">
+            <textarea id="copyCta">"温暖，从这一刻开始。点击下方链接，把温暖带回家！"</textarea>
+          </div>
+        </div>
+        
+        <button class="confirm-btn" id="confirmCopyBtn">确认文案</button>
+      </div>
+    </div>
+    
+    <!-- Storyboard Tab -->
+    <div class="tab-panel" id="tab-storyboard">
+      <div class="empty-state" id="storyboardEmpty">
+        <div class="empty-state-icon">🎞️</div>
+        <div class="empty-state-text">确认文案后生成分镜画板</div>
       </div>
       
-      <!-- Provider Selection Hint -->
-      <div class="provider-selection-hint hidden" id="providerSelectionHint">
-        <div class="spinner"></div>
-        <span>Analyzing prompt...</span>
-      </div>
-    </div>
-    
-    <!-- Generation Quiz -->
-    <div class="gen-quiz" id="genQuiz">
-      <div class="gen-quiz-title">
-        <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M7 1v2M7 11v2M1 7h2M11 7h2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-        Shape your next video
-      </div>
-      <div class="gen-quiz-question" id="genQuizQuestion">Loading...</div>
-      <div class="gen-quiz-options" id="genQuizOptions"></div>
-      <div class="gen-quiz-queue" id="genQuizQueue">
-        <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5" stroke-dasharray="20 10"/></svg>
-        <span id="genQuizQueueText">Queued!</span>
-      </div>
-    </div>
-  </main>
-
-  <!-- Right Column: Preview Panel -->
-  <aside class="preview-column">
-    <div class="preview-header">
-      <span class="preview-title">Preview</span>
-      <button class="preview-clear-btn" id="clearPreview">Clear</button>
-    </div>
-    
-    <!-- Generation Animation -->
-    <div class="gen-animation-area" id="genAnimation">
-      <div class="gen-shimmer-card">
-        <div class="gen-sparkle"></div>
-        <div class="gen-sparkle"></div>
-        <div class="gen-sparkle"></div>
-      </div>
-      <div class="gen-progress-section">
-        <div class="gen-progress-bar">
-          <div class="gen-progress-fill" id="genProgressFill"></div>
+      <div class="storyboard-grid" id="storyboardContent" style="display: none;">
+        <div class="storyboard-card">
+          <div class="storyboard-thumb">🎬</div>
+          <div class="storyboard-info">
+            <div class="storyboard-scene">清晨办公室环境，特写咖啡杯</div>
+            <div class="storyboard-meta">
+              <span>3s</span>
+              <span>推进</span>
+            </div>
+          </div>
         </div>
-        <div class="gen-status-text" id="genStatusText">Preparing your video...</div>
-        <div class="gen-prompt-preview" id="genPromptPreview"></div>
-      </div>
-    </div>
-    
-    <!-- Video Result -->
-    <div class="video-result-area" id="videoResultArea">
-      <div class="video-result-card">
-        <div class="video-result-player">
-          <video id="resultVideo" controls autoplay></video>
+        
+        <div class="storyboard-card">
+          <div class="storyboard-thumb">🎬</div>
+          <div class="storyboard-info">
+            <div class="storyboard-scene">产品展示，双层结构演示</div>
+            <div class="storyboard-meta">
+              <span>4s</span>
+              <span>环绕</span>
+            </div>
+          </div>
         </div>
-        <div class="video-result-info">
-          <p class="video-result-prompt" id="resultPrompt"></p>
+        
+        <div class="storyboard-card">
+          <div class="storyboard-thumb">🎬</div>
+          <div class="storyboard-info">
+            <div class="storyboard-scene">户外露营场景，阳光明媚</div>
+            <div class="storyboard-meta">
+              <span>5s</span>
+              <span>航拍</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="storyboard-card">
+          <div class="storyboard-thumb">🎬</div>
+          <div class="storyboard-info">
+            <div class="storyboard-scene">人物使用产品特写</div>
+            <div class="storyboard-meta">
+              <span>3s</span>
+              <span>跟拍</span>
+            </div>
+          </div>
         </div>
       </div>
+      
+      <button class="confirm-btn" id="confirmStoryBtn" style="display: none; margin-top: 16px;">确认分镜，开始生成视频</button>
     </div>
     
-    <!-- History Section -->
-    <div class="history-section">
-      <div class="history-header">
-        <span class="history-title">My Videos</span>
+    <!-- Video Tab -->
+    <div class="tab-panel" id="tab-video">
+      <div class="empty-state" id="videoEmpty">
+        <div class="empty-state-icon">🎬</div>
+        <div class="empty-state-text">视频生成完成后将在此显示</div>
       </div>
+      
+      <div id="videoContent" style="display: none;">
+        <div class="video-player">
+          <video id="resultVideo" controls></video>
+        </div>
+        <div class="video-info">
+          <div class="video-info-row">
+            <span>分辨率</span>
+            <span>1920 × 1080</span>
+          </div>
+          <div class="video-info-row">
+            <span>时长</span>
+            <span>30s</span>
+          </div>
+          <div class="video-info-row">
+            <span>Provider</span>
+            <span>Seedance</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- History Tab -->
+    <div class="tab-panel" id="tab-history">
       <div class="history-list" id="historyList">
-        <div class="history-empty">No videos yet. Start creating!</div>
+        <div class="empty-state">
+          <div class="empty-state-icon">📁</div>
+          <div class="empty-state-text">暂无历史任务</div>
+        </div>
       </div>
-    </div>
-  </aside>
-</div>
-
-<!-- Auth Overlay -->
-<div class="auth-overlay" id="authOverlay" style="display:none;">
-  <div class="auth-modal">
-    <button class="auth-close" id="authClose">&times;</button>
-    <div class="auth-logo">
-      <img src="logo.png" alt="MineVideos">
-    </div>
-    
-    <a href="#" class="github-signin-btn" id="githubSignIn">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-      Continue with GitHub
-    </a>
-    
-    <div class="auth-divider">or</div>
-    
-    <form id="emailSignInForm">
-      <input type="email" class="auth-input" id="authEmail" placeholder="Email" required>
-      <input type="password" class="auth-input" id="authPassword" placeholder="Password" required>
-      <button type="submit" class="auth-submit-btn">Sign In</button>
-    </form>
-    
-    <div class="auth-footer">
-      Don't have an account? <a href="#">Sign up free</a>
     </div>
   </div>
+</aside>
 </div>
+
+<!-- Bottom Dock: Quantum Progress -->
+<footer class="dock-bar">
+  <div class="dock-container">
+    <div class="quantum-node current" data-step="0">
+      🔍
+      <span class="node-label">需求探询</span>
+    </div>
+    
+    <div class="quantum-line" data-line="0">
+      <div class="quantum-particle"></div>
+    </div>
+    
+    <div class="quantum-node pending" data-step="1">
+      📋
+      <span class="node-label">文案生成</span>
+    </div>
+    
+    <div class="quantum-line" data-line="1">
+      <div class="quantum-particle"></div>
+    </div>
+    
+    <div class="quantum-node pending" data-step="2">
+      🎞️
+      <span class="node-label">分镜预览</span>
+    </div>
+    
+    <div class="quantum-line" data-line="2">
+      <div class="quantum-particle"></div>
+    </div>
+    
+    <div class="quantum-node pending" data-step="3">
+      🎬
+      <span class="node-label">视频生成</span>
+    </div>
+    
+    <div class="quantum-line" data-line="3">
+      <div class="quantum-particle"></div>
+    </div>
+    
+    <div class="quantum-node pending" data-step="4">
+      ✅
+      <span class="node-label">完成交付</span>
+    </div>
+  </div>
+  
+  <div class="generation-status" id="genStatus" style="display: none;">
+    <div class="spinner"></div>
+    <span>正在生成视频文案...</span>
+  </div>
+</footer>
 
 <script>
 // ═══════════════════════════════════════════════
-// MineVideos Studio — JavaScript
+// MineVideos Studio — AI Assistant Logic
 // ═══════════════════════════════════════════════
 
-const API_BASE = 'https://web-production-77f47.up.railway.app';
+// State
+let currentStep = 0;
+let conversationRound = 0;
+let userResponses = {};
+let isTyping = false;
+let uploadedImages = [];
 
-// ── State ──
-let providersData = [];
-let selectedProvider = null;
-let providerRankings = [];
-let healthCheckInterval = null;
-let genBtn = null;
-let selectedModel = 'standard';
-let pollInterval = null;
-let genStatusInterval = null;
-let lastVideoUrl = null;
-
-// ── Quiz System ──
-const quizQuestions = [
+// Conversation Flow
+const conversationFlow = [
   {
-    question: "What mood should your next video have?",
-    options: [
-      { icon: "🎬", text: "Cinematic & dramatic", value: "cinematic dramatic mood" },
-      { icon: "🌸", text: "Soft & dreamy", value: "soft dreamy ethereal mood" },
-      { icon: "⚡", text: "Energetic & dynamic", value: "energetic dynamic fast-paced" },
-      { icon: "🌙", text: "Dark & mysterious", value: "dark mysterious moody atmosphere" },
-    ]
+    ai: "👋 你好！我是 MineVideos 视频策划助理。\n\n上传你的产品图片，或者告诉我你想做什么样的视频，我来帮你策划。",
+    quickOptions: ["上传产品图片", "描述视频需求", "查看示例"]
   },
   {
-    question: "Which camera style do you prefer?",
-    options: [
-      { icon: "🔄", text: "Orbiting around subject", value: "slow orbit camera around subject" },
-      { icon: "📏", text: "Tracking follow shot", value: "tracking follow shot steady cam" },
-      { icon: "🔭", text: "Zoom into details", value: "macro zoom into fine details" },
-      { icon: "🦅", text: "Aerial drone view", value: "aerial drone birds-eye view sweeping" },
-    ]
+    ai: "你上传的这个产品看起来很不错！能告诉我它的主要功能和卖点是什么吗？比如材质、容量、核心技术等。",
+    quickOptions: ["保温杯", "电子产品", "服装配饰", "食品饮料", "家居用品"]
   },
   {
-    question: "What time of day fits your vision?",
-    options: [
-      { icon: "🌅", text: "Golden hour sunrise", value: "golden hour warm sunrise lighting" },
-      { icon: "☀️", text: "Bright midday", value: "bright midday natural lighting clear" },
-      { icon: "🌆", text: "Blue hour twilight", value: "blue hour twilight cool tones" },
-      { icon: "🌃", text: "Night with neon", value: "nighttime neon-lit cityscape glowing" },
-    ]
+    ai: "明白了！这个产品的目标受众是谁？主要在什么场景下使用？",
+    quickOptions: ["户外运动爱好者", "上班族/白领", "学生群体", "家庭用户", "商务人士"]
   },
   {
-    question: "Add a creative twist?",
-    options: [
-      { icon: "💧", text: "Slow motion water", value: "slow motion water splash liquid dynamics" },
-      { icon: "🔥", text: "Fire & particles", value: "fire particles embers floating magical" },
-      { icon: "❄️", text: "Frost & ice crystals", value: "frost ice crystals forming freezing cold" },
-      { icon: "✨", text: "Light rays & bokeh", value: "light rays bokeh lens flare god rays" },
-    ]
+    ai: "好的，视觉风格方面有什么偏好？想要什么样的光影效果和整体氛围？",
+    quickOptions: ["自然光·温暖清新", "Studio光·专业质感", "氛围光·高级神秘", "阳光活力·明亮"]
+  },
+  {
+    ai: "视频展示方式你更倾向哪种？",
+    quickOptions: ["人物带货讲解", "纯产品特写展示", "场景化使用演示", "混合模式（推荐）"]
+  },
+  {
+    ai: "最后一个问题：视频时长和节奏偏好？",
+    quickOptions: ["15秒·快节奏", "30秒·适中节奏", "60秒·详细展示", "不确定·你来建议"]
   }
 ];
 
-let currentQuizIndex = 0;
-let quizSelections = [];
-let questionsAnswered = 0;
-const MAX_QUESTIONS = 3;
-let nextGenQueued = false;
-
-// ── Provider Type Icons ──
-const providerTypeIcons = {
-  'openai': '🤖', 'stability': '🎨', 'runway': '✈️', 'pika': '🎬',
-  'kling': '🌟', 'hailuo': '🔮', 'minimax': '⚡', 'luma': '💎', 'default': '🎥'
-};
-
-function getProviderIcon(provider) {
-  const key = (provider || '').toLowerCase();
-  for (const [type, icon] of Object.entries(providerTypeIcons)) {
-    if (key.includes(type)) return icon;
-  }
-  return providerTypeIcons.default;
-}
-
-// ── Provider API Functions ──
-async function fetchProviders() {
-  try {
-    const res = await fetch(API_BASE + '/api/v1/video/providers');
-    if (res.ok) {
-      providersData = await res.json();
-      return providersData;
-    }
-  } catch (err) {
-    console.warn('Failed to fetch providers:', err);
-  }
-  return [];
-}
-
-async function fetchProviderHealth() {
-  try {
-    const res = await fetch(API_BASE + '/api/v1/video/providers/health');
-    if (res.ok) return await res.json();
-  } catch (err) {
-    console.warn('Failed to fetch health:', err);
-  }
-  return null;
-}
-
-async function selectBestProvider(prompt, ratio, duration) {
-  try {
-    const token = localStorage.getItem('mv_token');
-    if (!token) return null;
-
-    const res = await fetch(API_BASE + '/api/v1/video/select-provider', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token
-      },
-      body: JSON.stringify({ prompt, duration, ratio })
-    });
-
-    if (res.ok) {
-      const data = await res.json();
-      providerRankings = data.rankings || [];
-      return data;
-    }
-  } catch (err) {
-    console.warn('Failed to select provider:', err);
-  }
-  return null;
-}
-
-// ── Render Provider List ──
-function renderProviderList(providers, health) {
-  const list = document.getElementById('providerList');
-  if (!list || !providers || providers.length === 0) {
-    list.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-tertiary);font-size:12px;">No providers available</div>';
-    return;
-  }
-
-  list.innerHTML = providers.map((p, index) => {
-    const healthData = health && (health[p.name] || health[p.name?.toLowerCase()]);
-    const status = healthData?.status || 'unknown';
-    const score = p.weighted_score || p.score || p.runtime * 20 || 0;
-    const scoreClass = score >= 80 ? 'high' : score >= 60 ? 'medium' : 'low';
-    const isRecommended = index === 0;
-
-    // 7 dimensions
-    const dims = [
-      { label: 'Task Fit', key: 'task_fit', cls: 'runtime' },
-      { label: 'Quality', key: 'output_quality', cls: 'quality' },
-      { label: 'Reliability', key: 'reliability', cls: 'stability' },
-      { label: 'Cost', key: 'cost_efficiency', cls: 'cost' },
-      { label: 'Control', key: 'control', cls: 'control' },
-      { label: 'Latency', key: 'latency', cls: 'latency' },
-      { label: 'Continuity', key: 'continuity', cls: 'continuity' },
-    ];
-
-    const dimBars = dims.map(d => {
-      const val = (p[d.key] || 0) * 20;
-      return `<div class="provider-dimension">
-        <div class="provider-dimension-label">${d.label}</div>
-        <div class="provider-dimension-bar">
-          <div class="provider-dimension-fill ${d.cls}" style="width:${val}%"></div>
-        </div>
-      </div>`;
-    }).join('');
-
-    return `
-      <div class="provider-card ${isRecommended ? 'recommended' : ''}" data-provider="${p.name}">
-        <div class="provider-card-header">
-          <div class="provider-name">${p.name || 'Unknown'}</div>
-          <div class="provider-type-icon">${getProviderIcon(p.name)}</div>
-        </div>
-        <div class="provider-status">
-          <div class="provider-status-dot ${status}"></div>
-          <span>${p.runtime || status}</span>
-        </div>
-        <div class="provider-overall-score">
-          <span class="provider-score-label">Overall</span>
-          <span class="provider-score-value">${score.toFixed(0)}%</span>
-        </div>
-        <div class="provider-score-bar">
-          <div class="provider-score-fill ${scoreClass}" style="width:${score}%"></div>
-        </div>
-        <div class="provider-detail" id="detail-${index}">
-          <div class="provider-detail-title">7-Dimension Analysis</div>
-          <div class="provider-dimensions">${dimBars}</div>
-        </div>
-      </div>
-    `;
-  }).join('');
-
-  // Add click handlers
-  list.querySelectorAll('.provider-card').forEach(card => {
-    card.addEventListener('click', () => {
-      const name = card.dataset.provider;
-      const idx = Array.from(list.querySelectorAll('.provider-card')).indexOf(card);
-      
-      // Toggle selection
-      if (selectedProvider === name) {
-        selectedProvider = null;
-        card.classList.remove('selected');
-        document.getElementById(`detail-${idx}`)?.classList.remove('visible');
-      } else {
-        list.querySelectorAll('.provider-card').forEach(c => {
-          c.classList.remove('selected');
-          const cidx = Array.from(list.querySelectorAll('.provider-card')).indexOf(c);
-          document.getElementById(`detail-${cidx}`)?.classList.remove('visible');
-        });
-        selectedProvider = name;
-        card.classList.add('selected');
-        document.getElementById(`detail-${idx}`)?.classList.add('visible');
-      }
-    });
-  });
-}
-
-// ── Poll Provider Health ──
-async function pollProviderHealth() {
-  const health = await fetchProviderHealth();
-  const navHealthText = document.getElementById('navProviderHealthText');
-  const navDot = document.querySelector('#navProviderHealth .provider-health-dot');
-  const footerStatus = document.getElementById('providerFooterStatus');
-
-  if (health) {
-    const onlineCount = Object.values(health).filter(p => p.status === 'online').length;
-    const totalCount = Object.values(health).length;
-    
-    if (navHealthText) navHealthText.textContent = `${onlineCount}/${totalCount} Providers`;
-    
-    const hasOffline = Object.values(health).some(p => p.status === 'offline');
-    const hasDegraded = Object.values(health).some(p => p.status === 'degraded');
-    
-    if (navDot) navDot.className = 'provider-health-dot ' + (hasOffline ? 'offline' : hasDegraded ? 'degraded' : 'online');
-    if (footerStatus) {
-      footerStatus.innerHTML = `<span class="provider-health-dot ${hasOffline ? 'offline' : hasDegraded ? 'degraded' : 'online'}"></span><span>${onlineCount}/${totalCount} providers online</span>`;
-    }
-
-    // Update provider card status dots
-    document.querySelectorAll('.provider-card').forEach(card => {
-      const name = card.dataset.provider;
-      const pHealth = health[name] || health[name?.toLowerCase()];
-      if (pHealth) {
-        const dot = card.querySelector('.provider-status-dot');
-        if (dot) dot.className = 'provider-status-dot ' + pHealth.status;
-      }
-    });
-  } else {
-    if (navHealthText) navHealthText.textContent = 'Unavailable';
-    if (navDot) navDot.className = 'provider-health-dot offline';
-  }
-}
-
-// ── Auth Functions ──
-function updateAuthUI() {
-  const token = localStorage.getItem('mv_token');
-  const userStr = localStorage.getItem('mv_user');
-  const loginBtn = document.getElementById('loginBtn');
-
-  if (token && userStr) {
-    const user = JSON.parse(userStr);
-    
-    if (loginBtn) {
-      loginBtn.outerHTML = `
-        <div class="nav-user-menu">
-          <button class="nav-user-btn">
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="6" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-            ${user.username || user.email || 'Account'}
-            <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-          </button>
-          <div class="nav-user-dropdown">
-            <button class="signout-btn" onclick="signOut()">
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 12H2a1 1 0 01-1-1V3a1 1 0 011-1h3M10 10l3-3-3-3M13 7H5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Sign Out
-            </button>
-          </div>
-        </div>
-      `;
-    }
-  }
-}
-
-function signOut() {
-  localStorage.removeItem('mv_token');
-  localStorage.removeItem('mv_user');
-  location.reload();
-}
-
-async function validateToken() {
-  const token = localStorage.getItem('mv_token');
-  if (token) {
-    try {
-      const res = await fetch(API_BASE + '/api/v1/auth/me', {
-        headers: { 'Authorization': 'Bearer ' + token }
-      });
-      if (!res.ok) {
-        localStorage.removeItem('mv_token');
-        localStorage.removeItem('mv_user');
-      }
-    } catch (e) {}
-  }
-  updateAuthUI();
-}
-
-// ── Quiz Functions ──
-function showQuiz() {
-  const quiz = document.getElementById('genQuiz');
-  if (!quiz) return;
-  
-  currentQuizIndex = Math.floor(Math.random() * quizQuestions.length);
-  renderQuizQuestion(currentQuizIndex);
-  
-  setTimeout(() => quiz.classList.add('active'), 5000);
-  
-  quiz._rotateTimer = setInterval(() => {
-    if (!quiz.classList.contains('active')) return;
-    const hasSelected = document.querySelector('.gen-quiz-option.selected');
-    if (!hasSelected) {
-      currentQuizIndex = (currentQuizIndex + 1) % quizQuestions.length;
-      renderQuizQuestion(currentQuizIndex);
-    }
-  }, 15000);
-}
-
-function renderQuizQuestion(index) {
-  const q = quizQuestions[index];
-  const questionEl = document.getElementById('genQuizQuestion');
-  const optionsEl = document.getElementById('genQuizOptions');
-  if (!questionEl || !optionsEl) return;
-  
-  questionEl.textContent = q.question;
-  optionsEl.innerHTML = q.options.map((opt, i) => `
-    <button class="gen-quiz-option" data-value="${opt.value}">
-      <span>${opt.icon}</span>
-      <span>${opt.text}</span>
-    </button>
-  `).join('');
-  
-  optionsEl.querySelectorAll('.gen-quiz-option').forEach(btn => {
-    btn.addEventListener('click', () => {
-      optionsEl.querySelectorAll('.gen-quiz-option').forEach(b => b.classList.remove('selected'));
-      btn.classList.add('selected');
-      
-      quizSelections.push(btn.dataset.value);
-      questionsAnswered++;
-      
-      const quizEl = document.getElementById('genQuiz');
-      if (quizEl && quizEl._rotateTimer) { clearInterval(quizEl._rotateTimer); quizEl._rotateTimer = null; }
-      
-      const queueText = document.getElementById('genQuizQueueText');
-      if (queueText) queueText.textContent = `Queued! ${quizSelections.length}/${MAX_QUESTIONS}`;
-      
-      if (!nextGenQueued) {
-        nextGenQueued = true;
-        document.getElementById('genQuizQueue')?.classList.add('active');
-      }
-      
-      if (questionsAnswered >= MAX_QUESTIONS) {
-        setTimeout(() => showQuizSummary(), 1500);
-      } else {
-        setTimeout(() => {
-          currentQuizIndex = (currentQuizIndex + 1) % quizQuestions.length;
-          renderQuizQuestion(currentQuizIndex);
-        }, 2000);
-      }
-    });
-  });
-}
-
-function hideQuiz() {
-  const quiz = document.getElementById('genQuiz');
-  if (quiz) {
-    quiz.classList.remove('active');
-    if (quiz._rotateTimer) { clearInterval(quiz._rotateTimer); quizEl._rotateTimer = null; }
-  }
-  document.getElementById('genQuizQueue')?.classList.remove('active');
-}
-
-function showQuizSummary() {
-  const quiz = document.getElementById('genQuiz');
-  if (quiz && quiz._rotateTimer) { clearInterval(quiz._rotateTimer); quiz._rotateTimer = null; }
-  
-  const questionEl = document.getElementById('genQuizQuestion');
-  const optionsEl = document.getElementById('genQuizOptions');
-  if (!questionEl || !optionsEl) return;
-  
-  const styleTags = quizSelections.map(s => s.split(' ').filter(w => w.length > 3).slice(0, 3).join(' '));
-  
-  questionEl.innerHTML = '<span style="color:#00E676;">✓</span> Style profile ready!';
-  optionsEl.innerHTML = `<div style="display:flex;flex-wrap:wrap;gap:6px;padding:8px 0;">
-    ${styleTags.map(t => `<span style="background:rgba(139,92,246,0.15);border:1px solid rgba(139,92,246,0.3);border-radius:16px;padding:4px 12px;font-size:11px;color:#cdd6f4;">${t}</span>`).join('')}
-  </div>`;
-}
-
-function buildNextPrompt(originalPrompt) {
-  let nextPrompt = originalPrompt || 'A beautiful scene';
-  if (quizSelections.length > 0) {
-    const styleTags = quizSelections.map(s => s.split(' ').filter(w => w.length > 3).slice(0, 3).join(' '));
-    nextPrompt += ', ' + styleTags.join(', ');
-  }
-  return nextPrompt;
-}
-
-// ── Generation Animation ──
-const genStatusPhases = [
-  { text: 'Analyzing your prompt...', progress: 15 },
-  { text: 'Composing scene layout...', progress: 25 },
-  { text: 'Generating keyframes...', progress: 40 },
-  { text: 'Rendering motion dynamics...', progress: 55 },
-  { text: 'Synthesizing video frames...', progress: 70 },
-  { text: 'Applying color grading...', progress: 80 },
-  { text: 'Finalizing video output...', progress: 90 },
-];
-
-function showGenAnimation(prompt) {
-  const area = document.getElementById('genAnimation');
-  const resultArea = document.getElementById('videoResultArea');
-  const promptPreview = document.getElementById('genPromptPreview');
-  const progressFill = document.getElementById('genProgressFill');
-  const statusText = document.getElementById('genStatusText');
-  
-  if (!area) return;
-  
-  resultArea?.classList.remove('active');
-  area.classList.add('active');
-  area.classList.remove('completed');
-  
-  if (promptPreview) promptPreview.textContent = '"' + prompt + '"';
-  if (progressFill) progressFill.style.width = '5%';
-  if (statusText) statusText.textContent = 'Preparing your video...';
-  
-  let phaseIndex = 0;
-  genStatusInterval = setInterval(() => {
-    if (phaseIndex < genStatusPhases.length) {
-      const phase = genStatusPhases[phaseIndex];
-      updateGenStatus(phase.text, phase.progress);
-      phaseIndex++;
-    }
-  }, 8000);
-  
-  showQuiz();
-}
-
-function updateGenStatus(text, progress) {
-  const statusText = document.getElementById('genStatusText');
-  const progressFill = document.getElementById('genProgressFill');
-  if (statusText) statusText.textContent = text;
-  if (progressFill) progressFill.style.width = progress + '%';
-}
-
-function hideGenAnimation() {
-  const area = document.getElementById('genAnimation');
-  if (genStatusInterval) { clearInterval(genStatusInterval); genStatusInterval = null; }
-  if (area) { area.classList.remove('active'); area.classList.remove('completed'); }
-  hideQuiz();
-}
-
-// ── Video Generation ──
-async function proceedWithGeneration(token, prompt, ratio, duration) {
-  const genBtn = document.getElementById('generateBtn');
-  if (!genBtn) return;
-
-  genBtn.classList.add('loading');
-  const providerText = selectedProvider ? ` with ${selectedProvider}` : '';
-  genBtn.querySelector('.btn-text').innerHTML = `
-    <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M13 3L7 9M7 9L3 13M7 9L11 5M7 9L3 5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
-    Generating${providerText}...
-  `;
-
-  showGenAnimation(prompt);
-
-  try {
-    const requestBody = { prompt, ratio, duration, model: selectedModel === 'fast' ? 'fast' : undefined };
-    if (selectedProvider) requestBody.preferred_provider = selectedProvider;
-    
-    const res = await fetch(API_BASE + '/api/v1/video/generate', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token
-      },
-      body: JSON.stringify(requestBody)
-    });
-
-    const data = await res.json();
-    console.log('Generation response:', { status: res.status, data });
-
-    if (!res.ok) {
-      let errorMsg = data.detail || data.message || 'Generation failed';
-      if (res.status === 401) {
-        errorMsg = 'Session expired. Please sign in again.';
-        localStorage.removeItem('mv_token');
-        localStorage.removeItem('mv_user');
-        setTimeout(() => { document.getElementById('authOverlay').style.display = 'flex'; }, 1500);
-      } else if (res.status === 402) {
-        errorMsg = 'Insufficient tokens.';
-      }
-      console.error('Generation failed:', errorMsg);
-      alert(errorMsg);
-      hideGenAnimation();
-      resetProviderSelection();
-      return;
-    }
-
-    if (!data.task_id) {
-      alert('Invalid server response');
-      hideGenAnimation();
-      resetProviderSelection();
-      return;
-    }
-
-    updateGenStatus('Sending to AI model...', 10);
-    startPolling(data.task_id);
-  } catch (err) {
-    console.error('Generate error:', err);
-    alert('Connection error. Please check your connection.');
-    hideGenAnimation();
-    resetProviderSelection();
-  }
-}
-
-function startPolling(taskId) {
-  if (pollInterval) clearInterval(pollInterval);
-  let pollCount = 0;
-  const maxPolls = 120;
-
-  pollInterval = setInterval(async () => {
-    pollCount++;
-    if (pollCount > maxPolls) {
-      clearInterval(pollInterval);
-      if (genStatusInterval) { clearInterval(genStatusInterval); genStatusInterval = null; }
-      hideGenAnimation();
-      resetGenBtn();
-      alert('Generation timed out.');
-      loadMyVideos();
-      return;
-    }
-
-    try {
-      const token = localStorage.getItem('mv_token');
-      if (!token) { clearInterval(pollInterval); hideGenAnimation(); document.getElementById('authOverlay').style.display = 'flex'; return; }
-
-      const res = await fetch(API_BASE + '/api/v1/video/task/' + taskId, {
-        headers: { 'Authorization': 'Bearer ' + token }
-      });
-
-      if (!res.ok) {
-        if (res.status === 401) {
-          clearInterval(pollInterval);
-          hideGenAnimation();
-          resetGenBtn();
-          localStorage.removeItem('mv_token');
-          document.getElementById('authOverlay').style.display = 'flex';
-        }
-        return;
-      }
-
-      const data = await res.json();
-      console.log('Poll status:', data.status, 'progress:', data.progress);
-
-      if (data.progress && data.progress > 0) {
-        updateGenStatus('Rendering... ' + data.progress + '%', Math.max(data.progress, 50));
-      }
-
-      if (data.status === 'completed') {
-        clearInterval(pollInterval);
-        if (genStatusInterval) { clearInterval(genStatusInterval); genStatusInterval = null; }
-
-        const area = document.getElementById('genAnimation');
-        if (area) area.classList.add('completed');
-        updateGenStatus('Video ready!', 100);
-
-        setTimeout(() => {
-          hideGenAnimation();
-          resetProviderSelection();
-          resetGenBtn();
-
-          if (!data.video_url) {
-            alert('No video URL returned.');
-            loadMyVideos();
-            return;
-          }
-
-          showVideoResult(data.video_url, promptInput?.value || '');
-          lastVideoUrl = data.video_url;
-          loadMyVideos();
-
-          if (nextGenQueued && quizSelections.length > 0) {
-            setTimeout(() => autoGenerateNext(), 3000);
-          }
-          nextGenQueued = false;
-        }, 1200);
-
-      } else if (data.status === 'failed') {
-        clearInterval(pollInterval);
-        if (genStatusInterval) { clearInterval(genStatusInterval); genStatusInterval = null; }
-        hideGenAnimation();
-        resetGenBtn();
-        alert('Generation failed: ' + (data.error_message || 'Unknown error'));
-        loadMyVideos();
-      }
-    } catch (err) {
-      console.error('Poll error:', err);
-    }
-  }, 5000);
-}
-
-function resetGenBtn() {
-  const genBtn = document.getElementById('generateBtn');
-  if (genBtn) {
-    genBtn.classList.remove('loading');
-    genBtn.querySelector('.btn-text').innerHTML = `
-      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M13 3L7 9M7 9L3 13M7 9L11 5M7 9L3 5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
-      Generate
-    `;
-  }
-}
-
-function showVideoResult(videoUrl, prompt) {
-  const area = document.getElementById('videoResultArea');
-  const video = document.getElementById('resultVideo');
-  const promptEl = document.getElementById('resultPrompt');
-  
-  if (video) video.src = videoUrl;
-  if (promptEl) promptEl.textContent = prompt;
-  if (area) area.classList.add('active');
-}
-
-function resetProviderSelection() {
-  selectedProvider = null;
-  providerRankings = [];
-  const hint = document.getElementById('providerSelectionHint');
-  if (hint) hint.classList.add('hidden');
-}
-
-async function autoGenerateNext() {
-  const token = localStorage.getItem('mv_token');
-  if (!token) return;
-  
-  const originalPrompt = promptInput?.value?.trim() || '';
-  const nextPrompt = buildNextPrompt(originalPrompt);
-  if (promptInput) promptInput.value = nextPrompt;
-  
-  quizSelections = [];
-  questionsAnswered = 0;
-  
-  genBtn?.click();
-}
-
-// ── Image Upload ──
-let uploadedImageBase64 = null;
-const imageFileInput = document.getElementById('imageFileInput');
+// DOM Elements
+const messageArea = document.getElementById('messageArea');
+const inputText = document.getElementById('inputText');
+const sendBtn = document.getElementById('sendBtn');
 const uploadPreview = document.getElementById('uploadPreview');
-const previewImg = document.getElementById('previewImg');
+const imageInput = document.getElementById('imageInput');
 
-if (imageFileInput) {
-  imageFileInput.addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    if (file.size > 10 * 1024 * 1024) { alert('Image must be under 10MB'); return; }
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      uploadedImageBase64 = ev.target.result;
-      if (previewImg) previewImg.src = uploadedImageBase64;
-      if (uploadPreview) uploadPreview.style.display = 'block';
-    };
-    reader.readAsDataURL(file);
-  });
-}
-
-document.getElementById('removePreview')?.addEventListener('click', () => {
-  uploadedImageBase64 = null;
-  if (uploadPreview) uploadPreview.style.display = 'none';
-  if (imageFileInput) imageFileInput.value = '';
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+  initConversation();
+  initTabs();
+  initInputHandlers();
+  initDockProgress();
 });
 
-// ── Voice Recording ──
-let mediaRecorder = null;
-let audioChunks = [];
-let isRecording = false;
-const voiceRecordBtn = document.getElementById('voiceRecordBtn');
-const voiceBtnLabel = document.getElementById('voiceBtnLabel');
-
-if (voiceRecordBtn) {
-  voiceRecordBtn.addEventListener('click', async () => {
-    if (isRecording) {
-      mediaRecorder?.stop();
-      return;
-    }
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      mediaRecorder = new MediaRecorder(stream);
-      audioChunks = [];
-
-      mediaRecorder.ondataavailable = (e) => { if (e.data.size > 0) audioChunks.push(e.data); };
-
-      mediaRecorder.onstop = async () => {
-        stream.getTracks().forEach(t => t.stop());
-        voiceRecordBtn.classList.remove('recording');
-        if (voiceBtnLabel) voiceBtnLabel.textContent = 'Voice';
-        isRecording = false;
-
-        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-        if (audioBlob.size > 0) await transcribeAudio(audioBlob);
-      };
-
-      mediaRecorder.start();
-      isRecording = true;
-      voiceRecordBtn.classList.add('recording');
-      if (voiceBtnLabel) voiceBtnLabel.textContent = 'Stop';
-    } catch (err) {
-      console.error('Mic access denied:', err);
-      alert('Microphone access is required');
-    }
-  });
+// Conversation Logic
+function initConversation() {
+  // Auto-send welcome message
+  setTimeout(() => {
+    addAIMessage(conversationFlow[0].ai, conversationFlow[0].quickOptions);
+  }, 500);
 }
 
-async function transcribeAudio(audioBlob) {
-  const token = localStorage.getItem('mv_token');
-  if (!token) { document.getElementById('authOverlay').style.display = 'flex'; return; }
-  try {
-    const formData = new FormData();
-    formData.append('audio', audioBlob, 'recording.webm');
-    const res = await fetch(API_BASE + '/api/v1/audio/transcribe', {
-      method: 'POST',
-      headers: { 'Authorization': 'Bearer ' + token },
-      body: formData
-    });
-    const data = await res.json();
-    if (data.text && promptInput) { promptInput.value = data.text; promptInput.focus(); }
-  } catch (err) {
-    console.error('Transcription error:', err);
+function addAIMessage(text, quickOptions = null) {
+  isTyping = true;
+  
+  const messageEl = document.createElement('div');
+  messageEl.className = 'message ai';
+  messageEl.innerHTML = `
+    <div class="message-avatar">🤖</div>
+    <div class="message-content">
+      <div class="message-text"></div>
+      ${quickOptions ? '<div class="quick-options"></div>' : ''}
+    </div>
+  `;
+  messageArea.appendChild(messageEl);
+  
+  // Typing effect
+  const textEl = messageEl.querySelector('.message-text');
+  typeText(textEl, text, () => {
+    if (quickOptions) {
+      const optionsEl = messageEl.querySelector('.quick-options');
+      quickOptions.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'quick-option';
+        btn.textContent = opt;
+        btn.addEventListener('click', () => handleUserInput(opt));
+        optionsEl.appendChild(btn);
+      });
+    }
+    isTyping = false;
+    scrollToBottom();
+  });
+  
+  scrollToBottom();
+}
+
+function addUserMessage(text) {
+  const messageEl = document.createElement('div');
+  messageEl.className = 'message user';
+  messageEl.innerHTML = `
+    <div class="message-avatar">👤</div>
+    <div class="message-content">${escapeHtml(text)}</div>
+  `;
+  messageArea.appendChild(messageEl);
+  scrollToBottom();
+}
+
+function typeText(element, text, callback) {
+  let i = 0;
+  const speed = 20;
+  
+  function type() {
+    if (i < text.length) {
+      element.innerHTML = escapeHtml(text.substring(0, i + 1)).replace(/\n/g, '<br>');
+      i++;
+      scrollToBottom();
+      setTimeout(type, speed);
+    } else {
+      callback && callback();
+    }
+  }
+  
+  type();
+}
+
+function handleUserInput(text) {
+  if (isTyping) return;
+  
+  // Store response
+  const responseKeys = ['initial', 'product', 'audience', 'style', 'display', 'duration'];
+  userResponses[responseKeys[conversationRound]] = text;
+  
+  // Add user message
+  addUserMessage(text);
+  
+  // Advance conversation
+  conversationRound++;
+  
+  if (conversationRound >= conversationFlow.length) {
+    // Show summary
+    setTimeout(() => showSummary(), 1000);
+  } else {
+    // Show next AI question
+    setTimeout(() => {
+      addAIMessage(conversationFlow[conversationRound].ai, conversationFlow[conversationRound].quickOptions);
+    }, 1500);
   }
 }
 
-// ── Load My Videos ──
-async function loadMyVideos() {
-  const token = localStorage.getItem('mv_token');
-  if (!token) return;
-
-  const list = document.getElementById('historyList');
-  if (!list) return;
-
-  try {
-    const res = await fetch(API_BASE + '/api/v1/video/tasks', {
-      headers: { 'Authorization': 'Bearer ' + token }
-    });
-
-    if (res.status === 401) { signOut(); return; }
-
-    const data = await res.json();
-    const tasks = data.tasks || [];
-
-    if (tasks.length === 0) {
-      list.innerHTML = '<div class="history-empty">No videos yet. Start creating!</div>';
-      return;
-    }
-
-    list.innerHTML = tasks.slice(0, 10).map(task => {
-      const statusClass = task.status === 'completed' ? 'completed' : 
-                         task.status === 'failed' ? 'failed' : 'generating';
-      const statusText = task.status === 'completed' ? 'Done' : 
-                        task.status === 'failed' ? 'Failed' : '...';
-      const date = new Date(task.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-
-      return `
-        <div class="history-item" data-video="${task.video_url || ''}" data-prompt="${task.prompt || ''}">
-          <div class="history-thumb">
-            ${task.status === 'completed' && task.video_url 
-              ? `<video src="${task.video_url}" muted></video>`
-              : `<div class="history-loading-thumb"><div class="spinner"></div></div>`
-            }
+function showSummary() {
+  const summaryHtml = `
+    <div class="message ai">
+      <div class="message-avatar">🤖</div>
+      <div class="message-content">
+        <div class="summary-card">
+          <div class="summary-header">📋 需求摘要</div>
+          <div class="summary-items">
+            <div class="summary-item">
+              <span class="check">✅</span>
+              <span class="label">产品：</span>
+              <span>${userResponses.product || '待补充'}</span>
+            </div>
+            <div class="summary-item">
+              <span class="check">✅</span>
+              <span class="label">受众：</span>
+              <span>${userResponses.audience || '待补充'}</span>
+            </div>
+            <div class="summary-item">
+              <span class="check">✅</span>
+              <span class="label">风格：</span>
+              <span>${userResponses.style || '待补充'}</span>
+            </div>
+            <div class="summary-item">
+              <span class="check">✅</span>
+              <span class="label">场景：</span>
+              <span>${userResponses.display || '待补充'}</span>
+            </div>
+            <div class="summary-item">
+              <span class="check">✅</span>
+              <span class="label">时长：</span>
+              <span>${userResponses.duration || '待补充'}</span>
+            </div>
           </div>
-          <div class="history-info">
-            <div class="history-prompt">${task.prompt || 'No prompt'}</div>
-            <div class="history-meta">${date} • ${task.ratio || '16:9'} • ${task.duration || 5}s</div>
+          <div class="summary-actions">
+            <button class="summary-btn primary" id="confirmSummaryBtn">确认并开始策划</button>
+            <button class="summary-btn secondary" id="modifySummaryBtn">修改需求</button>
           </div>
-          <span class="history-status ${statusClass}">${statusText}</span>
         </div>
-      `;
-    }).join('');
+      </div>
+    </div>
+  `;
+  
+  messageArea.insertAdjacentHTML('beforeend', summaryHtml);
+  scrollToBottom();
+  
+  // Event handlers
+  document.getElementById('confirmSummaryBtn').addEventListener('click', () => {
+    startPlanning();
+  });
+  
+  document.getElementById('modifySummaryBtn').addEventListener('click', () => {
+    // Reset to specific round based on what needs modification
+    conversationRound = 1; // Go back to product question
+    addAIMessage("好的，让我们重新完善需求。", conversationFlow[1].quickOptions);
+  });
+}
 
-    // Add click handlers
-    list.querySelectorAll('.history-item').forEach(item => {
-      item.addEventListener('click', () => {
-        const videoUrl = item.dataset.video;
-        const prompt = item.dataset.prompt;
-        if (videoUrl) {
-          showVideoResult(videoUrl, prompt);
-          // Hide animation
-          document.getElementById('genAnimation')?.classList.remove('active');
-        }
-      });
+function startPlanning() {
+  // Add generating message
+  const genMsg = document.createElement('div');
+  genMsg.className = 'message ai';
+  genMsg.id = 'generatingMsg';
+  genMsg.innerHTML = `
+    <div class="message-avatar">🤖</div>
+    <div class="message-content">
+      <div class="typing-indicator">
+        <span></span><span></span><span></span>
+      </div>
+      <div style="margin-top: 8px; color: var(--ctp-overlay1);">正在生成视频文案...</div>
+    </div>
+  `;
+  messageArea.appendChild(genMsg);
+  scrollToBottom();
+  
+  // Show dock status
+  document.getElementById('genStatus').style.display = 'flex';
+  
+  // Advance dock progress
+  advanceStep();
+  
+  // Simulate generation
+  setTimeout(() => {
+    document.getElementById('generatingMsg').remove();
+    
+    addAIMessage("🎉 文案已生成！请查看右侧面板进行编辑和调整。", null);
+    
+    // Show copywriting content
+    document.getElementById('copywritingEmpty').style.display = 'none';
+    document.getElementById('copywritingContent').style.display = 'block';
+    
+    // Switch to copywriting tab
+    switchTab('copywriting');
+    
+    // Hide generating status
+    document.getElementById('genStatus').style.display = 'none';
+  }, 3000);
+}
+
+// Tab Switching
+function initTabs() {
+  const tabs = document.querySelectorAll('.output-tab');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const tabName = tab.dataset.tab;
+      switchTab(tabName);
     });
+  });
+}
 
-  } catch (err) {
-    console.error('Failed to load videos:', err);
+function switchTab(tabName) {
+  // Update tabs
+  document.querySelectorAll('.output-tab').forEach(t => t.classList.remove('active'));
+  document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+  
+  // Update panels
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById(`tab-${tabName}`).classList.add('active');
+}
+
+// Input Handlers
+function initInputHandlers() {
+  // Auto-resize textarea
+  inputText.addEventListener('input', () => {
+    inputText.style.height = 'auto';
+    inputText.style.height = Math.min(inputText.scrollHeight, 120) + 'px';
+  });
+  
+  // Send button
+  sendBtn.addEventListener('click', () => {
+    const text = inputText.value.trim();
+    if (text && !isTyping) {
+      handleUserInput(text);
+      inputText.value = '';
+      inputText.style.height = 'auto';
+    }
+  });
+  
+  // Enter to send
+  inputText.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendBtn.click();
+    }
+  });
+  
+  // Image upload
+  imageInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        uploadedImages.push(ev.target.result);
+        renderUploadPreviews();
+        
+        // Trigger conversation with image
+        if (conversationRound === 0) {
+          handleUserInput(`我上传了产品图片: ${file.name}`);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+  
+  // Voice button (placeholder)
+  document.getElementById('voiceBtn').addEventListener('click', () => {
+    alert('语音输入功能开发中...');
+  });
+}
+
+function renderUploadPreviews() {
+  if (uploadedImages.length === 0) {
+    uploadPreview.style.display = 'none';
+    return;
+  }
+  
+  uploadPreview.style.display = 'flex';
+  uploadPreview.innerHTML = uploadedImages.map((img, i) => `
+    <div class="preview-item">
+      <img src="${img}" alt="Preview">
+      <button class="preview-remove" data-index="${i}">×</button>
+    </div>
+  `).join('');
+  
+  // Remove handlers
+  uploadPreview.querySelectorAll('.preview-remove').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const index = parseInt(btn.dataset.index);
+      uploadedImages.splice(index, 1);
+      renderUploadPreviews();
+    });
+  });
+}
+
+// Dock Progress
+function initDockProgress() {
+  updateDockProgress();
+}
+
+function advanceStep() {
+  if (currentStep < 4) {
+    currentStep++;
+    updateDockProgress();
   }
 }
 
-// ── Event Listeners ──
-document.addEventListener('DOMContentLoaded', async () => {
-  genBtn = document.getElementById('generateBtn');
-  const promptInput = document.getElementById('promptInput');
-
-  // Validate token and update UI
-  await validateToken();
-
-  // Load providers
-  const providers = await fetchProviders();
-  const health = await fetchProviderHealth();
-  renderProviderList(providers, health);
-  pollProviderHealth();
+function updateDockProgress() {
+  const nodes = document.querySelectorAll('.quantum-node');
+  const lines = document.querySelectorAll('.quantum-line');
   
-  // Start health polling
-  healthCheckInterval = setInterval(pollProviderHealth, 30000);
-
-  // Load videos
-  loadMyVideos();
-
-  // Refresh providers
-  document.getElementById('refreshProviders')?.addEventListener('click', async () => {
-    const providers = await fetchProviders();
-    const health = await fetchProviderHealth();
-    renderProviderList(providers, health);
-    pollProviderHealth();
-  });
-
-  // Auth handlers
-  document.getElementById('loginBtn')?.addEventListener('click', (e) => {
-    e.preventDefault();
-    document.getElementById('authOverlay').style.display = 'flex';
-  });
-  
-  document.getElementById('authClose')?.addEventListener('click', () => {
-    document.getElementById('authOverlay').style.display = 'none';
-  });
-  
-  document.getElementById('authOverlay')?.addEventListener('click', (e) => {
-    if (e.target.id === 'authOverlay') e.target.style.display = 'none';
-  });
-
-  document.getElementById('githubSignIn')?.addEventListener('click', async (e) => {
-    e.preventDefault();
-    try {
-      const res = await fetch(API_BASE + '/api/v1/auth/github');
-      const data = await res.json();
-      if (data.authorization_url) window.location.href = data.authorization_url;
-    } catch (err) {
-      console.error('GitHub OAuth error:', err);
-      alert('Unable to connect to authentication service.');
+  nodes.forEach((node, i) => {
+    node.classList.remove('completed', 'current', 'pending');
+    if (i < currentStep) {
+      node.classList.add('completed');
+    } else if (i === currentStep) {
+      node.classList.add('current');
+    } else {
+      node.classList.add('pending');
     }
   });
-
-  // Email auth form
-  document.getElementById('emailSignInForm')?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const email = document.getElementById('authEmail')?.value?.trim();
-    const password = document.getElementById('authPassword')?.value;
-    if (!email || !password) { alert('Please enter email and password'); return; }
-
-    try {
-      const res = await fetch(API_BASE + '/api/v1/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: `username=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`
-      });
-      const data = await res.json();
-
-      if (!res.ok) {
-        alert('Login failed: ' + (data.detail || data.message || 'Error'));
-        return;
-      }
-
-      localStorage.setItem('mv_token', data.access_token);
-      const userRes = await fetch(API_BASE + '/api/v1/auth/me', {
-        headers: { 'Authorization': 'Bearer ' + data.access_token }
-      });
-      if (userRes.ok) {
-        const user = await userRes.json();
-        localStorage.setItem('mv_user', JSON.stringify(user));
-      }
-      document.getElementById('authOverlay').style.display = 'none';
-      updateAuthUI();
-      loadMyVideos();
-    } catch (err) {
-      console.error('Auth error:', err);
-      alert('Connection error.');
+  
+  lines.forEach((line, i) => {
+    line.classList.remove('completed', 'active');
+    if (i < currentStep) {
+      line.classList.add('completed');
+    } else if (i === currentStep - 1) {
+      line.classList.add('active');
     }
   });
+}
 
-  // Control chips
-  document.querySelectorAll('.control-chip[data-ratio]').forEach(chip => {
-    chip.addEventListener('click', () => {
-      document.querySelectorAll('.control-chip[data-ratio]').forEach(c => c.classList.remove('active'));
-      chip.classList.add('active');
-    });
-  });
+// Utility Functions
+function scrollToBottom() {
+  messageArea.scrollTop = messageArea.scrollHeight;
+}
 
-  document.querySelectorAll('.control-chip[data-duration]').forEach(chip => {
-    chip.addEventListener('click', () => {
-      document.querySelectorAll('.control-chip[data-duration]').forEach(c => c.classList.remove('active'));
-      chip.classList.add('active');
-    });
-  });
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
 
-  document.querySelectorAll('.control-chip[data-model]').forEach(chip => {
-    chip.addEventListener('click', () => {
-      document.querySelectorAll('.control-chip[data-model]').forEach(c => c.classList.remove('active'));
-      chip.classList.add('active');
-      selectedModel = chip.dataset.model;
-    });
-  });
+// Confirm buttons
+document.getElementById('confirmCopyBtn')?.addEventListener('click', () => {
+  advanceStep();
+  addAIMessage("文案已确认！正在为你生成分镜...", null);
+  
+  setTimeout(() => {
+    document.getElementById('copywritingEmpty').style.display = 'none';
+    document.getElementById('storyboardEmpty').style.display = 'none';
+    document.getElementById('storyboardContent').style.display = 'grid';
+    document.getElementById('confirmStoryBtn').style.display = 'block';
+    switchTab('storyboard');
+  }, 1500);
+});
 
-  // Generate button
-  if (genBtn) {
-    genBtn.addEventListener('click', async () => {
-      const token = localStorage.getItem('mv_token');
-      if (!token) {
-        alert('Please sign in to generate videos');
-        document.getElementById('authOverlay').style.display = 'flex';
-        return;
-      }
-
-      const prompt = promptInput?.value?.trim() || '';
-      if (!prompt) {
-        alert('Please enter a prompt');
-        promptInput?.focus();
-        return;
-      }
-
-      const ratio = document.querySelector('.control-chip[data-ratio].active')?.dataset?.ratio || '16:9';
-      const duration = parseInt(document.querySelector('.control-chip[data-duration].active')?.dataset?.duration || '5');
-
-      genBtn.classList.add('loading');
-      const hint = document.getElementById('providerSelectionHint');
-      if (hint) { hint.classList.remove('hidden'); hint.querySelector('span').textContent = 'Analyzing prompt...'; }
-
-      try {
-        const selectData = await selectBestProvider(prompt, ratio, duration);
-        if (selectData && selectData.rankings?.length > 0) {
-          const recommended = selectData.rankings[0];
-          if (hint) hint.innerHTML = `<span>Recommended: <strong>${recommended.name}</strong> (${recommended.weighted_score?.toFixed(0)}%)</span>`;
-          if (selectedProvider) {
-            if (hint) hint.classList.add('hidden');
-            await proceedWithGeneration(token, prompt, ratio, duration);
-          }
-        } else {
-          if (hint) hint.classList.add('hidden');
-          await proceedWithGeneration(token, prompt, ratio, duration);
-        }
-      } catch (err) {
-        console.warn('Provider selection failed:', err);
-        if (hint) hint.classList.add('hidden');
-        await proceedWithGeneration(token, prompt, ratio, duration);
-      }
-    });
-  }
-
-  // Clear preview
-  document.getElementById('clearPreview')?.addEventListener('click', () => {
-    document.getElementById('videoResultArea')?.classList.remove('active');
-    document.getElementById('genAnimation')?.classList.remove('active');
-  });
+document.getElementById('confirmStoryBtn')?.addEventListener('click', () => {
+  advanceStep();
+  
+  document.getElementById('genStatus').innerHTML = `
+    <div class="spinner"></div>
+    <span>正在生成视频...请耐心等待</span>
+  `;
+  document.getElementById('genStatus').style.display = 'flex';
+  
+  // Simulate video generation
+  setTimeout(() => {
+    document.getElementById('genStatus').style.display = 'none';
+    advanceStep();
+    addAIMessage("🎬 视频生成完成！快去成片标签页查看吧！", null);
+    
+    document.getElementById('videoEmpty').style.display = 'none';
+    document.getElementById('videoContent').style.display = 'block';
+    switchTab('video');
+  }, 5000);
 });
 </script>
 
