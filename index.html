@@ -1887,6 +1887,335 @@ body {
   width: 100% !important;
   background: linear-gradient(90deg, #785aff, #a78bfa);
 }
+
+/* ═══════════════════════════════════════════════
+   Provider Selection Panel (V3.0 Scoring Engine)
+   ═══════════════════════════════════════════════ */
+
+/* Provider Health Bar */
+.provider-health-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+  font-size: 11px;
+  color: var(--text-tertiary);
+  margin-left: auto;
+}
+.provider-health-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.provider-health-dot.online { background: #00E676; box-shadow: 0 0 4px #00E676; }
+.provider-health-dot.degraded { background: #FFB74D; box-shadow: 0 0 4px #FFB74D; }
+.provider-health-dot.offline { background: #FF6B9D; box-shadow: 0 0 4px #FF6B9D; }
+.provider-health-dot.loading { background: var(--text-tertiary); animation: pulse 1s infinite; }
+
+/* Provider Panel */
+.provider-panel {
+  max-width: 800px;
+  margin: 20px auto 0;
+  border-radius: var(--radius-md);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  overflow: hidden;
+  display: none;
+}
+.provider-panel.visible { display: block; animation: fadeIn 0.3s ease; }
+.provider-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: rgba(108,92,231,0.08);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.provider-panel-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.provider-panel-title svg { color: var(--accent); }
+.provider-panel-close {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: transparent;
+  border: none;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.provider-panel-close:hover { background: rgba(255,255,255,0.08); color: var(--text-primary); }
+
+.provider-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+  padding: 16px;
+}
+
+.provider-card {
+  padding: 14px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  cursor: pointer;
+  transition: all 0.3s var(--transition);
+  position: relative;
+}
+.provider-card:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.12);
+}
+.provider-card.selected {
+  background: rgba(108,92,231,0.12);
+  border-color: rgba(108,92,231,0.35);
+}
+.provider-card.recommended::before {
+  content: 'Recommended';
+  position: absolute;
+  top: -8px;
+  right: 12px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: linear-gradient(135deg, #6C5CE7, #8B5CF6);
+  color: white;
+}
+.provider-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.provider-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.provider-type-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  background: rgba(108,92,231,0.15);
+}
+.provider-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text-tertiary);
+  margin-bottom: 10px;
+}
+.provider-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+.provider-status-dot.online { background: #00E676; }
+.provider-status-dot.degraded { background: #FFB74D; }
+.provider-status-dot.offline { background: #FF6B9D; }
+.provider-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.provider-metric {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.provider-metric-label {
+  font-size: 10px;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.provider-metric-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.provider-metric-value.score { color: #00E676; }
+.provider-metric-value.latency { color: var(--accent-secondary); }
+.provider-score-bar {
+  height: 3px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 2px;
+  margin-top: 4px;
+  overflow: hidden;
+}
+.provider-score-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.5s ease;
+}
+.provider-score-fill.high { background: linear-gradient(90deg, #00E676, #00C853); }
+.provider-score-fill.medium { background: linear-gradient(90deg, #FFB74D, #FFA726); }
+.provider-score-fill.low { background: linear-gradient(90deg, #FF6B9D, #FF5252); }
+
+/* Provider Detail Expansion */
+.provider-detail {
+  padding: 16px;
+  background: rgba(0,0,0,0.2);
+  border-top: 1px solid rgba(255,255,255,0.04);
+  display: none;
+}
+.provider-detail.visible { display: block; }
+.provider-detail-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.provider-dimensions {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+@media (max-width: 600px) {
+  .provider-dimensions { grid-template-columns: repeat(2, 1fr); }
+}
+.provider-dimension {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.provider-dimension-label {
+  font-size: 10px;
+  color: var(--text-tertiary);
+}
+.provider-dimension-bar {
+  height: 4px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.provider-dimension-fill {
+  height: 100%;
+  border-radius: 2px;
+}
+.provider-dimension-fill.runtime { background: linear-gradient(90deg, #00E676, #00C853); }
+.provider-dimension-fill.stability { background: linear-gradient(90deg, #89b4fa, #74c7ec); }
+.provider-dimension-fill.quality { background: linear-gradient(90deg, #cba6f7, #b794f6); }
+.provider-dimension-fill.cost { background: linear-gradient(90deg, #f9e2af, #f5c542); }
+.provider-dimension-value {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.provider-reasons {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255,255,255,0.04);
+}
+.provider-reason {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+.provider-reason-icon { color: #00E676; flex-shrink: 0; margin-top: 2px; }
+.provider-warning {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 12px;
+  color: #FFB74D;
+  margin-top: 8px;
+  padding: 8px;
+  background: rgba(255,183,77,0.08);
+  border-radius: 8px;
+}
+.provider-warning-icon { flex-shrink: 0; }
+
+/* Provider Selection in Controls */
+.provider-selection-hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: rgba(108,92,231,0.08);
+  border: 1px solid rgba(108,92,231,0.2);
+  font-size: 12px;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+.provider-selection-hint.hidden { display: none; }
+.provider-selection-hint .spinner {
+  width: 12px;
+  height: 12px;
+  border: 2px solid rgba(108,92,231,0.2);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+/* Generation Provider Info */
+.gen-provider-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  background: rgba(0,230,118,0.06);
+  border: 1px solid rgba(0,230,118,0.15);
+  border-radius: 10px;
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.gen-provider-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: rgba(0,230,118,0.12);
+  border-radius: 6px;
+  color: #00E676;
+  font-weight: 600;
+}
+.gen-provider-score {
+  color: #00E676;
+  font-weight: 600;
+}
+
+/* Video Card Provider Badge */
+.video-provider-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 500;
+  background: rgba(108,92,231,0.1);
+  color: var(--accent);
+  border: 1px solid rgba(108,92,231,0.2);
+}
 </style>
 </head>
 
@@ -1913,6 +2242,13 @@ body {
         <li><a href="#gallery">Gallery</a></li>
         <li><a href="#pricing">Pricing</a></li>
       </ul>
+      
+      <!-- Provider Health Status Bar -->
+      <div class="provider-health-bar" id="navProviderHealth" title="Provider Status">
+        <span class="provider-health-dot loading"></span>
+        <span id="navProviderHealthText">Checking...</span>
+      </div>
+      
       <div class="nav-cta">
         <a href="#" class="btn btn-ghost" id="loginBtn">Sign In</a>
         <a href="#" class="btn btn-primary nav-get-started">Get Started</a>
@@ -2080,7 +2416,32 @@ body {
           </button>
         </div>
 
-      <!-- Generation Animation Overlay -->
+        <!-- Provider Selection Hint (shown after analyzing prompt) -->
+        <div class="provider-selection-hint hidden" id="providerSelectionHint">
+          <div class="spinner"></div>
+          <span>Analyzing prompt to find best provider...</span>
+        </div>
+
+        <!-- Provider Selection Panel -->
+        <div class="provider-panel" id="providerPanel">
+          <div class="provider-panel-header">
+            <div class="provider-panel-title">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.5 3.5 3.5 1-3.5 1.5L7 13l-1.5-3.5L2 7l3.5-1L7 1z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+              Select Provider
+            </div>
+            <button class="provider-panel-close" id="providerPanelClose">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 3l8 8M11 3l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+          <div class="provider-list" id="providerList">
+            <!-- Provider cards will be dynamically inserted here -->
+          </div>
+          <div class="provider-detail" id="providerDetail">
+            <!-- Selected provider details will be shown here -->
+          </div>
+        </div>
+
+        <!-- Generation Animation Overlay -->
       <div class="gen-animation-overlay" id="genAnimation">
         <div class="gen-shimmer-card">
           <div class="gen-sparkle"></div>
@@ -2389,6 +2750,356 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   const githubSignIn = document.getElementById('githubSignIn');
   
   const API_BASE = 'https://web-production-77f47.up.railway.app';
+  
+  // ── Provider Management (V3.0 Scoring Engine) ──
+  let providersData = [];
+  let selectedProvider = null;
+  let providerRankings = [];
+  let healthCheckInterval = null;
+  
+  // Reference to generate button (defined later in script)
+  let genBtn;
+
+  // Provider type icons
+  const providerTypeIcons = {
+    'openai': '🤖',
+    'stability': '🎨',
+    'runway': '✈️',
+    'pika': '🎬',
+    'kling': '🌟',
+    'hailuo': '🔮',
+    'minimax': '⚡',
+    'luma': '💎',
+    'default': '🎥'
+  };
+
+  function getProviderIcon(provider) {
+    const key = provider?.toLowerCase() || 'default';
+    for (const [type, icon] of Object.entries(providerTypeIcons)) {
+      if (key.includes(type)) return icon;
+    }
+    return providerTypeIcons.default;
+  }
+
+  // Fetch all providers
+  async function fetchProviders() {
+    try {
+      const res = await fetch(API_BASE + '/api/v1/video/providers');
+      if (res.ok) {
+        providersData = await res.json();
+        return providersData;
+      }
+    } catch (err) {
+      console.warn('Failed to fetch providers:', err);
+    }
+    return [];
+  }
+
+  // Fetch provider health status
+  async function fetchProviderHealth() {
+    try {
+      const res = await fetch(API_BASE + '/api/v1/video/providers/health');
+      if (res.ok) {
+        return await res.json();
+      }
+    } catch (err) {
+      console.warn('Failed to fetch provider health:', err);
+    }
+    return null;
+  }
+
+  // Call /select-provider to get scoring rankings
+  async function selectBestProvider(prompt, ratio, duration, imageUrl) {
+    try {
+      const token = localStorage.getItem('mv_token');
+      if (!token) return null;
+
+      const body = {
+        prompt: prompt,
+        duration: duration,
+        ratio: ratio
+      };
+      if (imageUrl) {
+        body.image_url = imageUrl;
+      }
+
+      const res = await fetch(API_BASE + '/api/v1/video/select-provider', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify(body)
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        providerRankings = data.rankings || [];
+        return data;
+      }
+    } catch (err) {
+      console.warn('Failed to select provider:', err);
+    }
+    return null;
+  }
+
+  // Show provider selection panel with rankings
+  function showProviderPanel(rankings, taskContext) {
+    const panel = document.getElementById('providerPanel');
+    const list = document.getElementById('providerList');
+    const hint = document.getElementById('providerSelectionHint');
+
+    if (!panel || !list) return;
+
+    // Hide loading hint
+    if (hint) hint.classList.add('hidden');
+
+    // Build provider cards
+    list.innerHTML = rankings.map((rank, index) => {
+      const isRecommended = index === 0;
+      const isSelected = selectedProvider === rank.name;
+      const scoreClass = rank.weighted_score >= 80 ? 'high' : rank.weighted_score >= 60 ? 'medium' : 'low';
+      const latencyDisplay = rank.latency_p50_seconds ? `${(rank.latency_p50_seconds).toFixed(1)}s` : 'N/A';
+
+      return `
+        <div class="provider-card ${isRecommended ? 'recommended' : ''} ${isSelected ? 'selected' : ''}" 
+             data-provider="${rank.name}" 
+             data-score="${rank.weighted_score}"
+             data-index="${index}">
+          <div class="provider-card-header">
+            <div class="provider-name">${rank.name || 'Unknown'}</div>
+            <div class="provider-type-icon">${getProviderIcon(rank.name)}</div>
+          </div>
+          <div class="provider-status">
+            <div class="provider-status-dot online"></div>
+            <span>${rank.runtime || 'Available'}</span>
+          </div>
+          <div class="provider-metrics">
+            <div class="provider-metric">
+              <div class="provider-metric-label">Score</div>
+              <div class="provider-metric-value score">${rank.weighted_score ? rank.weighted_score.toFixed(1) + '%' : 'N/A'}</div>
+              <div class="provider-score-bar">
+                <div class="provider-score-fill ${scoreClass}" style="width: ${rank.weighted_score || 0}%"></div>
+              </div>
+            </div>
+            <div class="provider-metric">
+              <div class="provider-metric-label">Latency</div>
+              <div class="provider-metric-value latency">${latencyDisplay}</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    // Add click handlers
+    list.querySelectorAll('.provider-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const providerName = card.dataset.provider;
+        const index = parseInt(card.dataset.index);
+        selectProviderByName(providerName, rankings[index]);
+      });
+    });
+
+    // Show panel
+    panel.classList.add('visible');
+
+    // Auto-select recommended provider
+    if (rankings.length > 0 && !selectedProvider) {
+      selectProviderByName(rankings[0].name, rankings[0]);
+    }
+  }
+
+  // Select a specific provider
+  function selectProviderByName(name, rankData) {
+    selectedProvider = name;
+
+    // Update UI
+    document.querySelectorAll('.provider-card').forEach(card => {
+      card.classList.toggle('selected', card.dataset.provider === name);
+    });
+
+    // Show details for selected provider
+    const detail = document.getElementById('providerDetail');
+    if (detail && rankData) {
+      detail.classList.add('visible');
+      detail.innerHTML = `
+        <div class="provider-detail-title">${name} - Detailed Analysis</div>
+        <div class="provider-dimensions">
+          <div class="provider-dimension">
+            <div class="provider-dimension-label">Runtime</div>
+            <div class="provider-dimension-bar">
+              <div class="provider-dimension-fill runtime" style="width: ${(rankData.runtime || 0) * 20}%"></div>
+            </div>
+            <div class="provider-dimension-value">${(rankData.runtime || 0).toFixed(2)}</div>
+          </div>
+          <div class="provider-dimension">
+            <div class="provider-dimension-label">Stability</div>
+            <div class="provider-dimension-bar">
+              <div class="provider-dimension-fill stability" style="width: ${(rankData.stability || 0) * 20}%"></div>
+            </div>
+            <div class="provider-dimension-value">${(rankData.stability || 0).toFixed(2)}</div>
+          </div>
+          <div class="provider-dimension">
+            <div class="provider-dimension-label">Quality</div>
+            <div class="provider-dimension-bar">
+              <div class="provider-dimension-fill quality" style="width: ${(rankData.quality_score || 0) * 20}%"></div>
+            </div>
+            <div class="provider-dimension-value">${(rankData.quality_score || 0).toFixed(2)}</div>
+          </div>
+          <div class="provider-dimension">
+            <div class="provider-dimension-label">Score</div>
+            <div class="provider-dimension-bar">
+              <div class="provider-dimension-fill runtime" style="width: ${rankData.weighted_score || 0}%"></div>
+            </div>
+            <div class="provider-dimension-value">${(rankData.weighted_score || 0).toFixed(1)}%</div>
+          </div>
+        </div>
+        ${rankData.reasons && rankData.reasons.length > 0 ? `
+          <div class="provider-reasons">
+            ${rankData.reasons.map(r => `
+              <div class="provider-reason">
+                <svg class="provider-reason-icon" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span>${r}</span>
+              </div>
+            `).join('')}
+          </div>
+        ` : ''}
+        ${rankData.warnings && rankData.warnings.length > 0 ? `
+          <div class="provider-warning">
+            <svg class="provider-warning-icon" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1L11 10H1L6 1z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M6 4v3M6 8.5v.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+            <span>${rankData.warnings.join(' ')}</span>
+          </div>
+        ` : ''}
+      `;
+    }
+
+    // Update generate button text to show selected provider
+    updateGenerateBtnWithProvider(name, rankData?.weighted_score);
+
+    // Auto-proceed with generation after selection (if panel is visible)
+    const panel = document.getElementById('providerPanel');
+    if (panel && panel.classList.contains('visible') && !genBtn.classList.contains('loading')) {
+      const hint = document.getElementById('providerSelectionHint');
+      if (hint) hint.classList.add('hidden');
+      
+      const token = localStorage.getItem('mv_token');
+      const prompt = promptInput?.value?.trim() || '';
+      const ratio = document.querySelector('.control-chip[data-ratio].active')?.dataset?.ratio || '16:9';
+      const duration = parseInt(document.querySelector('.control-chip[data-duration].active')?.dataset?.duration || '5');
+      
+      proceedWithGeneration(token, prompt, ratio, duration);
+    }
+  }
+
+  // Update generate button to show selected provider
+  function updateGenerateBtnWithProvider(providerName, score) {
+    const genBtn = document.getElementById('generateBtn');
+    if (!genBtn) return;
+
+    const scoreDisplay = score ? ` (${score.toFixed(0)}%)` : '';
+    genBtn.querySelector('.btn-text').innerHTML = `
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 3L7 9M7 9L3 13M7 9L11 5M7 9L3 5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+      Generate with ${providerName}${scoreDisplay}
+    `;
+  }
+
+  // Hide provider panel
+  function hideProviderPanel() {
+    const panel = document.getElementById('providerPanel');
+    const hint = document.getElementById('providerSelectionHint');
+    if (panel) panel.classList.remove('visible');
+    if (hint) hint.classList.add('hidden');
+  }
+
+  // Reset provider selection
+  function resetProviderSelection() {
+    selectedProvider = null;
+    providerRankings = [];
+    hideProviderPanel();
+    const genBtn = document.getElementById('generateBtn');
+    if (genBtn) {
+      genBtn.querySelector('.btn-text').innerHTML = `
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 3L7 9M7 9L3 13M7 9L11 5M7 9L3 5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Generate
+      `;
+    }
+  }
+
+  // Close provider panel button handler
+  const providerPanelClose = document.getElementById('providerPanelClose');
+  if (providerPanelClose) {
+    providerPanelClose.addEventListener('click', hideProviderPanel);
+  }
+
+  // Poll provider health and update status indicators
+  async function pollProviderHealth() {
+    const health = await fetchProviderHealth();
+    const navHealth = document.getElementById('navProviderHealth');
+    const navHealthText = document.getElementById('navProviderHealthText');
+    
+    if (health) {
+      // Update navigation bar health indicator
+      const onlineCount = Object.values(health).filter(p => p.status === 'online').length;
+      const totalCount = Object.values(health).length;
+      
+      if (navHealthText) {
+        navHealthText.textContent = `${onlineCount}/${totalCount} Providers`;
+      }
+      
+      // Determine overall status
+      const hasOffline = Object.values(health).some(p => p.status === 'offline');
+      const hasDegraded = Object.values(health).some(p => p.status === 'degraded');
+      
+      const navDot = navHealth?.querySelector('.provider-health-dot');
+      if (navDot) {
+        navDot.className = 'provider-health-dot ' + (hasOffline ? 'offline' : hasDegraded ? 'degraded' : 'online');
+      }
+      
+      // Update health indicators in provider cards
+      document.querySelectorAll('.provider-card').forEach(card => {
+        const providerName = card.dataset.provider;
+        const providerHealth = health[providerName] || health[providerName?.toLowerCase()];
+        if (providerHealth) {
+          const statusDot = card.querySelector('.provider-status-dot');
+          if (statusDot) {
+            statusDot.className = 'provider-status-dot ' + 
+              (providerHealth.status === 'online' ? 'online' : 
+               providerHealth.status === 'degraded' ? 'degraded' : 'offline');
+          }
+        }
+      });
+    } else {
+      // API unavailable
+      if (navHealthText) {
+        navHealthText.textContent = 'Providers Unavailable';
+      }
+      const navDot = navHealth?.querySelector('.provider-health-dot');
+      if (navDot) {
+        navDot.className = 'provider-health-dot offline';
+      }
+    }
+  }
+
+  // Start health polling
+  function startHealthPolling() {
+    pollProviderHealth();
+    if (!healthCheckInterval) {
+      healthCheckInterval = setInterval(pollProviderHealth, 30000); // Poll every 30 seconds
+    }
+  }
+
+  function stopHealthPolling() {
+    if (healthCheckInterval) {
+      clearInterval(healthCheckInterval);
+      healthCheckInterval = null;
+    }
+  }
+
+  // Initialize provider panel on page load
+  (async function initProviderPanel() {
+    await fetchProviders();
+    startHealthPolling();
+  })();
   
   loginBtn?.addEventListener('click', (e) => {
     e.preventDefault();
@@ -2752,7 +3463,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   })();
   
   // ── Video Generation (Real API) ──
-  const genBtn = document.getElementById('generateBtn');
+  genBtn = document.getElementById('generateBtn');
   const promptInput = document.getElementById('promptInput');
   let currentTaskId = null;
   let pollInterval = null;
@@ -2913,82 +3624,149 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 
       console.log('Starting video generation:', { prompt, ratio, duration, model: selectedModel });
 
+      // Show loading state
       genBtn.classList.add('loading');
-      genBtn.querySelector('.btn-text').innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 3L7 9M7 9L3 13M7 9L11 5M7 9L3 5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg> Generating...';
+      const hint = document.getElementById('providerSelectionHint');
+      if (hint) {
+        hint.classList.remove('hidden');
+        hint.querySelector('span').textContent = 'Analyzing prompt to find best provider...';
+      }
 
-      // Show generation animation
-      showGenAnimation(prompt);
-
+      // Step 1: Call /select-provider to get scoring rankings
       try {
-        const requestBody = { prompt, ratio, duration, model: selectedModel === 'fast' ? 'fast' : undefined };
-        if (uploadedImageBase64) {
-          requestBody.reference_image = uploadedImageBase64;
-        }
-
-        console.log('Sending generation request:', requestBody);
-
-        const res = await fetch(API_BASE + '/api/v1/video/generate', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token
-          },
-          body: JSON.stringify(requestBody)
-        });
-
-        const data = await res.json();
-        console.log('Generation response:', { status: res.status, data });
-
-        if (!res.ok) {
-          let errorMsg = data.detail || data.message || 'Generation failed';
-
-          if (res.status === 401) {
-            errorMsg = 'Session expired. Please sign in again.';
-            localStorage.removeItem('mv_token');
-            localStorage.removeItem('mv_user');
-            setTimeout(() => {
-              authOverlay.style.display = 'flex';
-            }, 1500);
-          } else if (res.status === 402) {
-            errorMsg = 'Insufficient tokens. Please purchase more tokens to continue.';
-          } else if (res.status === 429) {
-            errorMsg = 'Too many requests. Please wait a moment and try again.';
-          } else if (res.status >= 500) {
-            errorMsg = 'Server error. Please try again later.';
+        const selectData = await selectBestProvider(prompt, ratio, duration, uploadedImageBase64 ? 'image' : null);
+        
+        if (selectData && selectData.rankings && selectData.rankings.length > 0) {
+          // Show provider selection panel
+          showProviderPanel(selectData.rankings, selectData.task_context);
+          
+          // Update hint with recommended provider
+          const recommended = selectData.rankings[0];
+          if (hint) {
+            hint.innerHTML = `
+              <div class="spinner"></div>
+              <span>Recommended: <strong>${recommended.name}</strong> (${recommended.weighted_score?.toFixed(0)}%)</span>
+            `;
           }
-
-          console.error('Generation failed:', errorMsg);
-          alert(errorMsg);
-          hideGenAnimation();
-          genBtn.classList.remove('loading');
-          genBtn.querySelector('.btn-text').innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 3L7 9M7 9L3 13M7 9L11 5M7 9L3 5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg> Generate';
-          return;
+          
+          // If user already has a selection, proceed immediately
+          if (selectedProvider) {
+            if (hint) hint.classList.add('hidden');
+            await proceedWithGeneration(token, prompt, ratio, duration);
+          }
+          // Otherwise wait for user to select (handled by provider card click)
+        } else {
+          // No provider data, proceed with default
+          if (hint) hint.classList.add('hidden');
+          await proceedWithGeneration(token, prompt, ratio, duration);
         }
-
-        if (!data.task_id) {
-          console.error('No task_id in response:', data);
-          alert('Generation failed: Invalid server response');
-          hideGenAnimation();
-          genBtn.classList.remove('loading');
-          genBtn.querySelector('.btn-text').innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 3L7 9M7 9L3 13M7 9L11 5M7 9L3 5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg> Generate';
-          return;
-        }
-
-        currentTaskId = data.task_id;
-        console.log('Task started:', currentTaskId);
-        updateGenStatus('Sending to AI model...', 10);
-        startPolling(data.task_id);
       } catch (err) {
-        console.error('Generate error:', err);
-        const errorMsg = err.name === 'AbortError'
-          ? 'Request timed out. Please check your connection and try again.'
-          : 'Connection error. Please check your internet connection and try again.';
-        alert(errorMsg);
-        hideGenAnimation();
-        genBtn.classList.remove('loading');
-        genBtn.querySelector('.btn-text').innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 3L7 9M7 9L3 13M7 9L11 5M7 9L3 5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg> Generate';
+        console.warn('Provider selection failed, proceeding with default:', err);
+        if (hint) hint.classList.add('hidden');
+        await proceedWithGeneration(token, prompt, ratio, duration);
       }
     });
+  }
+
+  // Proceed with generation after provider selection
+  async function proceedWithGeneration(token, prompt, ratio, duration) {
+    const genBtn = document.getElementById('generateBtn');
+    if (!genBtn) return;
+
+    // Update button state
+    genBtn.classList.add('loading');
+    const providerText = selectedProvider ? ` with ${selectedProvider}` : '';
+    genBtn.querySelector('.btn-text').innerHTML = `
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 3L7 9M7 9L3 13M7 9L11 5M7 9L3 5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+      Generating${providerText}...
+    `;
+
+    // Show generation animation
+    showGenAnimation(prompt);
+
+    try {
+      // Build request body with preferred_provider
+      const requestBody = { 
+        prompt, 
+        ratio, 
+        duration, 
+        model: selectedModel === 'fast' ? 'fast' : undefined 
+      };
+      
+      // Add preferred_provider if selected
+      if (selectedProvider) {
+        requestBody.preferred_provider = selectedProvider;
+      }
+      
+      if (uploadedImageBase64) {
+        requestBody.reference_image = uploadedImageBase64;
+      }
+
+      console.log('Sending generation request:', requestBody);
+
+      const res = await fetch(API_BASE + '/api/v1/video/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify(requestBody)
+      });
+
+      const data = await res.json();
+      console.log('Generation response:', { status: res.status, data });
+
+      if (!res.ok) {
+        let errorMsg = data.detail || data.message || 'Generation failed';
+
+        if (res.status === 401) {
+          errorMsg = 'Session expired. Please sign in again.';
+          localStorage.removeItem('mv_token');
+          localStorage.removeItem('mv_user');
+          setTimeout(() => {
+            authOverlay.style.display = 'flex';
+          }, 1500);
+        } else if (res.status === 402) {
+          errorMsg = 'Insufficient tokens. Please purchase more tokens to continue.';
+        } else if (res.status === 429) {
+          errorMsg = 'Too many requests. Please wait a moment and try again.';
+        } else if (res.status >= 500) {
+          errorMsg = 'Server error. Please try again later.';
+        }
+
+        console.error('Generation failed:', errorMsg);
+        alert(errorMsg);
+        hideGenAnimation();
+        resetProviderSelection();
+        return;
+      }
+
+      if (!data.task_id) {
+        console.error('No task_id in response:', data);
+        alert('Generation failed: Invalid server response');
+        hideGenAnimation();
+        resetProviderSelection();
+        return;
+      }
+
+      // Update generation status with provider info
+      const recommended = providerRankings.find(r => r.name === selectedProvider);
+      if (recommended) {
+        updateGenStatus(`Provider: ${selectedProvider} (${recommended.weighted_score?.toFixed(0)}%) | Generating...`, 15);
+      } else {
+        updateGenStatus('Sending to AI model...', 10);
+      }
+
+      startPolling(data.task_id);
+    } catch (err) {
+      console.error('Generate error:', err);
+      const errorMsg = err.name === 'AbortError'
+        ? 'Request timed out. Please check your connection and try again.'
+        : 'Connection error. Please check your internet connection and try again.';
+      alert(errorMsg);
+      hideGenAnimation();
+      resetProviderSelection();
+    }
   }
   
   // ── Generation Animation Functions ──
@@ -3131,6 +3909,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
           // Brief celebration pause then show result
           setTimeout(() => {
             hideGenAnimation();
+            resetProviderSelection(); // Reset provider selection for next generation
             genBtn.classList.remove('loading');
             genBtn.querySelector('.btn-text').innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 3L7 9M7 9L3 13M7 9L11 5M7 9L3 5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg> Generate';
 
