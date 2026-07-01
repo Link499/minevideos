@@ -2312,13 +2312,7 @@ body {
           <h3>Creative Chain</h3>
           <p>Every video sparks the next. Interactive choices during generation automatically compose your next prompt — an infinite creation flywheel.</p>
         </div>
-        <div class="feature-card glass">
-          <div class="feature-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M8 12l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-          <h3>Interactive Wait</h3>
-          <p>No more staring at a progress bar. Answer style questions while your video generates — your choices shape the next creation.</p>
-        </div>
+
         <div class="feature-card glass">
           <div class="feature-icon">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" stroke-width="2"/><path d="M8 21h8M12 17v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -3512,6 +3506,8 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   
   let currentQuizIndex = 0;
   let quizSelections = [];
+  let questionsAnswered = 0;
+  const MAX_QUESTIONS = 3;
   let lastVideoUrl = null;
   let nextGenQueued = false;
   
@@ -3563,10 +3559,15 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         
         // Record selection
         quizSelections.push(btn.dataset.value);
+        questionsAnswered++;
+        
+        // Stop auto-rotation once user starts answering
+        const quizEl = document.getElementById('genQuiz');
+        if (quizEl && quizEl._rotateTimer) { clearInterval(quizEl._rotateTimer); quizEl._rotateTimer = null; }
         
         // Update queue text
         const queueText = document.getElementById('genQuizQueueText');
-        if (queueText) queueText.textContent = `Queued! ${quizSelections.length} style choice${quizSelections.length > 1 ? 's' : ''} applied`;
+        if (queueText) queueText.textContent = `Queued! ${quizSelections.length}/${MAX_QUESTIONS} style choices`;
         
         // Queue next generation
         if (!nextGenQueued) {
@@ -3575,11 +3576,18 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
           if (queueEl) queueEl.classList.add('active');
         }
         
-        // After 2s, show next question
-        setTimeout(() => {
-          currentQuizIndex = (currentQuizIndex + 1) % quizQuestions.length;
-          renderQuizQuestion(currentQuizIndex);
-        }, 2000);
+        // After 3 answers, show summary instead of next question
+        if (questionsAnswered >= MAX_QUESTIONS) {
+          setTimeout(() => {
+            showQuizSummary();
+          }, 1500);
+        } else {
+          // After 2s, show next question
+          setTimeout(() => {
+            currentQuizIndex = (currentQuizIndex + 1) % quizQuestions.length;
+            renderQuizQuestion(currentQuizIndex);
+          }, 2000);
+        }
       });
     });
   }
@@ -3594,10 +3602,48 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     if (queueEl) queueEl.classList.remove('active');
   }
   
+  function showQuizSummary() {
+    // Stop rotation timer
+    const quiz = document.getElementById('genQuiz');
+    if (quiz && quiz._rotateTimer) { clearInterval(quiz._rotateTimer); quiz._rotateTimer = null; }
+    
+    const questionEl = document.getElementById('genQuizQuestion');
+    const optionsEl = document.getElementById('genQuizOptions');
+    if (!questionEl || !optionsEl) return;
+    
+    // Build summary
+    const styleTags = quizSelections.map(s => {
+      // Extract the key descriptive words from each selection value
+      return s.split(' ').filter(w => w.length > 3).slice(0, 3).join(' ');
+    });
+    
+    questionEl.innerHTML = `<span style="color: #00E676;">✓</span> Your style profile is ready!`;
+    optionsEl.innerHTML = `
+      <div class="gen-quiz-summary" style="padding: 12px 0; display: flex; flex-wrap: wrap; gap: 8px;">
+        ${styleTags.map(t => `<span class="summary-tag" style="
+          background: rgba(139, 92, 246, 0.15);
+          border: 1px solid rgba(139, 92, 246, 0.3);
+          border-radius: 20px;
+          padding: 6px 14px;
+          font-size: 13px;
+          color: #cdd6f4;
+          text-transform: capitalize;
+        ">${t}</span>`).join('')}
+      </div>
+      <div style="font-size: 12px; color: #6c7086; margin-top: 4px;">
+        These tags will be added to your next video prompt.
+      </div>
+    `;
+  }
+  
   function buildNextPrompt(originalPrompt) {
     let nextPrompt = originalPrompt || 'A beautiful scene';
     if (quizSelections.length > 0) {
-      nextPrompt += ', ' + quizSelections.join(', ');
+      // Build concise style tags from quiz selections
+      const styleTags = quizSelections.map(s => {
+        return s.split(' ').filter(w => w.length > 3).slice(0, 3).join(' ');
+      });
+      nextPrompt += ', ' + styleTags.join(', ');
     }
     return nextPrompt;
   }
@@ -3827,8 +3873,9 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     // Update prompt input to show what's being generated
     if (promptInput) promptInput.value = nextPrompt;
     
-    // Reset quiz selections
+    // Reset quiz state
     quizSelections = [];
+    questionsAnswered = 0;
     
     // Trigger generation
     genBtn.click();
