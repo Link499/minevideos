@@ -1634,6 +1634,600 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+/* ═══════════════════════════════════════════════
+   需求进度条
+   ═══════════════════════════════════════════════ */
+.requirement-progress {
+  padding: 12px 24px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.progress-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.progress-title {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ctp-overlay1);
+}
+
+.progress-count {
+  font-size: 10px;
+  color: var(--ctp-mauve);
+  font-weight: 500;
+}
+
+.progress-bar-track {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--ctp-mauve), var(--ctp-blue));
+  border-radius: 2px;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 0%;
+}
+
+.progress-dims {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.progress-dim {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-size: 10px;
+  color: var(--ctp-overlay1);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: all 0.3s var(--transition);
+}
+
+.progress-dim.done {
+  color: var(--ctp-green);
+  background: rgba(166, 227, 161, 0.1);
+  border-color: rgba(166, 227, 161, 0.25);
+}
+
+.progress-dim-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--ctp-surface2);
+  transition: all 0.3s var(--transition);
+}
+
+.progress-dim.done .progress-dim-dot {
+  background: var(--ctp-green);
+  box-shadow: 0 0 4px var(--ctp-green);
+}
+
+.generate-creative-btn {
+  margin-top: 12px;
+  width: 100%;
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--ctp-mauve), var(--ctp-blue));
+  border: none;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s var(--transition);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  animation: creativeBtnPulse 2s ease-in-out infinite;
+}
+
+.generate-creative-btn:hover {
+  box-shadow: 0 4px 20px var(--accent-glow);
+  transform: translateY(-1px);
+}
+
+.generate-creative-btn.show {
+  display: flex;
+}
+
+@keyframes creativeBtnPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(203, 164, 247, 0); }
+  50% { box-shadow: 0 0 16px 2px rgba(203, 164, 247, 0.25); }
+}
+
+/* ═══════════════════════════════════════════════
+   分镜画板 (Col 4 独立模块)
+   ═══════════════════════════════════════════════ */
+.storyboard-board {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.storyboard-board-header {
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.storyboard-board-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ctp-text);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.storyboard-board-title::before {
+  content: '';
+  display: inline-block;
+  width: 3px;
+  height: 14px;
+  background: linear-gradient(180deg, var(--ctp-mauve), var(--ctp-blue));
+  border-radius: 2px;
+}
+
+.storyboard-board-count {
+  font-size: 10px;
+  color: var(--ctp-overlay1);
+  padding: 2px 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 10px;
+}
+
+.storyboard-card-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sb-card {
+  background: rgba(30, 30, 46, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: sbCardSlideIn 0.4s var(--transition) both;
+}
+
+.sb-card:nth-child(1) { animation-delay: 0s; }
+.sb-card:nth-child(2) { animation-delay: 0.08s; }
+.sb-card:nth-child(3) { animation-delay: 0.16s; }
+.sb-card:nth-child(4) { animation-delay: 0.24s; }
+.sb-card:nth-child(5) { animation-delay: 0.32s; }
+.sb-card:nth-child(6) { animation-delay: 0.40s; }
+
+@keyframes sbCardSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sb-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(203, 164, 247, 0.25);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3), 0 0 16px rgba(203, 164, 247, 0.08);
+}
+
+.sb-card-top {
+  display: flex;
+  gap: 0;
+}
+
+.sb-card-thumb {
+  width: 100px;
+  min-height: 68px;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(137, 180, 250, 0.1));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.sb-card-thumb-icon {
+  font-size: 22px;
+  opacity: 0.4;
+}
+
+.sb-card-number {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  font-size: 9px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sb-card-body {
+  flex: 1;
+  padding: 8px 10px;
+  min-width: 0;
+}
+
+.sb-card-scene {
+  font-size: 11px;
+  color: var(--ctp-text);
+  line-height: 1.5;
+  margin-bottom: 6px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.sb-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.sb-card-tag {
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: 500;
+}
+
+.sb-card-tag.camera {
+  background: rgba(137, 180, 250, 0.15);
+  color: var(--ctp-blue);
+}
+
+.sb-card-tag.duration {
+  background: rgba(249, 226, 175, 0.12);
+  color: var(--ctp-yellow);
+}
+
+.sb-card-narration {
+  padding: 8px 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  font-size: 10px;
+  color: var(--ctp-overlay1);
+  line-height: 1.5;
+  font-style: italic;
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.sb-card-narration::before {
+  content: '🎙';
+  font-size: 9px;
+  flex-shrink: 0;
+  font-style: normal;
+}
+
+.sb-card-edit {
+  padding: 6px 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.sb-card-edit-btn {
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 10px;
+  color: var(--ctp-subtext0);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  transition: all 0.2s var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.sb-card-edit-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--ctp-text);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.sb-card-edit-btn svg {
+  width: 10px;
+  height: 10px;
+}
+
+/* Storyboard Board Empty State */
+.sb-board-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.sb-board-empty-icon {
+  font-size: 36px;
+  opacity: 0.3;
+  margin-bottom: 12px;
+}
+
+.sb-board-empty-text {
+  font-size: 12px;
+  color: var(--ctp-overlay1);
+  line-height: 1.6;
+}
+
+/* Storyboard Board Bottom Actions */
+.sb-board-actions {
+  padding: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(24, 24, 37, 0.8);
+  backdrop-filter: blur(12px);
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sb-board-actions.show {
+  display: flex;
+}
+
+.sb-action-btn {
+  width: 100%;
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.sb-action-btn.primary {
+  background: linear-gradient(135deg, var(--ctp-mauve), #9d7cd8);
+  border: none;
+  color: white;
+}
+
+.sb-action-btn.primary:hover {
+  box-shadow: 0 4px 16px var(--accent-glow);
+  transform: translateY(-1px);
+}
+
+.sb-action-btn.secondary {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--ctp-subtext1);
+}
+
+.sb-action-btn.secondary:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.sb-action-btn.ghost {
+  background: transparent;
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  color: var(--ctp-overlay1);
+}
+
+.sb-action-btn.ghost:hover {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--ctp-subtext0);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* 4K Render Progress Overlay */
+.sb-render-progress {
+  padding: 16px;
+  background: rgba(203, 164, 247, 0.06);
+  border: 1px solid rgba(203, 164, 247, 0.15);
+  border-radius: var(--radius-md);
+  margin: 12px;
+  display: none;
+}
+
+.sb-render-progress.show {
+  display: block;
+}
+
+.sb-render-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ctp-mauve);
+}
+
+.sb-render-header .spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(203, 164, 247, 0.2);
+  border-top-color: var(--ctp-mauve);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.sb-render-bar-track {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+
+.sb-render-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--ctp-mauve), var(--ctp-blue));
+  border-radius: 2px;
+  transition: width 0.4s ease;
+  width: 0%;
+}
+
+.sb-render-status {
+  font-size: 10px;
+  color: var(--ctp-overlay1);
+}
+
+/* Edit modal for storyboard card */
+.sb-edit-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.sb-edit-overlay.show {
+  display: flex;
+}
+
+.sb-edit-modal {
+  width: 420px;
+  max-width: 90vw;
+  background: var(--ctp-base);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5);
+}
+
+.sb-edit-modal-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ctp-text);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sb-edit-modal-title::before {
+  content: '';
+  display: inline-block;
+  width: 3px;
+  height: 16px;
+  background: var(--ctp-mauve);
+  border-radius: 2px;
+}
+
+.sb-edit-field {
+  margin-bottom: 12px;
+}
+
+.sb-edit-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ctp-overlay1);
+  margin-bottom: 4px;
+}
+
+.sb-edit-input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  color: var(--ctp-text);
+  font-size: 12px;
+  font-family: var(--font-family);
+  outline: none;
+  resize: vertical;
+}
+
+.sb-edit-input:focus {
+  border-color: rgba(139, 92, 246, 0.4);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+.sb-edit-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.sb-edit-actions button {
+  flex: 1;
+  padding: 8px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s var(--transition);
+}
+
+.sb-edit-save {
+  background: linear-gradient(135deg, var(--ctp-mauve), #9d7cd8);
+  border: none;
+  color: white;
+}
+
+.sb-edit-cancel {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--ctp-subtext1);
+}
+
+/* Chat message fade in for new messages */
+@keyframes chatFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.message.ai, .message.user {
+  animation: chatFadeIn 0.35s var(--transition);
+}
+
 </style>
 </head>
 <body>
@@ -1732,6 +2326,43 @@ body {
     <div class="conversation-header">
       <div class="conversation-title" id="conversationTitle">智能对话式需求挖掘</div>
       <div class="conversation-subtitle">AI 将逐步引导你完善视频需求</div>
+    </div>
+    
+    <!-- 需求进度条 -->
+    <div class="requirement-progress" id="reqProgress">
+      <div class="progress-header">
+        <span class="progress-title">需求收集进度</span>
+        <span class="progress-count" id="progressCount">0/5</span>
+      </div>
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill" id="progressBarFill"></div>
+      </div>
+      <div class="progress-dims" id="progressDims">
+        <div class="progress-dim" data-dim="product">
+          <span class="progress-dim-dot"></span>
+          产品描述
+        </div>
+        <div class="progress-dim" data-dim="audience">
+          <span class="progress-dim-dot"></span>
+          目标受众
+        </div>
+        <div class="progress-dim" data-dim="style">
+          <span class="progress-dim-dot"></span>
+          风格偏好
+        </div>
+        <div class="progress-dim" data-dim="display">
+          <span class="progress-dim-dot"></span>
+          展示方式
+        </div>
+        <div class="progress-dim" data-dim="duration">
+          <span class="progress-dim-dot"></span>
+          时长要求
+        </div>
+      </div>
+      <button class="generate-creative-btn" id="generateCreativeBtn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        ✨ 生成创意方案
+      </button>
     </div>
     
     <div class="message-area" id="messageArea">
@@ -1880,59 +2511,55 @@ body {
         </div>
       </div>
       
-      <!-- Storyboard Tab -->
-      <div class="tab-panel" id="tab-storyboard">
-        <div class="empty-state" id="storyboardEmpty">
-          <div class="empty-state-text">确认文案后生成分镜画板</div>
-        </div>
-        
-        <div class="storyboard-grid" id="storyboardContent" style="display: none;">
-          <div class="storyboard-card">
-            <div class="storyboard-thumb"></div>
-            <div class="storyboard-info">
-              <div class="storyboard-scene">清晨办公室环境，特写咖啡杯</div>
-              <div class="storyboard-meta">
-                <span>3s</span>
-                <span>推进</span>
-              </div>
+      <!-- Storyboard Tab — 分镜画板 -->
+      <div class="tab-panel active" id="tab-storyboard">
+        <div class="storyboard-board" id="storyboardBoard">
+          <div class="storyboard-board-header">
+            <span class="storyboard-board-title">分镜画板</span>
+            <span class="storyboard-board-count" id="sbBoardCount">0 个分镜</span>
+          </div>
+          
+          <!-- Empty State -->
+          <div class="sb-board-empty" id="sbBoardEmpty">
+            <div class="sb-board-empty-icon">🎬</div>
+            <div class="sb-board-empty-text">
+              完成需求对话后<br>将自动生成分镜画板
             </div>
           </div>
           
-          <div class="storyboard-card">
-            <div class="storyboard-thumb"></div>
-            <div class="storyboard-info">
-              <div class="storyboard-scene">产品展示，双层结构演示</div>
-              <div class="storyboard-meta">
-                <span>4s</span>
-                <span>环绕</span>
-              </div>
+          <!-- Card List (dynamically rendered) -->
+          <div class="storyboard-card-list" id="sbCardList" style="display: none;"></div>
+          
+          <!-- 4K Render Progress -->
+          <div class="sb-render-progress" id="sbRenderProgress">
+            <div class="sb-render-header">
+              <div class="spinner"></div>
+              <span>正在生成 4K 画板...</span>
             </div>
+            <div class="sb-render-bar-track">
+              <div class="sb-render-bar-fill" id="sbRenderFill"></div>
+            </div>
+            <div class="sb-render-status" id="sbRenderStatus">准备中...</div>
           </div>
           
-          <div class="storyboard-card">
-            <div class="storyboard-thumb"></div>
-            <div class="storyboard-info">
-              <div class="storyboard-scene">户外露营场景，阳光明媚</div>
-              <div class="storyboard-meta">
-                <span>5s</span>
-                <span>航拍</span>
-              </div>
-            </div>
-          </div>
-          
-          <div class="storyboard-card">
-            <div class="storyboard-thumb"></div>
-            <div class="storyboard-info">
-              <div class="storyboard-scene">人物使用产品特写</div>
-              <div class="storyboard-meta">
-                <span>3s</span>
-                <span>跟拍</span>
-              </div>
+          <!-- Bottom Actions -->
+          <div class="sb-board-actions" id="sbBoardActions">
+            <button class="sb-action-btn primary" id="sbConfirmBtn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+              确认分镜，生成 4K 画板
+            </button>
+            <div style="display:flex;gap:8px;">
+              <button class="sb-action-btn secondary" id="sbAdjustBtn" style="flex:1;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                调整分镜
+              </button>
+              <button class="sb-action-btn ghost" id="sbRegenBtn" style="flex:1;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                重新生成
+              </button>
             </div>
           </div>
         </div>
-        
-        <button class="confirm-btn" id="confirmStoryBtn" style="display: none; margin-top: 16px;">确认分镜，开始生成视频</button>
       </div>
       
       <!-- Video Tab -->
@@ -2831,7 +3458,411 @@ if (originalConfirmCopy) {
 document.addEventListener('DOMContentLoaded', () => {
   initArtStyleCards();
 });
+
+// ═══════════════════════════════════════════════
+// USE_MOCK 开关 + API 接口函数
+// ═══════════════════════════════════════════════
+
+const USE_MOCK = true; // ← 切换 mock/真实 API
+
+/**
+ * 发送 Brainstorm 对话消息（SSE 流式）
+ * POST /api/v1/brainstorm/chat
+ */
+async function sendBrainstormMessage(message, context) {
+  if (USE_MOCK) return null; // mock 模式不调用 API
+  
+  const response = await fetch('/api/v1/brainstorm/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      message: message,
+      context: context || {},
+      session_id: brainstormSessionId
+    })
+  });
+  
+  if (!response.ok) throw new Error(`Brainstorm API error: ${response.status}`);
+  
+  // SSE stream reading
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let fullText = '';
+  
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    const chunk = decoder.decode(value, { stream: true });
+    const lines = chunk.split('\n');
+    for (const line of lines) {
+      if (line.startsWith('data: ')) {
+        const data = JSON.parse(line.slice(6));
+        if (data.type === 'delta' && data.text) {
+          fullText += data.text;
+        } else if (data.type === 'done') {
+          return { text: fullText, suggestions: data.suggestions || [] };
+        }
+      }
+    }
+  }
+  return { text: fullText, suggestions: [] };
+}
+
+/**
+ * 生成分镜
+ * POST /api/v1/storyboard/generate
+ */
+async function generateStoryboard(requirements) {
+  if (USE_MOCK) return getMockStoryboardData();
+  
+  const response = await fetch('/api/v1/storyboard/generate', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      requirements: requirements,
+      style: selectedArtStyle || 'cinematic'
+    })
+  });
+  
+  if (!response.ok) throw new Error(`Storyboard API error: ${response.status}`);
+  return await response.json();
+}
+
+// ═══════════════════════════════════════════════
+// 需求进度追踪
+// ═══════════════════════════════════════════════
+
+const reqDims = ['product', 'audience', 'style', 'display', 'duration'];
+const reqDimLabels = {
+  product: '产品描述', audience: '目标受众', style: '风格偏好',
+  display: '展示方式', duration: '时长要求'
+};
+let reqProgress = {};
+
+function updateReqProgress(dimKey) {
+  reqProgress[dimKey] = true;
+  
+  // Update dim pills
+  document.querySelectorAll('.progress-dim').forEach(el => {
+    const dim = el.dataset.dim;
+    if (reqProgress[dim]) {
+      el.classList.add('done');
+    }
+  });
+  
+  // Update count & bar
+  const done = reqDims.filter(d => reqProgress[d]).length;
+  document.getElementById('progressCount').textContent = `${done}/${reqDims.length}`;
+  document.getElementById('progressBarFill').style.width = `${(done / reqDims.length) * 100}%`;
+  
+  // Show creative button when all done
+  if (done >= reqDims.length) {
+    document.getElementById('generateCreativeBtn').classList.add('show');
+  }
+}
+
+function resetReqProgress() {
+  reqProgress = {};
+  document.querySelectorAll('.progress-dim').forEach(el => el.classList.remove('done'));
+  document.getElementById('progressCount').textContent = `0/${reqDims.length}`;
+  document.getElementById('progressBarFill').style.width = '0%';
+  document.getElementById('generateCreativeBtn').classList.remove('show');
+}
+
+// ═══════════════════════════════════════════════
+// 分镜画板状态 & 渲染
+// ═══════════════════════════════════════════════
+
+let storyboardData = [];
+let editingSbIndex = -1;
+const brainstormSessionId = 'session_' + Date.now();
+
+function getMockStoryboardData() {
+  return {
+    storyboards: [
+      {
+        id: 1,
+        scene: '清晨阳光透过落地窗洒入办公室，一杯热气腾腾的咖啡置于桌面，保温杯在旁',
+        camera: '推进',
+        duration: 3,
+        narration: '清晨的第一缕阳光，从一杯温暖的咖啡开始...'
+      },
+      {
+        id: 2,
+        scene: '保温杯360°旋转展示，双层真空结构剖面动画，蒸汽粒子特效',
+        camera: '环绕',
+        duration: 4,
+        narration: '双层真空技术，12小时长效锁温，让温暖不再流失'
+      },
+      {
+        id: 3,
+        scene: '户外露营场景，年轻人从背包中取出保温杯，倒出热气腾腾的茶水',
+        camera: '跟拍',
+        duration: 5,
+        narration: '无论是山野徒步还是城市漫步，温暖始终相伴'
+      },
+      {
+        id: 4,
+        scene: '产品特写：手掌握住杯身，指纹质感与磨砂工艺清晰可见',
+        camera: '特写',
+        duration: 3,
+        narration: '304不锈钢材质，500ml大容量，安全健康'
+      },
+      {
+        id: 5,
+        scene: '结尾品牌 Logo 动画 + 产品全景 + 购买链接引导',
+        camera: '拉远',
+        duration: 3,
+        narration: '温暖，从这一刻开始。点击下方链接，把温暖带回家！'
+      }
+    ]
+  };
+}
+
+function renderStoryboardCards(data) {
+  storyboardData = data.storyboards || data;
+  const list = document.getElementById('sbCardList');
+  const empty = document.getElementById('sbBoardEmpty');
+  const actions = document.getElementById('sbBoardActions');
+  const count = document.getElementById('sbBoardCount');
+  
+  empty.style.display = 'none';
+  list.style.display = 'flex';
+  actions.classList.add('show');
+  count.textContent = `${storyboardData.length} 个分镜`;
+  
+  list.innerHTML = storyboardData.map((sb, i) => `
+    <div class="sb-card" data-sb-index="${i}">
+      <div class="sb-card-top">
+        <div class="sb-card-thumb">
+          <span class="sb-card-number">${String(i + 1).padStart(2, '0')}</span>
+          <span class="sb-card-thumb-icon">🎞</span>
+        </div>
+        <div class="sb-card-body">
+          <div class="sb-card-scene">${escapeHtml(sb.scene)}</div>
+          <div class="sb-card-tags">
+            <span class="sb-card-tag camera">📷 ${escapeHtml(sb.camera)}</span>
+            <span class="sb-card-tag duration">⏱ ${sb.duration}s</span>
+          </div>
+        </div>
+      </div>
+      <div class="sb-card-narration">${escapeHtml(sb.narration)}</div>
+      <div class="sb-card-edit">
+        <button class="sb-card-edit-btn" onclick="openSbEdit(${i})">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          编辑
+        </button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ═══════════════════════════════════════════════
+// 分镜编辑弹窗
+// ═══════════════════════════════════════════════
+
+function openSbEdit(index) {
+  editingSbIndex = index;
+  const sb = storyboardData[index];
+  
+  document.getElementById('sbEditModalTitle').textContent = `编辑分镜 #${index + 1}`;
+  document.getElementById('sbEditScene').value = sb.scene;
+  document.getElementById('sbEditNarration').value = sb.narration;
+  document.getElementById('sbEditDuration').value = sb.duration;
+  document.getElementById('sbEditOverlay').classList.add('show');
+}
+
+function closeSbEdit() {
+  document.getElementById('sbEditOverlay').classList.remove('show');
+  editingSbIndex = -1;
+}
+
+function saveSbEdit() {
+  if (editingSbIndex < 0) return;
+  storyboardData[editingSbIndex].scene = document.getElementById('sbEditScene').value;
+  storyboardData[editingSbIndex].narration = document.getElementById('sbEditNarration').value;
+  storyboardData[editingSbIndex].duration = parseInt(document.getElementById('sbEditDuration').value) || 3;
+  renderStoryboardCards(storyboardData);
+  closeSbEdit();
+}
+
+document.getElementById('sbEditSave').addEventListener('click', saveSbEdit);
+document.getElementById('sbEditCancel').addEventListener('click', closeSbEdit);
+document.getElementById('sbEditOverlay').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('sbEditOverlay')) closeSbEdit();
+});
+
+// ═══════════════════════════════════════════════
+// 分镜画板底部按钮事件
+// ═══════════════════════════════════════════════
+
+document.getElementById('sbConfirmBtn').addEventListener('click', () => {
+  // 开始 4K 渲染进度
+  const progressEl = document.getElementById('sbRenderProgress');
+  const fillEl = document.getElementById('sbRenderFill');
+  const statusEl = document.getElementById('sbRenderStatus');
+  progressEl.classList.add('show');
+  
+  let pct = 0;
+  const stages = [
+    { at: 10, text: '正在上传分镜数据...' },
+    { at: 30, text: '生成 4K 画面 (1/5)...' },
+    { at: 50, text: '生成 4K 画面 (3/5)...' },
+    { at: 70, text: '生成 4K 画面 (5/5)...' },
+    { at: 90, text: '合成视频流...' },
+    { at: 100, text: '✅ 4K 画板生成完成！' }
+  ];
+  
+  const interval = setInterval(() => {
+    pct += 2;
+    fillEl.style.width = Math.min(pct, 100) + '%';
+    
+    const stage = stages.find(s => s.at >= pct);
+    if (stage) statusEl.textContent = stage.text;
+    
+    if (pct >= 100) {
+      clearInterval(interval);
+      setTimeout(() => {
+        progressEl.classList.remove('show');
+        advanceStep();
+        addAIMessage("🎬 4K 画板已生成！视频正在渲染中，请稍等片刻...", null);
+        // Switch to video tab
+        setTimeout(() => {
+          document.getElementById('videoEmpty').style.display = 'none';
+          document.getElementById('videoContent').style.display = 'block';
+          switchTab('video');
+        }, 2000);
+      }, 1500);
+    }
+  }, 120);
+});
+
+document.getElementById('sbAdjustBtn').addEventListener('click', () => {
+  addAIMessage("你可以在右侧分镜画板中点击每个分镜的「编辑」按钮来调整内容。", null);
+});
+
+document.getElementById('sbRegenBtn').addEventListener('click', () => {
+  // 重新生成分镜
+  const list = document.getElementById('sbCardList');
+  list.style.display = 'none';
+  document.getElementById('sbBoardEmpty').style.display = 'flex';
+  document.getElementById('sbBoardEmpty').querySelector('.sb-board-empty-text').innerHTML = '正在重新生成分镜...';
+  document.getElementById('sbBoardActions').classList.remove('show');
+  
+  setTimeout(async () => {
+    const data = await generateStoryboard(userResponses);
+    renderStoryboardCards(data);
+    addAIMessage("分镜已重新生成，请查看调整。", null);
+  }, 1500);
+});
+
+// ═══════════════════════════════════════════════
+// "生成创意方案" 按钮 → 触发分镜生成
+// ═══════════════════════════════════════════════
+
+document.getElementById('generateCreativeBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('generateCreativeBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner" style="width:14px;height:14px;border:2px solid rgba(255,255,255,0.3);border-top-color:white;border-radius:50%;animation:spin 1s linear infinite;"></div> 正在生成创意方案...';
+  
+  addAIMessage("✨ 需求已收集完毕！正在为你策划创意分镜方案...", null);
+  
+  // 先启动文案生成（保持原有流程）
+  document.getElementById('genStatus').style.display = 'flex';
+  advanceStep();
+  
+  setTimeout(() => {
+    document.getElementById('copywritingEmpty').style.display = 'none';
+    document.getElementById('copywritingContent').style.display = 'block';
+  }, 1000);
+  
+  // 同时生成分镜
+  setTimeout(async () => {
+    try {
+      const data = await generateStoryboard(userResponses);
+      renderStoryboardCards(data);
+      
+      // 显示分镜空状态变为已生成
+      document.getElementById('storyboardEmpty').style.display = 'none';
+      
+      addAIMessage("🎬 创意分镜方案已生成！请查看右侧分镜画板，可以编辑调整每个分镜。", null);
+    } catch (err) {
+      console.error('Storyboard generation error:', err);
+      addAIMessage("分镜生成遇到问题，请稍后重试。", null);
+    }
+    
+    btn.disabled = false;
+    btn.innerHTML = `
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+      ✅ 创意方案已生成
+    `;
+  }, 2000);
+});
+
+// ═══════════════════════════════════════════════
+// 增强 handleUserInput 以追踪需求维度
+// ═══════════════════════════════════════════════
+
+const origHandleUserInput = handleUserInput;
+handleUserInput = function(text) {
+  // 调用原始逻辑
+  origHandleUserInput(text);
+  
+  // 追踪维度完成
+  const dimMap = {
+    0: 'product',   // 初始/产品描述
+    1: 'audience',
+    2: 'style',
+    3: 'display',
+    4: 'duration'
+  };
+  const dimKey = dimMap[conversationRound - 1];
+  if (dimKey) {
+    updateReqProgress(dimKey);
+  }
+};
+
+// 重置对话时也重置进度
+const origResetConversation = resetConversation;
+resetConversation = function() {
+  origResetConversation();
+  resetReqProgress();
+};
+
+// 初始化：确保 storyboard tab 是默认 active
+document.addEventListener('DOMContentLoaded', () => {
+  // 默认激活分镜 tab
+  document.querySelectorAll('.output-tab').forEach(t => t.classList.remove('active'));
+  document.querySelector('[data-tab="storyboard"]').classList.add('active');
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-storyboard').classList.add('active');
+});
+
 </script>
+
+
+<!-- Storyboard Edit Modal -->
+<div class="sb-edit-overlay" id="sbEditOverlay">
+  <div class="sb-edit-modal">
+    <div class="sb-edit-modal-title" id="sbEditModalTitle">编辑分镜 #1</div>
+    <div class="sb-edit-field">
+      <div class="sb-edit-label">画面描述</div>
+      <textarea class="sb-edit-input" id="sbEditScene" rows="3"></textarea>
+    </div>
+    <div class="sb-edit-field">
+      <div class="sb-edit-label">旁白文字</div>
+      <textarea class="sb-edit-input" id="sbEditNarration" rows="2"></textarea>
+    </div>
+    <div class="sb-edit-field">
+      <div class="sb-edit-label">时长 (秒)</div>
+      <input type="number" class="sb-edit-input" id="sbEditDuration" value="3" min="1" max="30">
+    </div>
+    <div class="sb-edit-actions">
+      <button class="sb-edit-cancel" id="sbEditCancel">取消</button>
+      <button class="sb-edit-save" id="sbEditSave">保存</button>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
