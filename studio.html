@@ -1375,6 +1375,265 @@ body {
     display: none;
   }
 }
+/* Art Style Cards - Glassmorphism Effect */
+.art-style-section {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-md);
+  padding: 14px;
+}
+
+.art-style-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.art-style-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ctp-mauve);
+}
+
+.art-style-hint {
+  font-size: 10px;
+  color: var(--ctp-overlay1);
+}
+
+.art-style-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.art-style-card {
+  position: relative;
+  background: rgba(30, 30, 46, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.art-style-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(203, 164, 247, 0.05), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.art-style-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(203, 164, 247, 0.3);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3), 0 0 20px rgba(203, 164, 247, 0.1);
+}
+
+.art-style-card:hover::before {
+  opacity: 1;
+}
+
+.art-style-card.selected {
+  border-color: var(--ctp-mauve);
+  box-shadow: 0 0 0 2px var(--ctp-mauve), 0 8px 24px rgba(203, 164, 247, 0.2);
+}
+
+.art-style-card.selected::after {
+  content: '';
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 18px;
+  height: 18px;
+  background: var(--ctp-mauve);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.art-style-card.selected .style-check {
+  display: flex;
+}
+
+.style-check {
+  display: none;
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 18px;
+  height: 18px;
+  background: var(--ctp-mauve);
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.style-check svg {
+  width: 10px;
+  height: 10px;
+  color: white;
+}
+
+.art-style-img {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  display: block;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(137, 180, 250, 0.1));
+}
+
+.art-style-name {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 6px 8px;
+  background: linear-gradient(to top, rgba(17, 17, 27, 0.9), transparent);
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--ctp-text);
+  text-align: center;
+}
+
+.art-style-generate-btn {
+  width: 100%;
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--ctp-mauve), #9d7cd8);
+  border: none;
+  color: white;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.art-style-generate-btn:hover {
+  box-shadow: 0 4px 16px var(--accent-glow);
+  transform: translateY(-1px);
+}
+
+.art-style-generate-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.art-style-generate-btn .spinner {
+  width: 12px;
+  height: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.art-style-prompt-area {
+  margin-bottom: 12px;
+}
+
+.art-style-prompt-input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-sm);
+  padding: 10px;
+  color: var(--ctp-text);
+  font-size: 12px;
+  font-family: var(--font-family);
+  resize: none;
+  outline: none;
+  transition: all 0.2s var(--transition);
+}
+
+.art-style-prompt-input::placeholder {
+  color: var(--ctp-overlay1);
+}
+
+.art-style-prompt-input:focus {
+  border-color: rgba(139, 92, 246, 0.4);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+.art-style-selected-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(203, 164, 247, 0.1);
+  border: 1px solid rgba(203, 164, 247, 0.2);
+  border-radius: var(--radius-sm);
+  margin-bottom: 12px;
+}
+
+.art-style-selected-info svg {
+  width: 16px;
+  height: 16px;
+  color: var(--ctp-mauve);
+  flex-shrink: 0;
+}
+
+.art-style-selected-text {
+  font-size: 11px;
+  color: var(--ctp-subtext1);
+}
+
+.art-style-selected-name {
+  color: var(--ctp-mauve);
+  font-weight: 500;
+}
+
+.art-style-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.art-style-loading .spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid rgba(203, 164, 247, 0.2);
+  border-top-color: var(--ctp-mauve);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 12px;
+}
+
+.art-style-loading-text {
+  font-size: 12px;
+  color: var(--ctp-subtext0);
+}
+
+.art-style-error {
+  padding: 16px;
+  background: rgba(243, 139, 168, 0.1);
+  border: 1px solid rgba(243, 139, 168, 0.2);
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  color: var(--ctp-red);
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .art-style-grid {
+    grid-template-columns: 1fr;
+  }
+}
 </style>
 </head>
 <body>
@@ -1519,6 +1778,7 @@ body {
   <aside class="output-column">
     <div class="output-tabs">
       <div class="output-tab active" data-tab="copywriting">文案</div>
+      <div class="output-tab" data-tab="style">风格</div>
       <div class="output-tab" data-tab="storyboard">分镜</div>
       <div class="output-tab" data-tab="video">成片</div>
       <div class="output-tab" data-tab="history">历史</div>
@@ -1577,6 +1837,46 @@ body {
           </div>
           
           <button class="confirm-btn" id="confirmCopyBtn">确认文案</button>
+        </div>
+      </div>
+      
+      <!-- Style Tab -->
+      <div class="tab-panel" id="tab-style">
+        <div class="art-style-section">
+          <div class="art-style-header">
+            <span class="art-style-title">🎨 美术风格选择</span>
+            <span class="art-style-hint">选择适合视频的风格</span>
+          </div>
+          
+          <div id="artStyleSelectedInfo" class="art-style-selected-info" style="display: none;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+            <span class="art-style-selected-text">已选择：<span class="art-style-selected-name" id="selectedStyleName"></span></span>
+          </div>
+          
+          <div class="art-style-prompt-area">
+            <textarea 
+              class="art-style-prompt-input" 
+              id="artStylePrompt" 
+              rows="2" 
+              placeholder="输入产品描述，如：一款简约的保温杯，适合户外运动..."
+            ></textarea>
+          </div>
+          
+          <button class="art-style-generate-btn" id="generateStyleCardsBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            生成风格卡
+          </button>
+          
+          <div id="artStyleLoading" class="art-style-loading" style="display: none;">
+            <div class="spinner"></div>
+            <span class="art-style-loading-text">正在生成风格卡...</span>
+          </div>
+          
+          <div id="artStyleError" class="art-style-error" style="display: none;"></div>
+          
+          <div class="art-style-grid" id="artStyleGrid">
+            <!-- Style cards will be rendered here -->
+          </div>
         </div>
       </div>
       
@@ -2324,6 +2624,212 @@ document.getElementById('confirmStoryBtn')?.addEventListener('click', () => {
     document.getElementById('videoContent').style.display = 'block';
     switchTab('video');
   }, 5000);
+});
+
+// ═══════════════════════════════════════════════
+// Art Style Cards - Seedream API Integration
+// ═══════════════════════════════════════════════
+
+// Style definitions
+const artStyleDefs = {
+  cinematic: { name: '电影感', icon: '🎬', desc: '大片级光影，戏剧化叙事' },
+  minimalist: { name: '极简主义', icon: '◻️', desc: '简洁留白，高级质感' },
+  vibrant: { name: '活力四射', icon: '🌈', desc: '鲜艳色彩，年轻活力' },
+  anime: { name: '动漫风格', icon: '✨', desc: '二次元画风，梦幻唯美' },
+  realistic: { name: '写实风格', icon: '📷', desc: '真实还原，贴近生活' },
+  vintage: { name: '复古怀旧', icon: '📜', desc: '时光质感，岁月沉淀' },
+  cyberpunk: { name: '赛博朋克', icon: '🤖', desc: '未来科技，霓虹光效' },
+  watercolor: { name: '水彩艺术', icon: '🎨', desc: '手绘水彩，文艺清新' }
+};
+
+// State
+let selectedArtStyle = null;
+let artStyleCards = [];
+
+// Initialize Art Style Cards
+function initArtStyleCards() {
+  const generateBtn = document.getElementById('generateStyleCardsBtn');
+  const promptInput = document.getElementById('artStylePrompt');
+  
+  generateBtn.addEventListener('click', generateArtStyleCards);
+  
+  // Auto-fill prompt from user input if available
+  if (userResponses.product) {
+    promptInput.value = userResponses.product;
+  }
+}
+
+async function generateArtStyleCards() {
+  const prompt = document.getElementById('artStylePrompt').value.trim();
+  const generateBtn = document.getElementById('generateStyleCardsBtn');
+  const loadingEl = document.getElementById('artStyleLoading');
+  const errorEl = document.getElementById('artStyleError');
+  const gridEl = document.getElementById('artStyleGrid');
+  
+  if (!prompt) {
+    showArtStyleError('请输入产品描述');
+    return;
+  }
+  
+  // Hide previous error and grid, show loading
+  hideArtStyleError();
+  gridEl.innerHTML = '';
+  gridEl.style.display = 'none';
+  loadingEl.style.display = 'flex';
+  generateBtn.disabled = true;
+  
+  try {
+    // Call the Seedream API
+    const response = await fetch('/api/v1/image/art-style-cards', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        prompt: prompt,
+        styles: Object.keys(artStyleDefs),
+        size: '1024x1024'
+      })
+    });
+    
+    if (!response.ok) {
+      throw new Error(`API 请求失败: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    
+    // Handle different response formats
+    let styleUrls = [];
+    if (Array.isArray(data)) {
+      // Direct array of URLs
+      styleUrls = data;
+    } else if (data.styles && Array.isArray(data.styles)) {
+      // Object with styles array
+      styleUrls = data.styles.map(s => s.url || s.image_url || s);
+    } else if (data.urls && Array.isArray(data.urls)) {
+      // Object with urls array
+      styleUrls = data.urls;
+    } else if (data.data && Array.isArray(data.data)) {
+      // Object with data array
+      styleUrls = data.data.map(d => d.url || d);
+    } else {
+      throw new Error('API 返回数据格式异常');
+    }
+    
+    // Store the generated style cards
+    artStyleCards = Object.keys(artStyleDefs).map((style, index) => ({
+      style: style,
+      url: styleUrls[index] || null,
+      ...artStyleDefs[style]
+    }));
+    
+    // Render the cards
+    renderArtStyleCards(artStyleCards);
+    
+  } catch (error) {
+    console.error('Art style generation error:', error);
+    
+    // Show fallback demo cards on error
+    artStyleCards = Object.entries(artStyleDefs).map(([style, def]) => ({
+      style: style,
+      url: null,
+      ...def
+    }));
+    renderArtStyleCards(artStyleCards, true);
+  } finally {
+    loadingEl.style.display = 'none';
+    generateBtn.disabled = false;
+  }
+}
+
+function renderArtStyleCards(cards, isDemo = false) {
+  const gridEl = document.getElementById('artStyleGrid');
+  
+  gridEl.style.display = 'grid';
+  gridEl.innerHTML = cards.map(card => `
+    <div class="art-style-card ${selectedArtStyle === card.style ? 'selected' : ''}" 
+         data-style="${card.style}"
+         onclick="selectArtStyle('${card.style}')">
+      <div class="style-check">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+          <path d="M20 6L9 17l-5-5"/>
+        </svg>
+      </div>
+      ${card.url 
+        ? `<img class="art-style-img" src="${card.url}" alt="${card.name}" loading="lazy" onerror="this.style.display='none'">`
+        : `<div class="art-style-img" style="display:flex;align-items:center;justify-content:center;font-size:28px;opacity:0.6;">
+            ${card.icon}
+           </div>`
+      }
+      <div class="art-style-name">${card.icon} ${card.name}</div>
+    </div>
+  `).join('');
+}
+
+function selectArtStyle(styleKey) {
+  // Toggle selection
+  if (selectedArtStyle === styleKey) {
+    selectedArtStyle = null;
+  } else {
+    selectedArtStyle = styleKey;
+  }
+  
+  // Update UI
+  const cards = document.querySelectorAll('.art-style-card');
+  cards.forEach(card => {
+    if (card.dataset.style === selectedArtStyle) {
+      card.classList.add('selected');
+    } else {
+      card.classList.remove('selected');
+    }
+  });
+  
+  // Update selected info
+  const infoEl = document.getElementById('artStyleSelectedInfo');
+  const nameEl = document.getElementById('selectedStyleName');
+  
+  if (selectedArtStyle && artStyleDefs[selectedArtStyle]) {
+    const style = artStyleDefs[selectedArtStyle];
+    nameEl.textContent = `${style.icon} ${style.name}`;
+    infoEl.style.display = 'flex';
+  } else {
+    infoEl.style.display = 'none';
+  }
+}
+
+function showArtStyleError(message) {
+  const errorEl = document.getElementById('artStyleError');
+  errorEl.textContent = message;
+  errorEl.style.display = 'block';
+  
+  // Auto hide after 5 seconds
+  setTimeout(() => {
+    hideArtStyleError();
+  }, 5000);
+}
+
+function hideArtStyleError() {
+  document.getElementById('artStyleError').style.display = 'none';
+}
+
+function getSelectedArtStyle() {
+  return selectedArtStyle ? { ...artStyleDefs[selectedArtStyle], key: selectedArtStyle } : null;
+}
+
+// Hook into existing flow - auto switch to style tab when copywriting is confirmed
+const originalConfirmCopy = document.getElementById('confirmCopyBtn');
+if (originalConfirmCopy) {
+  originalConfirmCopy.addEventListener('click', () => {
+    // Suggest switching to style tab
+    setTimeout(() => {
+      addAIMessage("💡 建议：生成视频前可以先选择喜欢的美术风格哦！点击「风格」标签试试。", null);
+    }, 500);
+  });
+}
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+  initArtStyleCards();
 });
 </script>
 
